@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Nöbet Tabelası</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #000000;
+      color: #9ca3af;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 12px;
+      user-select: none;
+    }
+
+    /* Üst Bilgi Çubuğu */
+    .ust-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #6b7280;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .kilit-durum {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      background: #111827;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+    .kilit-aktif { color: #34d399; border: 1px solid #065f46; }
+    .kilit-pasif { color: #f87171; border: 1px solid #7f1d1d; }
+
+    /* Pozisyon Kartları */
+    .kart {
+      background: #070707;
+      border: 2px solid #27272a;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    /* Duruma Göre Renk Kodları */
+    .durum-notr {
+      border-color: #3f3f46;
+      color: #d4d4d8;
+    }
+    .durum-pozitif {
+      border-color: #16a34a;
+      background: #031208;
+      color: #4ade80;
+    }
+    .durum-uyari {
+      border-color: #f59e0b;
+      background: #170f02;
+      color: #fbbf24;
+    }
+    .durum-kritik {
+      border-color: #ef4444;
+      background: #1c0404;
+      color: #f87171;
+      animation: nabiz 1.8s infinite;
+    }
+
+    @keyframes nabiz {
+      0%, 100% { box-shadow: 0 0 0px rgba(239, 68, 68, 0); }
+      50% { box-shadow: 0 0 22px rgba(239, 68, 68, 0.55); }
+    }
+
+    .satir-ust {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .sembol-ad {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: #f3f4f6;
+    }
+    .fiyat-kutu {
+      font-size: 24px;
+      font-weight: 900;
+    }
+    .kz-rozet {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 800;
+      background: #18181b;
+    }
+    .nobetci-metin {
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .alt-seviyeler {
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: #71717a;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .bos-kutu {
+      text-align: center;
+      padding: 28px 12px;
+      border: 1px dashed #27272a;
+      border-radius: 12px;
+      color: #71717a;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body onclick="tamEkranVeUyanikTut()">
+
+  <div class="ust-bar">
+    <div id="saatBilgi">Bağlanıyor...</div>
+    <div id="bistBilgi"></div>
+    <div id="wakeDurum" class="kilit-durum kilit-pasif">🔆 Ekrana Dokun (Sabitle)</div>
+  </div>
+
+  <div id="icerikAlani"></div>
+
+  <script>
+    // =========================================================================
+    // 1) BURAYA SMC MOTORU WEB UYGULAMASI (/exec) LİNKİNİ YAPIŞTIR:
+    // =========================================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbyMit9WOCaCUglLFosrQmg2cbo7iQ-lKwqCltJKqaikFvpIVfnXBXXlIGeL7Yrc_GIR/exec";
+    const YENILEME_SANIYE = 120; // 2 dakikada bir tabloyu kontrol eder
+
+    let wakeLock = null;
+
+    async function uyanikKilidiAl() {
+      try {
+        if ("wakeLock" in navigator) {
+          wakeLock = await navigator.wakeLock.request("screen");
+          const el = document.getElementById("wakeDurum");
+          el.textContent = "🔒 Ekran Açık";
+          el.className = "kilit-durum kilit-aktif";
+          wakeLock.addEventListener("release", () => {
+            el.textContent = "🔆 Ekrana Dokun";
+            el.className = "kilit-durum kilit-pasif";
+          });
+        }
+      } catch (e) {
+        console.log("WakeLock hatası:", e);
+      }
+    }
+
+    function tamEkranVeUyanikTut() {
+      uyanikKilidiAl();
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") uyanikKilidiAl();
+    });
+
+    function kartSinifiBelirle(nobetciStr, kzMetin) {
+      if (nobetciStr.includes("🚨")) return "durum-kritik"; // SL veya RE Test Edildi -> Kırmızı Yanıp Söner
+      if (nobetciStr.includes("⚠️")) return "durum-uyari";  // TP veya OB Dönüş Riski -> Turuncu/Sarı
+      if (nobetciStr.includes("⏳")) return "durum-notr";   // RE Nöbeti Bekleniyor -> Mat Gri
+      if (kzMetin.includes("+")) return "durum-pozitif";    // Pozisyon Kârda -> Yeşil
+      if (kzMetin.includes("-")) return "durum-uyari";      // Pozisyon Zararda -> Turuncu
+      if (nobetciStr.includes("✅")) return "durum-pozitif";
+      return "durum-notr";
+    }
+
+    async function veriyiCek() {
+      try {
+        const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
+        const veri = await res.json();
+        if (!veri.ok) throw new Error(veri.hata || "Veri hatası");
+
+        document.getElementById("saatBilgi").textContent = "🕒 " + (veri.zaman || "-");
+        document.getElementById("bistBilgi").textContent = veri.bist30 || "";
+
+        const alan = document.getElementById("icerikAlani");
+        alan.innerHTML = "";
+
+        if (veri.pozisyonlar && veri.pozisyonlar.length > 0) {
+          veri.pozisyonlar.forEach(p => {
+            // [K/Z:%+0.85] veya [Fark:%-0.40] kısmını ayıkla
+            const kzEslesme = p.nobetci.match(/\[(K\/Z|Fark):([^\]]+)\]/);
+            const kzMetin = kzEslesme ? `${kzEslesme[1]}: ${kzEslesme[2]}` : "";
+            const temizNobetci = p.nobetci.replace(/\[(K\/Z|Fark):[^\]]+\]/g, "").trim();
+
+            const renkSinifi = kartSinifiBelirle(p.nobetci, kzMetin);
+            const kart = document.createElement("div");
+            kart.className = `kart ${renkSinifi}`;
+            kart.innerHTML = `
+              <div class="satir-ust">
+                <div class="sembol-ad">${p.etiket}</div>
+                <div class="fiyat-kutu">${p.fiyat}</div>
+              </div>
+              ${kzMetin ? `<div class="kz-rozet">${kzMetin}</div>` : ""}
+              <div class="nobetci-metin">${temizNobetci}</div>
+              <div class="alt-seviyeler">
+                <span>${p.anaYon} | ${p.icDalga}</span>
+                <span>${p.destek.split("|")[0]} • ${p.direnc.split("|")[0]}</span>
+              </div>
+            `;
+            alan.appendChild(kart);
+          });
+        } else {
+          // Açık pozisyon veya RE nöbeti yoksa mat gri modda BIST30 ve Ons Altın göster
+          let altHtml = `<div class="bos-kutu">Aktif Pozisyon veya RE Nöbeti Yok (%100 Nakit)</div>`;
+          if (veri.anaGostergeler && veri.anaGostergeler.length > 0) {
+            veri.anaGostergeler.forEach(g => {
+              altHtml += `
+                <div class="kart durum-notr" style="margin-top:10px;">
+                  <div class="satir-ust">
+                    <div class="sembol-ad" style="font-size:17px;">${g.etiket}</div>
+                    <div class="fiyat-kutu" style="font-size:19px;">${g.fiyat}</div>
+                  </div>
+                  <div class="alt-seviyeler"><span>${g.anaYon} | ${g.pusu}</span></div>
+                </div>`;
+            });
+          }
+          alan.innerHTML = altHtml;
+        }
+      } catch (err) {
+        document.getElementById("saatBilgi").textContent = "⚠️ Bağlantı Bekleniyor...";
+      }
+    }
+
+    uyanikKilidiAl();
+    veriyiCek();
+    setInterval(veriyiCek, YENILEME_SANIYE * 1000);
+  </script>
+</body>
+</html>
