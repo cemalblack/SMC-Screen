@@ -200,37 +200,87 @@
       return "renk-gri";
     }
 
-    // [K/Z:+1.450 TL (%+0.85)] içinden öncelikle TL tutarını, yoksa yüzdeyi çeker
-    function kzAyikla(nobetciStr, etiketStr) {
-      const s = String(nobetciStr || "");
+    // Açık pozisyonda TL K/Z döndürür; RE nöbetinde ise RE hedefinin bugünkü karşılık oranını hesaplar
+    function kzAyikla(p) {
+      const s = String(p.nobetci || "");
+      const etiket = String(p.etiket || "");
+
+      // 1) Gerçek Açık Pozisyon (TL veya % K/Z)
       const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
       if (kzM) {
-        const icerik = kzM[1].trim(); // Örn: "+1.450 TL (%+0.85)" veya "%+0.85"
+        const icerik = kzM[1].trim();
         const tlKisim = icerik.match(/^([+\-][\d.,]+\s*TL)/i);
         const gosterim = tlKisim ? tlKisim[1] : icerik;
         const renk = gosterim.includes("+") ? "renk-yesil" : gosterim.includes("-") ? "renk-kirmizi" : "renk-gri";
-        return { metin: gosterim, renk: renk };
+        return {
+          html: `<div class="kz-dev ${renk}">${gosterim}</div>`,
+          pozitifMi: gosterim.startsWith("+"),
+          negatifMi: gosterim.startsWith("-")
+        };
       }
-      // Sadece RE Nöbetiyse RE hedefini veya farkı göster
-      const farkM = s.match(/\[Fark:([^\]]+)\]/);
-      const reKodM = String(etiketStr || "").match(/RE-SHORT|RE-LONG/i);
-      if (reKodM || s.includes("RE:")) {
-        return { metin: farkM ? `RE (${farkM[1]})` : "RE NÖBETİ", renk: "renk-sari" };
+
+      // 2) RE Nöbeti: RE hedef fiyatını dünkü kapanışa göre günlük orana çevir (Örn: +0.45)
+      const isRe = /RE-SHORT|RE-LONG/i.test(etiket) || s.includes("RE:");
+      if (isRe) {
+        const isShortRe = /RE-SHORT/i.test(etiket) || /\(RE-SHORT\)/i.test(s);
+        const fiyatStr = String(p.fiyat || "");
+        const fM = fiyatStr.match(/^([\d.,]+)\s*\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
+        const reM = etiket.match(/RE:([\d.]+)/i) || s.match(/RE:([\d.]+)/i);
+
+        let reGunlukPct = null;
+        let curPct = null;
+
+        if (fM && reM) {
+          const curPrice = parseFloat(fM[1].replace(",", "."));
+          curPct = parseFloat(fM[2].replace(",", "."));
+          const rePrice = parseFloat(reM[1]);
+          if (curPrice > 0 && rePrice > 0 && !isNaN(curPct)) {
+            const dunKapanis = curPrice / (1 + curPct / 100);
+            reGunlukPct = ((rePrice - dunKapanis) / dunKapanis) * 100;
+          }
+        }
+
+        // Fiyat RE seviyesine ulaştı veya geçti mi? (%0.05 iğne/yuvarlama toleranslı)
+        let seviyeAsildi = false;
+        if (reGunlukPct !== null && curPct !== null) {
+          seviyeAsildi = isShortRe ? (curPct >= reGunlukPct - 0.05) : (curPct <= reGunlukPct + 0.05);
+        } else if (s.includes("TEST EDİLDİ")) {
+          seviyeAsildi = true;
+        }
+
+        // İç dalga yönü RE yönüyle aynı mı?
+        const icStr = String(p.icDalga || "");
+        const icUygun = isShortRe
+          ? (icStr.includes("Short") || icStr.includes("↘"))
+          : (icStr.includes("Long") || icStr.includes("↗"));
+
+        const oranMetin = reGunlukPct !== null
+          ? `(${reGunlukPct >= 0 ? "+" : ""}${reGunlukPct.toFixed(2)})`
+          : "";
+
+        const oranRenk = seviyeAsildi ? "renk-yesil" : "renk-gri";
+        const uygunEk = (seviyeAsildi && icUygun) ? ` - UYGUN` : "";
+
+        return {
+          html: `<div class="kz-dev"><span class="renk-sari">RE</span> <span class="${oranRenk}">${oranMetin}${uygunEk}</span></div>`,
+          pozitifMi: (seviyeAsildi && icUygun),
+          negatifMi: false
+        };
       }
-      return { metin: "", renk: "renk-gri" };
+
+      return { html: "", pozitifMi: false, negatifMi: false };
     }
 
     function cerceveBelirle(nobetciStr, kzObj) {
       const s = String(nobetciStr || "");
-      if (s.includes("🚨")) return "cerceve-kritik";
+      if (s.includes("🚨") && !s.includes("RE-")) return "cerceve-kritik";
       if (s.includes("⚠️")) return "cerceve-uyari";
-      if (kzObj.metin.startsWith("+")) return "cerceve-pozitif";
-      if (kzObj.metin.startsWith("-")) return "cerceve-uyari";
+      if (kzObj.pozitifMi) return "cerceve-pozitif";
+      if (kzObj.negatifMi) return "cerceve-uyari";
       return "cerceve-notr";
     }
 
     function nobetciMetniSadelestir(nobetciStr) {
-      // Baştaki Hurst kelimesini ("Hareketli | ") ve sondaki [K/Z:...] etiketini temizle
       let t = String(nobetciStr || "").replace(/\[(K\/Z|Fark):[^\]]+\]/g, "").trim();
       if (t.includes("|")) {
         const parcalar = t.split("|").map(x => x.trim());
@@ -257,7 +307,7 @@
             const yuzde = sadeceYuzdeAyikla(p.fiyat);
             const yRenk = yuzdeRenkSinifi(yuzde);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
-            const kzObj = kzAyikla(p.nobetci, p.etiket);
+            const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
             const temizNobetci = nobetciMetniSadelestir(p.nobetci);
             const nobetciRenk = p.nobetci.includes("🚨") ? "renk-kirmizi"
@@ -272,7 +322,7 @@
                   <span class="sembol-baslik">${ad} ${simge}</span>
                   <span class="yuzde-metin ${yRenk}">${yuzde}</span>
                 </div>
-                ${kzObj.metin ? `<div class="kz-dev ${kzObj.renk}">${kzObj.metin}</div>` : ""}
+                ${kzObj.html}
               </div>
               <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
               <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
@@ -280,7 +330,7 @@
             alan.appendChild(kart);
           });
         }
-        // B) HİÇ POZİSYON YOKSA (SADECE BIST30 & ONS ALTIN — FİYATSIZ, RENKLİ İÇ DALGALI)
+        // B) HİÇ POZİSYON YOKSA (SADECE BIST30 & ONS ALTIN)
         else {
           let html = `<div class="nakit-etiket">⚪ %100 Nakit — Ana Piyasa İzleme</div>`;
           (veri.anaGostergeler || []).forEach(g => {
