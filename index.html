@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#000000" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Nöbet Tabelası</title>
+  <title>Canlı Nöbet Tabelası</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       width: 100%;
       min-height: 100vh;
       background-color: #000000;
-      color: #9ca3af;
+      color: #e5e7eb;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       padding: 12px;
       user-select: none;
@@ -24,109 +24,97 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
-      color: #6b7280;
+      font-size: 14px;
+      color: #9ca3af;
       border-bottom: 1px solid #1f2937;
       padding-bottom: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     .kilit-durum {
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
-      font-weight: 600;
-      font-size: 12px;
-      background: #111827;
-      color: #9ca3af;
-      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      background: #09090b;
     }
     .kilit-aktif { color: #34d399; border: 1px solid #065f46; }
     .kilit-pasif { color: #f87171; border: 1px solid #7f1d1d; }
 
-    /* Pozisyon Kartları */
+    /* Tam Siyah Yüksek Kontrast Kartlar */
     .kart {
-      background: #070707;
+      background: #000000;
       border: 2px solid #27272a;
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      transition: all 0.3s ease;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
     }
-
-    /* Duruma Göre Renk Kodları */
-    .durum-notr {
-      border-color: #3f3f46;
-      color: #d4d4d8;
-    }
-    .durum-pozitif {
-      border-color: #16a34a;
-      background: #031208;
-      color: #4ade80;
-    }
-    .durum-uyari {
-      border-color: #f59e0b;
-      background: #170f02;
-      color: #fbbf24;
-    }
-    .durum-kritik {
+    .cerceve-notr    { border-color: #3f3f46; }
+    .cerceve-pozitif { border-color: #16a34a; }
+    .cerceve-uyari   { border-color: #f59e0b; }
+    .cerceve-kritik  {
       border-color: #ef4444;
-      background: #1c0404;
-      color: #f87171;
-      animation: nabiz 1.8s infinite;
+      animation: nabiz 1.6s infinite;
     }
 
     @keyframes nabiz {
       0%, 100% { box-shadow: 0 0 0px rgba(239, 68, 68, 0); }
-      50% { box-shadow: 0 0 22px rgba(239, 68, 68, 0.55); }
+      50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.75); }
     }
 
-    .satir-ust {
+    /* 1. Satır: Sembol + 15dk Simge + Yüzde  |  Sağda Dev TL K/Z */
+    .ust-satir {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
     }
-    .sembol-ad {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      color: #f3f4f6;
-    }
-    .fiyat-kutu {
-      font-size: 24px;
+    .sembol-baslik {
+      font-size: 26px;
       font-weight: 900;
+      letter-spacing: 0.4px;
+      color: #ffffff;
     }
-    .kz-rozet {
-      display: inline-block;
-      margin-top: 6px;
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-size: 16px;
+    .yuzde-metin {
+      font-size: 24px;
       font-weight: 800;
-      background: #18181b;
     }
-    .nobetci-metin {
+    .kz-dev {
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+
+    /* Renk Sınıfları (Gözlüksüz Net Görünüm) */
+    .renk-yesil   { color: #4ade80; }
+    .renk-kirmizi { color: #f87171; }
+    .renk-sari    { color: #fbbf24; }
+    .renk-gri     { color: #d4d4d8; }
+
+    /* 2. Satır: İç Dalga (Büyük ve Yöne Göre Yeşil/Kırmızı) */
+    .ic-dalga-satir {
       margin-top: 10px;
-      font-size: 15px;
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    /* 3. Satır: Pusu H/R veya Nöbetçi Durumu (Büyütülmüş Okunaklı Punto) */
+    .alt-bilgi-satir {
+      margin-top: 9px;
+      font-size: 18px;
       font-weight: 700;
+      color: #e4e4e7;
       line-height: 1.35;
     }
-    .alt-seviyeler {
-      margin-top: 8px;
-      font-size: 12.5px;
+
+    .nakit-etiket {
+      font-size: 14px;
+      font-weight: 700;
       color: #71717a;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .bos-kutu {
-      text-align: center;
-      padding: 28px 12px;
-      border: 1px dashed #27272a;
-      border-radius: 12px;
-      color: #71717a;
-      font-size: 15px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
   </style>
 </head>
@@ -134,18 +122,17 @@
 
   <div class="ust-bar">
     <div id="saatBilgi">Bağlanıyor...</div>
-    <div id="bistBilgi"></div>
-    <div id="wakeDurum" class="kilit-durum kilit-pasif">🔆 Ekrana Dokun (Sabitle)</div>
+    <div id="wakeDurum" class="kilit-durum kilit-pasif">🔆 Ekrana Dokun</div>
   </div>
 
   <div id="icerikAlani"></div>
 
   <script>
     // =========================================================================
-    // 1) BURAYA SMC MOTORU WEB UYGULAMASI (/exec) LİNKİNİ YAPIŞTIR:
+    // SMC MOTORU WEB UYGULAMASI (/exec) LİNKİNİ BURAYA YAPIŞTIR:
     // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbyMit9WOCaCUglLFosrQmg2cbo7iQ-lKwqCltJKqaikFvpIVfnXBXXlIGeL7Yrc_GIR/exec";
-    const YENILEME_SANIYE = 120; // 2 dakikada bir tabloyu kontrol eder
+    const API_URL = "BURAYA_WEB_APP_EXEC_LINKINI_YAPISTIR";
+    const YENILEME_SANIYE = 120; // 2 dakikada bir yeniler
 
     let wakeLock = null;
 
@@ -154,16 +141,14 @@
         if ("wakeLock" in navigator) {
           wakeLock = await navigator.wakeLock.request("screen");
           const el = document.getElementById("wakeDurum");
-          el.textContent = "🔒 Ekran Açık";
+          el.textContent = "🔒 Ekran Sabit";
           el.className = "kilit-durum kilit-aktif";
           wakeLock.addEventListener("release", () => {
             el.textContent = "🔆 Ekrana Dokun";
             el.className = "kilit-durum kilit-pasif";
           });
         }
-      } catch (e) {
-        console.log("WakeLock hatası:", e);
-      }
+      } catch (_) {}
     }
 
     function tamEkranVeUyanikTut() {
@@ -177,14 +162,81 @@
       if (document.visibilityState === "visible") uyanikKilidiAl();
     });
 
-    function kartSinifiBelirle(nobetciStr, kzMetin) {
-      if (nobetciStr.includes("🚨")) return "durum-kritik"; // SL veya RE Test Edildi -> Kırmızı Yanıp Söner
-      if (nobetciStr.includes("⚠️")) return "durum-uyari";  // TP veya OB Dönüş Riski -> Turuncu/Sarı
-      if (nobetciStr.includes("⏳")) return "durum-notr";   // RE Nöbeti Bekleniyor -> Mat Gri
-      if (kzMetin.includes("+")) return "durum-pozitif";    // Pozisyon Kârda -> Yeşil
-      if (kzMetin.includes("-")) return "durum-uyari";      // Pozisyon Zararda -> Turuncu
-      if (nobetciStr.includes("✅")) return "durum-pozitif";
-      return "durum-notr";
+    // "14405.0 (%-0.77)" içinden fiyatı atar, sadece "(-0.77)" döndürür
+    function sadeceYuzdeAyikla(fiyatStr) {
+      const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
+      if (!m) return "";
+      return `(${m[1]})`;
+    }
+
+    // 15dk Ana Yön içinden sadece simgeyi (🟢 / 🔴 / ⚪) alır
+    function anaYonSimgesi(anaYonStr) {
+      const s = String(anaYonStr || "");
+      if (s.includes("🟢")) return "🟢";
+      if (s.includes("🔴")) return "🔴";
+      return "⚪";
+    }
+
+    // Sembol adını sadeleştirir ("BIST 30 Endeksi" -> "BİST30", "TUPRS [SHORT | ...]" -> "TUPRS")
+    function kisaAdTemizle(etiket) {
+      let s = String(etiket || "").split("[")[0].trim();
+      if (/BIST\s*30/i.test(s)) return "BİST30";
+      if (/Ons\s*Altın/i.test(s)) return "ONS ALTIN";
+      return s;
+    }
+
+    // İç dalga metnine göre renk sınıfı verir (Long ↗ -> Yeşil, Short ↘ -> Kırmızı)
+    function icDalgaRenkSinifi(icDalgaStr) {
+      const s = String(icDalgaStr || "");
+      if (s.includes("Long") || s.includes("↗")) return "renk-yesil";
+      if (s.includes("Short") || s.includes("↘")) return "renk-kirmizi";
+      return "renk-gri";
+    }
+
+    // Yüzde metnine göre renk sınıfı
+    function yuzdeRenkSinifi(yuzdeStr) {
+      if (yuzdeStr.includes("+")) return "renk-yesil";
+      if (yuzdeStr.includes("-")) return "renk-kirmizi";
+      return "renk-gri";
+    }
+
+    // [K/Z:+1.450 TL (%+0.85)] içinden öncelikle TL tutarını, yoksa yüzdeyi çeker
+    function kzAyikla(nobetciStr, etiketStr) {
+      const s = String(nobetciStr || "");
+      const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
+      if (kzM) {
+        const icerik = kzM[1].trim(); // Örn: "+1.450 TL (%+0.85)" veya "%+0.85"
+        const tlKisim = icerik.match(/^([+\-][\d.,]+\s*TL)/i);
+        const gosterim = tlKisim ? tlKisim[1] : icerik;
+        const renk = gosterim.includes("+") ? "renk-yesil" : gosterim.includes("-") ? "renk-kirmizi" : "renk-gri";
+        return { metin: gosterim, renk: renk };
+      }
+      // Sadece RE Nöbetiyse RE hedefini veya farkı göster
+      const farkM = s.match(/\[Fark:([^\]]+)\]/);
+      const reKodM = String(etiketStr || "").match(/RE-SHORT|RE-LONG/i);
+      if (reKodM || s.includes("RE:")) {
+        return { metin: farkM ? `RE (${farkM[1]})` : "RE NÖBETİ", renk: "renk-sari" };
+      }
+      return { metin: "", renk: "renk-gri" };
+    }
+
+    function cerceveBelirle(nobetciStr, kzObj) {
+      const s = String(nobetciStr || "");
+      if (s.includes("🚨")) return "cerceve-kritik";
+      if (s.includes("⚠️")) return "cerceve-uyari";
+      if (kzObj.metin.startsWith("+")) return "cerceve-pozitif";
+      if (kzObj.metin.startsWith("-")) return "cerceve-uyari";
+      return "cerceve-notr";
+    }
+
+    function nobetciMetniSadelestir(nobetciStr) {
+      // Baştaki Hurst kelimesini ("Hareketli | ") ve sondaki [K/Z:...] etiketini temizle
+      let t = String(nobetciStr || "").replace(/\[(K\/Z|Fark):[^\]]+\]/g, "").trim();
+      if (t.includes("|")) {
+        const parcalar = t.split("|").map(x => x.trim());
+        t = parcalar[parcalar.length - 1];
+      }
+      return t.replace(/NÖBETÇİ\s*\([^)]+\)\s*:\s*/i, "");
     }
 
     async function veriyiCek() {
@@ -194,51 +246,64 @@
         if (!veri.ok) throw new Error(veri.hata || "Veri hatası");
 
         document.getElementById("saatBilgi").textContent = "🕒 " + (veri.zaman || "-");
-        document.getElementById("bistBilgi").textContent = veri.bist30 || "";
-
         const alan = document.getElementById("icerikAlani");
         alan.innerHTML = "";
 
+        // A) AÇIK POZİSYON VEYA RE NÖBETİ VARSA
         if (veri.pozisyonlar && veri.pozisyonlar.length > 0) {
           veri.pozisyonlar.forEach(p => {
-            // [K/Z:%+0.85] veya [Fark:%-0.40] kısmını ayıkla
-            const kzEslesme = p.nobetci.match(/\[(K\/Z|Fark):([^\]]+)\]/);
-            const kzMetin = kzEslesme ? `${kzEslesme[1]}: ${kzEslesme[2]}` : "";
-            const temizNobetci = p.nobetci.replace(/\[(K\/Z|Fark):[^\]]+\]/g, "").trim();
+            const ad = kisaAdTemizle(p.etiket);
+            const simge = anaYonSimgesi(p.anaYon);
+            const yuzde = sadeceYuzdeAyikla(p.fiyat);
+            const yRenk = yuzdeRenkSinifi(yuzde);
+            const icRenk = icDalgaRenkSinifi(p.icDalga);
+            const kzObj = kzAyikla(p.nobetci, p.etiket);
+            const cerceve = cerceveBelirle(p.nobetci, kzObj);
+            const temizNobetci = nobetciMetniSadelestir(p.nobetci);
+            const nobetciRenk = p.nobetci.includes("🚨") ? "renk-kirmizi"
+                              : p.nobetci.includes("⚠️") ? "renk-sari"
+                              : p.nobetci.includes("✅") ? "renk-yesil" : "renk-gri";
 
-            const renkSinifi = kartSinifiBelirle(p.nobetci, kzMetin);
             const kart = document.createElement("div");
-            kart.className = `kart ${renkSinifi}`;
+            kart.className = `kart ${cerceve}`;
             kart.innerHTML = `
-              <div class="satir-ust">
-                <div class="sembol-ad">${p.etiket}</div>
-                <div class="fiyat-kutu">${p.fiyat}</div>
+              <div class="ust-satir">
+                <div>
+                  <span class="sembol-baslik">${ad} ${simge}</span>
+                  <span class="yuzde-metin ${yRenk}">${yuzde}</span>
+                </div>
+                ${kzObj.metin ? `<div class="kz-dev ${kzObj.renk}">${kzObj.metin}</div>` : ""}
               </div>
-              ${kzMetin ? `<div class="kz-rozet">${kzMetin}</div>` : ""}
-              <div class="nobetci-metin">${temizNobetci}</div>
-              <div class="alt-seviyeler">
-                <span>${p.anaYon} | ${p.icDalga}</span>
-                <span>${p.destek.split("|")[0]} • ${p.direnc.split("|")[0]}</span>
-              </div>
+              <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
+              <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
             `;
             alan.appendChild(kart);
           });
-        } else {
-          // Açık pozisyon veya RE nöbeti yoksa mat gri modda BIST30 ve Ons Altın göster
-          let altHtml = `<div class="bos-kutu">Aktif Pozisyon veya RE Nöbeti Yok (%100 Nakit)</div>`;
-          if (veri.anaGostergeler && veri.anaGostergeler.length > 0) {
-            veri.anaGostergeler.forEach(g => {
-              altHtml += `
-                <div class="kart durum-notr" style="margin-top:10px;">
-                  <div class="satir-ust">
-                    <div class="sembol-ad" style="font-size:17px;">${g.etiket}</div>
-                    <div class="fiyat-kutu" style="font-size:19px;">${g.fiyat}</div>
+        }
+        // B) HİÇ POZİSYON YOKSA (SADECE BIST30 & ONS ALTIN — FİYATSIZ, RENKLİ İÇ DALGALI)
+        else {
+          let html = `<div class="nakit-etiket">⚪ %100 Nakit — Ana Piyasa İzleme</div>`;
+          (veri.anaGostergeler || []).forEach(g => {
+            const ad = kisaAdTemizle(g.etiket);
+            const simge = anaYonSimgesi(g.anaYon);
+            const yuzde = sadeceYuzdeAyikla(g.fiyat);
+            const yRenk = yuzdeRenkSinifi(yuzde);
+            const icRenk = icDalgaRenkSinifi(g.icDalga);
+
+            html += `
+              <div class="kart cerceve-notr">
+                <div class="ust-satir">
+                  <div>
+                    <span class="sembol-baslik">${ad} ${simge}</span>
+                    <span class="yuzde-metin ${yRenk}">${yuzde}</span>
                   </div>
-                  <div class="alt-seviyeler"><span>${g.anaYon} | ${g.pusu}</span></div>
-                </div>`;
-            });
-          }
-          alan.innerHTML = altHtml;
+                </div>
+                <div class="ic-dalga-satir ${icRenk}">${g.icDalga || "-"}</div>
+                <div class="alt-bilgi-satir">${g.pusu || "-"}</div>
+              </div>
+            `;
+          });
+          alan.innerHTML = html;
         }
       } catch (err) {
         document.getElementById("saatBilgi").textContent = "⚠️ Bağlantı Bekleniyor...";
