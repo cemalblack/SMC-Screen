@@ -15,7 +15,7 @@
       background-color: #000000;
       color: #e5e7eb;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 12px;
+      padding: 9px 10px;
       user-select: none;
     }
 
@@ -24,29 +24,46 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14px;
+      font-size: 12px;
       color: #9ca3af;
       border-bottom: 1px solid #1f2937;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
     }
     .kilit-durum {
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 6px;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 11.5px;
       background: #09090b;
     }
     .kilit-aktif { color: #34d399; border: 1px solid #065f46; }
     .kilit-pasif { color: #f87171; border: 1px solid #7f1d1d; }
 
-    /* Tam Siyah Yüksek Kontrast Kartlar */
+    /* Bölüm Ayırıcı Etiket */
+    .bolum-ayirici {
+      font-size: 11px;
+      font-weight: 700;
+      color: #6b7280;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin: 8px 2px 6px 2px;
+      padding-top: 4px;
+      border-top: 1px dashed #27272a;
+    }
+
+    /* Kartlar (Küçültülmüş ve Dengelenmiş Boyut) */
     .kart {
       background: #000000;
-      border: 2px solid #27272a;
-      border-radius: 16px;
-      padding: 16px 18px;
-      margin-bottom: 14px;
+      border: 1.5px solid #27272a;
+      border-radius: 12px;
+      padding: 9px 12px;
+      margin-bottom: 8px;
+    }
+    .kart-sabit {
+      border-color: #1e3a5f;
+      padding: 8px 12px;
+      margin-bottom: 6px;
     }
     .cerceve-notr    { border-color: #3f3f46; }
     .cerceve-pozitif { border-color: #16a34a; }
@@ -55,85 +72,86 @@
       border-color: #ef4444;
       animation: nabiz 1.6s infinite;
     }
-
     @keyframes nabiz {
       0%, 100% { box-shadow: 0 0 0px rgba(239, 68, 68, 0); }
-      50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.75); }
+      50% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.75); }
     }
 
-    /* 1. Satır: Sembol + 15dk Simge + Yüzde  |  Sağda Dev TL K/Z */
+    /* Satır Düzenleri ve Küçültülmüş Puntolar */
     .ust-satir {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .sembol-baslik {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: 0.4px;
-      color: #ffffff;
-    }
-    .yuzde-metin {
-      font-size: 24px;
-      font-weight: 800;
-    }
-    .kz-dev {
-      font-size: 27px;
+      font-size: 18.5px;
       font-weight: 900;
       letter-spacing: 0.3px;
+      color: #ffffff;
+    }
+    .kart-sabit .sembol-baslik {
+      font-size: 17px;
+    }
+    .yuzde-metin {
+      font-size: 17.5px;
+      font-weight: 800;
+    }
+    .kart-sabit .yuzde-metin {
+      font-size: 16.5px;
+    }
+    .kz-dev {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+    .re-ust-satir {
+      font-size: 18.5px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      margin-bottom: 3px;
+    }
+    .re-sembol-satir {
+      margin-top: 1px;
     }
 
-    /* Renk Sınıfları (Gözlüksüz Net Görünüm) */
+    /* Renk Sınıfları */
     .renk-yesil   { color: #4ade80; }
     .renk-kirmizi { color: #f87171; }
     .renk-sari    { color: #fbbf24; }
     .renk-gri     { color: #d4d4d8; }
 
-    /* 2. Satır: İç Dalga (Büyük ve Yöne Göre Yeşil/Kırmızı) */
+    /* İç Dalga ve Alt Bilgi Satırları */
     .ic-dalga-satir {
-      margin-top: 10px;
-      font-size: 21px;
+      margin-top: 5px;
+      font-size: 15px;
       font-weight: 800;
-      line-height: 1.3;
+      line-height: 1.25;
     }
-
-    /* 3. Satır: Pusu H/R veya Nöbetçi Durumu (Büyütülmüş Okunaklı Punto) */
+    .kart-sabit .ic-dalga-satir {
+      margin-top: 4px;
+      font-size: 14px;
+    }
     .alt-bilgi-satir {
-      margin-top: 9px;
-      font-size: 18px;
+      margin-top: 4px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #e4e4e7;
-      line-height: 1.35;
-    }
-
-    .nakit-etiket {
-      font-size: 14px;
-      font-weight: 700;
-      color: #71717a;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
+      line-height: 1.3;
     }
   </style>
 </head>
 <body onclick="tamEkranVeUyanikTut()">
-
   <div class="ust-bar">
     <div id="saatBilgi">Bağlanıyor...</div>
     <div id="wakeDurum" class="kilit-durum kilit-pasif">🔆 Ekrana Dokun</div>
   </div>
-
   <div id="icerikAlani"></div>
 
   <script>
-    // =========================================================================
-    // SMC MOTORU WEB UYGULAMASI (/exec) LİNKİNİ BURAYA YAPIŞTIR:
-    // =========================================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbyMit9WOCaCUglLFosrQmg2cbo7iQ-lKwqCltJKqaikFvpIVfnXBXXlIGeL7Yrc_GIR/exec";
-    const YENILEME_SANIYE = 120; // 2 dakikada bir yeniler
-
+    const YENILEME_SANIYE = 120;
     let wakeLock = null;
 
     async function uyanikKilidiAl() {
@@ -162,14 +180,12 @@
       if (document.visibilityState === "visible") uyanikKilidiAl();
     });
 
-    // "14405.0 (%-0.77)" içinden fiyatı atar, sadece "(-0.77)" döndürür
     function sadeceYuzdeAyikla(fiyatStr) {
       const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
       if (!m) return "";
       return `(${m[1]})`;
     }
 
-    // 15dk Ana Yön içinden sadece simgeyi (🟢 / 🔴 / ⚪) alır
     function anaYonSimgesi(anaYonStr) {
       const s = String(anaYonStr || "");
       if (s.includes("🟢")) return "🟢";
@@ -177,15 +193,14 @@
       return "⚪";
     }
 
-    // Sembol adını sadeleştirir ("BIST 30 Endeksi" -> "BİST30", "TUPRS [SHORT | ...]" -> "TUPRS")
     function kisaAdTemizle(etiket) {
       let s = String(etiket || "").split("[")[0].trim();
-      if (/BIST\s*30/i.test(s)) return "BİST30";
-      if (/Ons\s*Altın/i.test(s)) return "ONS ALTIN";
+      if (/BİST30\s*V\.|XU030D1!/i.test(s)) return "BİST30 V.";
+      if (/BIST\s*30/i.test(s)) return "BİST30 V.";
+      if (/Ons\s*Altın|ONS\s*ALTIN/i.test(s)) return "ONS ALTIN";
       return s;
     }
 
-    // İç dalga metnine göre renk sınıfı verir (Long ↗ -> Yeşil, Short ↘ -> Kırmızı)
     function icDalgaRenkSinifi(icDalgaStr) {
       const s = String(icDalgaStr || "");
       if (s.includes("Long") || s.includes("↗")) return "renk-yesil";
@@ -193,88 +208,88 @@
       return "renk-gri";
     }
 
-    // Yüzde metnine göre renk sınıfı
     function yuzdeRenkSinifi(yuzdeStr) {
       if (yuzdeStr.includes("+")) return "renk-yesil";
       if (yuzdeStr.includes("-")) return "renk-kirmizi";
       return "renk-gri";
     }
 
-    // Açık pozisyonda TL K/Z döndürür; RE nöbetinde ise RE hedefinin bugünkü karşılık oranını hesaplar
+    function reKaydiMi(p) {
+      const etiket = String(p.etiket || "");
+      const nobetci = String(p.nobetci || "");
+      return /\[(RE-SHORT|RE-LONG)/i.test(etiket) || /NÖBETÇİ\s*\(RE-/i.test(nobetci);
+    }
+
     function kzAyikla(p) {
       const s = String(p.nobetci || "");
       const etiket = String(p.etiket || "");
+      const isRe = reKaydiMi(p);
 
       // 1) Gerçek Açık Pozisyon (TL veya % K/Z)
-      const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
-      if (kzM) {
-        const icerik = kzM[1].trim();
-        const tlKisim = icerik.match(/^([+\-][\d.,]+\s*TL)/i);
-        const gosterim = tlKisim ? tlKisim[1] : icerik;
-        const renk = gosterim.includes("+") ? "renk-yesil" : gosterim.includes("-") ? "renk-kirmizi" : "renk-gri";
-        return {
-          html: `<div class="kz-dev ${renk}">${gosterim}</div>`,
-          pozitifMi: gosterim.startsWith("+"),
-          negatifMi: gosterim.startsWith("-")
-        };
+      if (!isRe) {
+        const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
+        if (kzM) {
+          const icerik = kzM[1].trim();
+          const tlKisim = icerik.match(/^([+\-][\d.,]+\s*TL)/i);
+          const gosterim = tlKisim ? tlKisim[1] : icerik;
+          const renk = gosterim.includes("+") ? "renk-yesil" : gosterim.includes("-") ? "renk-kirmizi" : "renk-gri";
+          return {
+            isRe: false,
+            html: `<div class="kz-dev ${renk}">${gosterim}</div>`,
+            pozitifMi: gosterim.startsWith("+"),
+            negatifMi: gosterim.startsWith("-")
+          };
+        }
+        return { isRe: false, html: "", pozitifMi: false, negatifMi: false };
       }
 
-      // 2) RE Nöbeti: RE hedef fiyatını dünkü kapanışa göre günlük orana çevir (Örn: +0.45)
-      const isRe = /RE-SHORT|RE-LONG/i.test(etiket) || s.includes("RE:");
-      if (isRe) {
-        const isShortRe = /RE-SHORT/i.test(etiket) || /\(RE-SHORT\)/i.test(s);
-        const fiyatStr = String(p.fiyat || "");
-        const fM = fiyatStr.match(/^([\d.,]+)\s*\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
-        const reM = etiket.match(/RE:([\d.]+)/i) || s.match(/RE:([\d.]+)/i);
-
-        let reGunlukPct = null;
-        let curPct = null;
-
-        if (fM && reM) {
-          const curPrice = parseFloat(fM[1].replace(",", "."));
-          curPct = parseFloat(fM[2].replace(",", "."));
-          const rePrice = parseFloat(reM[1]);
-          if (curPrice > 0 && rePrice > 0 && !isNaN(curPct)) {
-            const dunKapanis = curPrice / (1 + curPct / 100);
-            reGunlukPct = ((rePrice - dunKapanis) / dunKapanis) * 100;
-          }
+      // 2) RE Nöbeti: Dünkü kapanışa göre günlük orana çevir (Üst satırda gösterilecek)
+      const isShortRe = /RE-SHORT/i.test(etiket) || /RE-SHORT/i.test(s);
+      const fiyatStr = String(p.fiyat || "");
+      const fM = fiyatStr.match(/^([\d.,]+)\s*\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
+      const reM = etiket.match(/RE:([\d.]+)/i) || s.match(/RE:([\d.]+)/i);
+      let reGunlukPct = null;
+      let curPct = null;
+      if (fM && reM) {
+        const curPrice = parseFloat(fM[1].replace(",", "."));
+        curPct = parseFloat(fM[2].replace(",", "."));
+        const rePrice = parseFloat(reM[1]);
+        if (curPrice > 0 && rePrice > 0 && !isNaN(curPct)) {
+          const dunKapanis = curPrice / (1 + curPct / 100);
+          reGunlukPct = ((rePrice - dunKapanis) / dunKapanis) * 100;
         }
-
-        // Fiyat RE seviyesine ulaştı veya geçti mi? (%0.05 iğne/yuvarlama toleranslı)
-        let seviyeAsildi = false;
-        if (reGunlukPct !== null && curPct !== null) {
-          seviyeAsildi = isShortRe ? (curPct >= reGunlukPct - 0.05) : (curPct <= reGunlukPct + 0.05);
-        } else if (s.includes("TEST EDİLDİ")) {
-          seviyeAsildi = true;
-        }
-
-        // İç dalga yönü RE yönüyle aynı mı?
-        const icStr = String(p.icDalga || "");
-        const icUygun = isShortRe
-          ? (icStr.includes("Short") || icStr.includes("↘"))
-          : (icStr.includes("Long") || icStr.includes("↗"));
-
-        const oranMetin = reGunlukPct !== null
-          ? `(${reGunlukPct >= 0 ? "+" : ""}${reGunlukPct.toFixed(2)})`
-          : "";
-
-        const oranRenk = seviyeAsildi ? "renk-yesil" : "renk-gri";
-        const uygunEk = (seviyeAsildi && icUygun) ? ` - UYGUN` : "";
-
-        return {
-          html: `<div class="kz-dev"><span class="renk-sari">RE</span> <span class="${oranRenk}">${oranMetin}${uygunEk}</span></div>`,
-          pozitifMi: (seviyeAsildi && icUygun),
-          negatifMi: false
-        };
       }
 
-      return { html: "", pozitifMi: false, negatifMi: false };
+      let seviyeAsildi = false;
+      if (reGunlukPct !== null && curPct !== null) {
+        seviyeAsildi = isShortRe ? (curPct >= reGunlukPct - 0.05) : (curPct <= reGunlukPct + 0.05);
+      } else if (s.includes("TEST EDİLDİ")) {
+        seviyeAsildi = true;
+      }
+
+      const icStr = String(p.icDalga || "");
+      const icUygun = isShortRe
+        ? (icStr.includes("Short") || icStr.includes("↘"))
+        : (icStr.includes("Long") || icStr.includes("↗"));
+
+      const oranMetin = reGunlukPct !== null
+        ? `(${reGunlukPct >= 0 ? "+" : ""}${reGunlukPct.toFixed(2)})`
+        : "";
+      const oranRenk = seviyeAsildi ? "renk-yesil" : "renk-gri";
+      const uygunEk = (seviyeAsildi && icUygun) ? " - UYGUN" : "";
+
+      return {
+        isRe: true,
+        html: `<div class="re-ust-satir"><span class="renk-sari">RE</span> <span class="${oranRenk}">${oranMetin}${uygunEk}</span></div>`,
+        pozitifMi: (seviyeAsildi && icUygun),
+        negatifMi: false
+      };
     }
 
     function cerceveBelirle(nobetciStr, kzObj) {
       const s = String(nobetciStr || "");
-      if (s.includes("🚨") && !s.includes("RE-")) return "cerceve-kritik";
-      if (s.includes("⚠️")) return "cerceve-uyari";
+      if (!kzObj.isRe && s.includes("🚨")) return "cerceve-kritik";
+      if (!kzObj.isRe && s.includes("⚠️")) return "cerceve-uyari";
       if (kzObj.pozitifMi) return "cerceve-pozitif";
       if (kzObj.negatifMi) return "cerceve-uyari";
       return "cerceve-notr";
@@ -286,7 +301,7 @@
         const parcalar = t.split("|").map(x => x.trim());
         t = parcalar[parcalar.length - 1];
       }
-      return t.replace(/NÖBETÇİ\s*\([^)]+\)\s*:\s*/i, "");
+      return t.replace(/NÖBETÇİ\s*\([^)]+\)\s*:\s*/i, "").trim();
     }
 
     async function veriyiCek() {
@@ -299,9 +314,50 @@
         const alan = document.getElementById("icerikAlani");
         alan.innerHTML = "";
 
-        // A) AÇIK POZİSYON VEYA RE NÖBETİ VARSA
+        // 1) HER EKRANDA SABİT ÜST BÖLÜM: ONS ALTIN & BİST30 V.
+        const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
+          const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
+          const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
+          return aOns - bOns;
+        });
+
+        gostergeler.forEach(g => {
+          const ad = kisaAdTemizle(g.etiket);
+          const simge = anaYonSimgesi(g.anaYon);
+          const yuzde = sadeceYuzdeAyikla(g.fiyat);
+          const yRenk = yuzdeRenkSinifi(yuzde);
+          const icRenk = icDalgaRenkSinifi(g.icDalga);
+          const pusuGoster = (g.pusu && g.pusu !== "Nötr" && g.pusu !== "-")
+            ? `<div class="alt-bilgi-satir">${g.pusu}</div>`
+            : "";
+
+          const sabitKart = document.createElement("div");
+          sabitKart.className = "kart kart-sabit";
+          sabitKart.innerHTML = `
+            <div class="ust-satir">
+              <div>
+                <span class="sembol-baslik">${ad} ${simge}</span>
+                <span class="yuzde-metin ${yRenk}">${yuzde}</span>
+              </div>
+            </div>
+            <div class="ic-dalga-satir ${icRenk}">${g.icDalga || "-"}</div>
+            ${pusuGoster}
+          `;
+          alan.appendChild(sabitKart);
+        });
+
+        // 2) ALT BÖLÜM: ÖNCE GERÇEK AÇIK POZİSYONLAR, EN ALTTA RE NÖBETLERİ
         if (veri.pozisyonlar && veri.pozisyonlar.length > 0) {
-          veri.pozisyonlar.forEach(p => {
+          const siraliPozlar = [...veri.pozisyonlar].sort((a, b) => {
+            return (reKaydiMi(a) ? 1 : 0) - (reKaydiMi(b) ? 1 : 0);
+          });
+
+          const ayirici = document.createElement("div");
+          ayirici.className = "bolum-ayirici";
+          ayirici.textContent = "Pozisyon & RE Nöbeti";
+          alan.appendChild(ayirici);
+
+          siraliPozlar.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
             const simge = anaYonSimgesi(p.anaYon);
             const yuzde = sadeceYuzdeAyikla(p.fiyat);
@@ -316,44 +372,41 @@
 
             const kart = document.createElement("div");
             kart.className = `kart ${cerceve}`;
-            kart.innerHTML = `
-              <div class="ust-satir">
-                <div>
+
+            if (kzObj.isRe) {
+              const pusuSatir = (p.pusu && p.pusu !== "Nötr" && p.pusu !== "-")
+                ? `<div class="alt-bilgi-satir">${p.pusu}</div>`
+                : "";
+              kart.innerHTML = `
+                ${kzObj.html}
+                <div class="re-sembol-satir">
                   <span class="sembol-baslik">${ad} ${simge}</span>
                   <span class="yuzde-metin ${yRenk}">${yuzde}</span>
                 </div>
-                ${kzObj.html}
-              </div>
-              <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
-              <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
-            `;
-            alan.appendChild(kart);
-          });
-        }
-        // B) HİÇ POZİSYON YOKSA (SADECE BIST30 & ONS ALTIN)
-        else {
-          let html = `<div class="nakit-etiket">⚪ %100 Nakit — Ana Piyasa İzleme</div>`;
-          (veri.anaGostergeler || []).forEach(g => {
-            const ad = kisaAdTemizle(g.etiket);
-            const simge = anaYonSimgesi(g.anaYon);
-            const yuzde = sadeceYuzdeAyikla(g.fiyat);
-            const yRenk = yuzdeRenkSinifi(yuzde);
-            const icRenk = icDalgaRenkSinifi(g.icDalga);
-
-            html += `
-              <div class="kart cerceve-notr">
+                <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
+                ${pusuSatir}
+              `;
+            } else {
+              kart.innerHTML = `
                 <div class="ust-satir">
                   <div>
                     <span class="sembol-baslik">${ad} ${simge}</span>
                     <span class="yuzde-metin ${yRenk}">${yuzde}</span>
                   </div>
+                  ${kzObj.html}
                 </div>
-                <div class="ic-dalga-satir ${icRenk}">${g.icDalga || "-"}</div>
-                <div class="alt-bilgi-satir">${g.pusu || "-"}</div>
-              </div>
-            `;
+                <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
+                <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
+              `;
+            }
+
+            alan.appendChild(kart);
           });
-          alan.innerHTML = html;
+        } else {
+          const nakitBilgi = document.createElement("div");
+          nakitBilgi.className = "bolum-ayirici";
+          nakitBilgi.textContent = "⚪ %100 Nakit — Açık Pozisyon / RE Yok";
+          alan.appendChild(nakitBilgi);
         }
       } catch (err) {
         document.getElementById("saatBilgi").textContent = "⚠️ Bağlantı Bekleniyor...";
