@@ -261,7 +261,7 @@
       transform: translateY(0);
     }
     .ozet-cekmece-ust {
-      padding: 9px 14px 11px 14px;
+      padding: 9px 12px 11px 12px;
       border-bottom: 1px solid #cbd5e1;
       background: #ffffff;
       border-radius: 18px 18px 0 0;
@@ -276,52 +276,78 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .ozet-ana-baslik {
-      font-size: 17px;
+      font-size: 16.5px;
       font-weight: 900;
       color: #0f172a;
     }
     .ozet-zaman-etiket {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: #0369a1;
       margin-top: 2px;
     }
     .ozet-buton-grup {
       display: flex;
-      gap: 7px;
+      gap: 6px;
       align-items: center;
+      flex-shrink: 0;
     }
     .ozet-btn {
       background: #f0f9ff;
       color: #0369a1;
       border: 1px solid #7dd3fc;
       border-radius: 9px;
-      padding: 6px 11px;
-      font-size: 13.5px;
+      padding: 6px 9px;
+      font-size: 13px;
       font-weight: 800;
       cursor: pointer;
+      line-height: 1.1;
+    }
+    .ozet-btn-boyut {
+      min-width: 42px;
+      text-align: center;
+      letter-spacing: -0.2px;
+    }
+    .ozet-btn-boyut.buyutuldu {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #075985;
     }
     .ozet-btn-kapat {
       background: #fef2f2;
       border-color: #fca5a5;
       color: #b91c1c;
     }
+
+    /* Haber Özeti Gövdesi ve 3 Kademeli Yazı Boyutu Sınıfları */
     .ozet-icerik-alani {
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       padding: 14px 14px calc(22px + env(safe-area-inset-bottom, 0px)) 14px;
       user-select: text;
-      font-size: 16.5px;
-      line-height: 1.55;
+      font-weight: 500;
       color: #1e293b;
     }
-    /* Deniz Mavisi Bölüm Başlıkları (ÖZET STRATEJİ, YENİ GELİŞMELER) */
+    .ozet-icerik-alani.boyut-normal {
+      font-size: 17px;
+      line-height: 1.56;
+    }
+    .ozet-icerik-alani.boyut-buyuk {
+      font-size: 19.5px;
+      line-height: 1.62;
+    }
+    .ozet-icerik-alani.boyut-cok-buyuk {
+      font-size: 22px;
+      line-height: 1.65;
+    }
+
+    /* Deniz Mavisi Bölüm Başlıkları (Seçilen Boyutla Orantılı Büyür) */
     .ozet-bolum-baslik {
-      font-size: 16.5px;
+      font-size: 1.02em;
       font-weight: 900;
       color: #075985;
       background: #e0f2fe;
@@ -346,7 +372,7 @@
     }
     .ozet-madde-vurgu {
       color: #0369a1;
-      font-weight: 900;
+      font-weight: 800;
     }
     .ozet-paragraf {
       background: #ffffff;
@@ -391,16 +417,17 @@
       </div>
       <div class="ozet-baslik-satir">
         <div>
-          <div class="ozet-ana-baslik">📄 Piyasa & Haber Özeti</div>
+          <div class="ozet-ana-baslik">📄 Haber Özeti</div>
           <div id="ozetZamanBilgi" class="ozet-zaman-etiket">Son Güncelleme: Bekleniyor...</div>
         </div>
         <div class="ozet-buton-grup">
+          <button id="ozetBoyutBtn" class="ozet-btn ozet-btn-boyut" onclick="ozetYaziBoyutuDegistir(event)">Aa</button>
           <button class="ozet-btn" onclick="ozetVerisiniCek(true, event)">↻ Yenile</button>
           <button class="ozet-btn ozet-btn-kapat" onclick="ozetCekmeceKapat(event)">✕ Kapat</button>
         </div>
       </div>
     </div>
-    <div id="ozetGovde" class="ozet-icerik-alani">
+    <div id="ozetGovde" class="ozet-icerik-alani boyut-normal">
       <div class="ozet-bilgi-mesaj">⏳ Haber Özeti yükleniyor...</div>
     </div>
   </div>
@@ -409,9 +436,44 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbyMit9WOCaCUglLFosrQmg2cbo7iQ-lKwqCltJKqaikFvpIVfnXBXXlIGeL7Yrc_GIR/exec";
     const YENILEME_SANIYE = 120;
 
+    const YAZI_KADEMELERI = [
+      { sinif: "boyut-normal",    etiket: "Aa" },
+      { sinif: "boyut-buyuk",     etiket: "Aa+" },
+      { sinif: "boyut-cok-buyuk", etiket: "Aa++" }
+    ];
+
     let wakeLock = null;
     let sonOzetCekimMs = 0;
     let ozetYukleniyor = false;
+    let aktifYaziKademe = 0;
+
+    function yaziBoyutunuUygula(kademe) {
+      const gecerli = (kademe >= 0 && kademe < YAZI_KADEMELERI.length) ? kademe : 0;
+      aktifYaziKademe = gecerli;
+      const govdeEl = document.getElementById("ozetGovde");
+      const btnEl = document.getElementById("ozetBoyutBtn");
+      YAZI_KADEMELERI.forEach(k => govdeEl.classList.remove(k.sinif));
+      govdeEl.classList.add(YAZI_KADEMELERI[gecerli].sinif);
+      btnEl.textContent = YAZI_KADEMELERI[gecerli].etiket;
+      if (gecerli > 0) btnEl.classList.add("buyutuldu");
+      else btnEl.classList.remove("buyutuldu");
+    }
+
+    function ozetYaziBoyutuDegistir(ev) {
+      if (ev) ev.stopPropagation();
+      const yeniKademe = (aktifYaziKademe + 1) % YAZI_KADEMELERI.length;
+      yaziBoyutunuUygula(yeniKademe);
+      try {
+        localStorage.setItem("OZET_YAZI_KADEME", String(yeniKademe));
+      } catch (_) {}
+    }
+
+    (function kayitliYaziBoyutunuYukle() {
+      try {
+        const kayitli = parseInt(localStorage.getItem("OZET_YAZI_KADEME") || "0", 10);
+        if (!isNaN(kayitli)) yaziBoyutunuUygula(kayitli);
+      } catch (_) {}
+    })();
 
     async function uyanikKilidiAl() {
       try {
