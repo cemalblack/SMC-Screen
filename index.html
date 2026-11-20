@@ -2,10 +2,11 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#000000" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Canlı Nöbet Tabelası</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,55 +16,38 @@
       background-color: #000000;
       color: #e5e7eb;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 9px 10px;
+      padding: 12px 12px 84px 12px;
       user-select: none;
+      overscroll-behavior-y: none;
     }
-
     /* Üst Bilgi Çubuğu */
     .ust-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
+      font-size: 14px;
       color: #9ca3af;
       border-bottom: 1px solid #1f2937;
-      padding-bottom: 6px;
-      margin-bottom: 8px;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
     }
     .kilit-durum {
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
       font-weight: 700;
-      font-size: 11.5px;
+      font-size: 13px;
       background: #09090b;
     }
     .kilit-aktif { color: #34d399; border: 1px solid #065f46; }
     .kilit-pasif { color: #f87171; border: 1px solid #7f1d1d; }
 
-    /* Bölüm Ayırıcı Etiket */
-    .bolum-ayirici {
-      font-size: 11px;
-      font-weight: 700;
-      color: #6b7280;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin: 8px 2px 6px 2px;
-      padding-top: 4px;
-      border-top: 1px dashed #27272a;
-    }
-
-    /* Kartlar (Küçültülmüş ve Dengelenmiş Boyut) */
+    /* Tam Siyah Yüksek Kontrast Kartlar */
     .kart {
       background: #000000;
-      border: 1.5px solid #27272a;
-      border-radius: 12px;
-      padding: 9px 12px;
-      margin-bottom: 8px;
-    }
-    .kart-sabit {
-      border-color: #1e3a5f;
-      padding: 8px 12px;
-      margin-bottom: 6px;
+      border: 2px solid #27272a;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
     }
     .cerceve-notr    { border-color: #3f3f46; }
     .cerceve-pozitif { border-color: #16a34a; }
@@ -74,71 +58,233 @@
     }
     @keyframes nabiz {
       0%, 100% { box-shadow: 0 0 0px rgba(239, 68, 68, 0); }
-      50% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.75); }
+      50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.75); }
     }
 
-    /* Satır Düzenleri ve Küçültülmüş Puntolar */
+    /* 1. Satır: Sembol + 15dk Simge + Yüzde | Sağda Dev TL K/Z */
     .ust-satir {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .sembol-baslik {
-      font-size: 18.5px;
+      font-size: 26px;
       font-weight: 900;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
       color: #ffffff;
     }
-    .kart-sabit .sembol-baslik {
-      font-size: 17px;
-    }
     .yuzde-metin {
-      font-size: 17.5px;
+      font-size: 24px;
       font-weight: 800;
     }
-    .kart-sabit .yuzde-metin {
-      font-size: 16.5px;
-    }
     .kz-dev {
-      font-size: 19px;
+      font-size: 27px;
       font-weight: 900;
-      letter-spacing: 0.2px;
-    }
-    .re-ust-satir {
-      font-size: 18.5px;
-      font-weight: 900;
-      letter-spacing: 0.2px;
-      margin-bottom: 3px;
-    }
-    .re-sembol-satir {
-      margin-top: 1px;
+      letter-spacing: 0.3px;
     }
 
-    /* Renk Sınıfları */
+    /* Renk Sınıfları (Gözlüksüz Net Görünüm) */
     .renk-yesil   { color: #4ade80; }
     .renk-kirmizi { color: #f87171; }
     .renk-sari    { color: #fbbf24; }
     .renk-gri     { color: #d4d4d8; }
 
-    /* İç Dalga ve Alt Bilgi Satırları */
+    /* 2. Satır: İç Dalga */
     .ic-dalga-satir {
-      margin-top: 5px;
-      font-size: 15px;
+      margin-top: 10px;
+      font-size: 21px;
       font-weight: 800;
-      line-height: 1.25;
+      line-height: 1.3;
     }
-    .kart-sabit .ic-dalga-satir {
-      margin-top: 4px;
-      font-size: 14px;
-    }
+    /* 3. Satır: Pusu H/R veya Nöbetçi Durumu */
     .alt-bilgi-satir {
-      margin-top: 4px;
-      font-size: 13.5px;
+      margin-top: 9px;
+      font-size: 18px;
       font-weight: 700;
       color: #e4e4e7;
-      line-height: 1.3;
+      line-height: 1.35;
+    }
+    .nakit-etiket {
+      font-size: 14px;
+      font-weight: 700;
+      color: #71717a;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    /* ======================================================================
+       ALTTAN YUKARI KAYDIRMALI HABER / PİYASA ÖZETİ ÇEKMECESİ (PWA UYUMLU)
+       ====================================================================== */
+    .ozet-alt-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: rgba(15, 23, 42, 0.96);
+      border-top: 1.5px solid #334155;
+      border-radius: 18px 18px 0 0;
+      padding: 8px 16px calc(10px + env(safe-area-inset-bottom, 0px)) 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.75);
+    }
+    .cekmece-tutamac {
+      width: 46px;
+      height: 5px;
+      border-radius: 999px;
+      background: #64748b;
+    }
+    .ozet-alt-satir {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+    .ozet-alt-ipucu {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
+    /* Açılır Arka Plan Karartması ve Çekmece Gövdesi */
+    .ozet-arka-perde {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: rgba(0, 0, 0, 0.78);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .ozet-arka-perde.acik {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .ozet-cekmece {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      height: 88vh;
+      max-height: 88vh;
+      background: #09090b;
+      border-top: 2px solid #fbbf24;
+      border-radius: 22px 22px 0 0;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(104%);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.9);
+    }
+    .ozet-cekmece.acik {
+      transform: translateY(0);
+    }
+    .ozet-cekmece-ust {
+      padding: 10px 16px 12px 16px;
+      border-bottom: 1px solid #27272a;
+      background: #0f172a;
+      border-radius: 20px 20px 0 0;
+      touch-action: none;
+    }
+    .ozet-cekmece-ust-cubuk {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .ozet-baslik-satir {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .ozet-ana-baslik {
+      font-size: 18px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .ozet-zaman-etiket {
+      font-size: 13px;
+      font-weight: 700;
+      color: #93c5fd;
+      margin-top: 3px;
+    }
+    .ozet-buton-grup {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .ozet-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 7px 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .ozet-btn-kapat {
+      background: #7f1d1d;
+      border-color: #ef4444;
+      color: #ffffff;
+    }
+    .ozet-icerik-alani {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px;
+      user-select: text;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #e4e4e7;
+    }
+    .ozet-bolum-baslik {
+      font-size: 19px;
+      font-weight: 900;
+      color: #fbbf24;
+      background: #18181b;
+      border-left: 4px solid #fbbf24;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 16px 0 12px 0;
+      letter-spacing: 0.3px;
+    }
+    .ozet-bolum-baslik:first-child {
+      margin-top: 0;
+    }
+    .ozet-madde {
+      background: #121215;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .ozet-madde-vurgu {
+      color: #38bdf8;
+      font-weight: 900;
+    }
+    .ozet-paragraf {
+      margin-bottom: 12px;
+      color: #e4e4e7;
+    }
+    .ozet-bilgi-mesaj {
+      text-align: center;
+      padding: 32px 12px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #9ca3af;
     }
   </style>
 </head>
@@ -147,12 +293,51 @@
     <div id="saatBilgi">Bağlanıyor...</div>
     <div id="wakeDurum" class="kilit-durum kilit-pasif">🔆 Ekrana Dokun</div>
   </div>
+
   <div id="icerikAlani"></div>
 
+  <!-- SABİT ALT TUTAMAÇ BARI (Yukarı Kaydırınca veya Dokununca Açılır) -->
+  <div id="ozetAltBar" class="ozet-alt-bar" onclick="altBarTiklandi(event)">
+    <div class="cekmece-tutamac"></div>
+    <div class="ozet-alt-satir">
+      <span id="ozetAltEtiket">📄 Haber Özeti</span>
+      <span class="ozet-alt-ipucu">⌃ Yukarı Kaydır</span>
+    </div>
+  </div>
+
+  <!-- KARARTMA PERDESİ VE OKUMA ÇEKMECESİ -->
+  <div id="ozetPerde" class="ozet-arka-perde" onclick="ozetCekmeceKapat(event)"></div>
+  <div id="ozetCekmece" class="ozet-cekmece" onclick="event.stopPropagation()">
+    <div id="ozetCekmeceUst" class="ozet-cekmece-ust">
+      <div class="ozet-cekmece-ust-cubuk">
+        <div class="cekmece-tutamac"></div>
+      </div>
+      <div class="ozet-baslik-satir">
+        <div>
+          <div class="ozet-ana-baslik">📄 Piyasa & Haber Özeti</div>
+          <div id="ozetZamanBilgi" class="ozet-zaman-etiket">Son Güncelleme: Bekleniyor...</div>
+        </div>
+        <div class="ozet-buton-grup">
+          <button class="ozet-btn" onclick="ozetVerisiniCek(true, event)">↻ Yenile</button>
+          <button class="ozet-btn ozet-btn-kapat" onclick="ozetCekmeceKapat(event)">✕ Kapat</button>
+        </div>
+      </div>
+    </div>
+    <div id="ozetGovde" class="ozet-icerik-alani">
+      <div class="ozet-bilgi-mesaj">⏳ Haber Özeti yükleniyor...</div>
+    </div>
+  </div>
+
   <script>
+    // =========================================================================
+    // SMC MOTORU WEB UYGULAMASI (/exec) LİNKİ:
+    // =========================================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbyMit9WOCaCUglLFosrQmg2cbo7iQ-lKwqCltJKqaikFvpIVfnXBXXlIGeL7Yrc_GIR/exec";
-    const YENILEME_SANIYE = 120;
+    const YENILEME_SANIYE = 120; // 2 dakikada bir canlı fiyatları yeniler
+
     let wakeLock = null;
+    let sonOzetCekimMs = 0;
+    let ozetYukleniyor = false;
 
     async function uyanikKilidiAl() {
       try {
@@ -195,9 +380,8 @@
 
     function kisaAdTemizle(etiket) {
       let s = String(etiket || "").split("[")[0].trim();
-      if (/BİST30\s*V\.|XU030D1!/i.test(s)) return "BİST30 V.";
-      if (/BIST\s*30/i.test(s)) return "BİST30 V.";
-      if (/Ons\s*Altın|ONS\s*ALTIN/i.test(s)) return "ONS ALTIN";
+      if (/BIST\s*30/i.test(s)) return "BİST30";
+      if (/Ons\s*Altın/i.test(s)) return "ONS ALTIN";
       return s;
     }
 
@@ -214,82 +398,70 @@
       return "renk-gri";
     }
 
-    function reKaydiMi(p) {
-      const etiket = String(p.etiket || "");
-      const nobetci = String(p.nobetci || "");
-      return /\[(RE-SHORT|RE-LONG)/i.test(etiket) || /NÖBETÇİ\s*\(RE-/i.test(nobetci);
-    }
-
     function kzAyikla(p) {
       const s = String(p.nobetci || "");
       const etiket = String(p.etiket || "");
-      const isRe = reKaydiMi(p);
 
       // 1) Gerçek Açık Pozisyon (TL veya % K/Z)
-      if (!isRe) {
-        const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
-        if (kzM) {
-          const icerik = kzM[1].trim();
-          const tlKisim = icerik.match(/^([+\-][\d.,]+\s*TL)/i);
-          const gosterim = tlKisim ? tlKisim[1] : icerik;
-          const renk = gosterim.includes("+") ? "renk-yesil" : gosterim.includes("-") ? "renk-kirmizi" : "renk-gri";
-          return {
-            isRe: false,
-            html: `<div class="kz-dev ${renk}">${gosterim}</div>`,
-            pozitifMi: gosterim.startsWith("+"),
-            negatifMi: gosterim.startsWith("-")
-          };
+      const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
+      if (kzM) {
+        const icerik = kzM[1].trim();
+        const tlKisim = icerik.match(/^([+\-][\d.,]+\s*TL)/i);
+        const gosterim = tlKisim ? tlKisim[1] : icerik;
+        const renk = gosterim.includes("+") ? "renk-yesil" : gosterim.includes("-") ? "renk-kirmizi" : "renk-gri";
+        return {
+          html: `<div class="kz-dev ${renk}">${gosterim}</div>`,
+          pozitifMi: gosterim.startsWith("+"),
+          negatifMi: gosterim.startsWith("-")
+        };
+      }
+
+      // 2) RE Nöbeti
+      const isRe = /RE-SHORT|RE-LONG/i.test(etiket) || s.includes("RE:");
+      if (isRe) {
+        const isShortRe = /RE-SHORT/i.test(etiket) || /RE-SHORT/i.test(s);
+        const fiyatStr = String(p.fiyat || "");
+        const fM = fiyatStr.match(/^([\d.,]+)\s*\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
+        const reM = etiket.match(/RE:([\d.]+)/i) || s.match(/RE:([\d.]+)/i);
+        let reGunlukPct = null;
+        let curPct = null;
+        if (fM && reM) {
+          const curPrice = parseFloat(fM[1].replace(",", "."));
+          curPct = parseFloat(fM[2].replace(",", "."));
+          const rePrice = parseFloat(reM[1]);
+          if (curPrice > 0 && rePrice > 0 && !isNaN(curPct)) {
+            const dunKapanis = curPrice / (1 + curPct / 100);
+            reGunlukPct = ((rePrice - dunKapanis) / dunKapanis) * 100;
+          }
         }
-        return { isRe: false, html: "", pozitifMi: false, negatifMi: false };
-      }
-
-      // 2) RE Nöbeti: Dünkü kapanışa göre günlük orana çevir (Üst satırda gösterilecek)
-      const isShortRe = /RE-SHORT/i.test(etiket) || /RE-SHORT/i.test(s);
-      const fiyatStr = String(p.fiyat || "");
-      const fM = fiyatStr.match(/^([\d.,]+)\s*\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
-      const reM = etiket.match(/RE:([\d.]+)/i) || s.match(/RE:([\d.]+)/i);
-      let reGunlukPct = null;
-      let curPct = null;
-      if (fM && reM) {
-        const curPrice = parseFloat(fM[1].replace(",", "."));
-        curPct = parseFloat(fM[2].replace(",", "."));
-        const rePrice = parseFloat(reM[1]);
-        if (curPrice > 0 && rePrice > 0 && !isNaN(curPct)) {
-          const dunKapanis = curPrice / (1 + curPct / 100);
-          reGunlukPct = ((rePrice - dunKapanis) / dunKapanis) * 100;
+        let seviyeAsildi = false;
+        if (reGunlukPct !== null && curPct !== null) {
+          seviyeAsildi = isShortRe ? (curPct >= reGunlukPct - 0.05) : (curPct <= reGunlukPct + 0.05);
+        } else if (s.includes("TEST EDİLDİ")) {
+          seviyeAsildi = true;
         }
+        const icStr = String(p.icDalga || "");
+        const icUygun = isShortRe
+          ? (icStr.includes("Short") || icStr.includes("↘"))
+          : (icStr.includes("Long") || icStr.includes("↗"));
+        const oranMetin = reGunlukPct !== null
+          ? `(${reGunlukPct >= 0 ? "+" : ""}${reGunlukPct.toFixed(2)})`
+          : "";
+        const oranRenk = seviyeAsildi ? "renk-yesil" : "renk-gri";
+        const uygunEk = (seviyeAsildi && icUygun) ? " - UYGUN" : "";
+        return {
+          html: `<div class="kz-dev"><span class="renk-sari">RE</span> <span class="${oranRenk}">${oranMetin}${uygunEk}</span></div>`,
+          pozitifMi: (seviyeAsildi && icUygun),
+          negatifMi: false
+        };
       }
-
-      let seviyeAsildi = false;
-      if (reGunlukPct !== null && curPct !== null) {
-        seviyeAsildi = isShortRe ? (curPct >= reGunlukPct - 0.05) : (curPct <= reGunlukPct + 0.05);
-      } else if (s.includes("TEST EDİLDİ")) {
-        seviyeAsildi = true;
-      }
-
-      const icStr = String(p.icDalga || "");
-      const icUygun = isShortRe
-        ? (icStr.includes("Short") || icStr.includes("↘"))
-        : (icStr.includes("Long") || icStr.includes("↗"));
-
-      const oranMetin = reGunlukPct !== null
-        ? `(${reGunlukPct >= 0 ? "+" : ""}${reGunlukPct.toFixed(2)})`
-        : "";
-      const oranRenk = seviyeAsildi ? "renk-yesil" : "renk-gri";
-      const uygunEk = (seviyeAsildi && icUygun) ? " - UYGUN" : "";
-
-      return {
-        isRe: true,
-        html: `<div class="re-ust-satir"><span class="renk-sari">RE</span> <span class="${oranRenk}">${oranMetin}${uygunEk}</span></div>`,
-        pozitifMi: (seviyeAsildi && icUygun),
-        negatifMi: false
-      };
+      return { html: "", pozitifMi: false, negatifMi: false };
     }
 
     function cerceveBelirle(nobetciStr, kzObj) {
       const s = String(nobetciStr || "");
-      if (!kzObj.isRe && s.includes("🚨")) return "cerceve-kritik";
-      if (!kzObj.isRe && s.includes("⚠️")) return "cerceve-uyari";
+      if (s.includes("🚨") && !s.includes("RE-")) return "cerceve-kritik";
+      if (s.includes("⚠️")) return "cerceve-uyari";
       if (kzObj.pozitifMi) return "cerceve-pozitif";
       if (kzObj.negatifMi) return "cerceve-uyari";
       return "cerceve-notr";
@@ -301,7 +473,7 @@
         const parcalar = t.split("|").map(x => x.trim());
         t = parcalar[parcalar.length - 1];
       }
-      return t.replace(/NÖBETÇİ\s*\([^)]+\)\s*:\s*/i, "").trim();
+      return t.replace(/NÖBETÇİ\s*\([^)]+\)\s*:\s*/i, "");
     }
 
     async function veriyiCek() {
@@ -309,55 +481,13 @@
         const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
         const veri = await res.json();
         if (!veri.ok) throw new Error(veri.hata || "Veri hatası");
-
         document.getElementById("saatBilgi").textContent = "🕒 " + (veri.zaman || "-");
         const alan = document.getElementById("icerikAlani");
         alan.innerHTML = "";
 
-        // 1) HER EKRANDA SABİT ÜST BÖLÜM: ONS ALTIN & BİST30 V.
-        const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
-          const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
-          const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
-          return aOns - bOns;
-        });
-
-        gostergeler.forEach(g => {
-          const ad = kisaAdTemizle(g.etiket);
-          const simge = anaYonSimgesi(g.anaYon);
-          const yuzde = sadeceYuzdeAyikla(g.fiyat);
-          const yRenk = yuzdeRenkSinifi(yuzde);
-          const icRenk = icDalgaRenkSinifi(g.icDalga);
-          const pusuGoster = (g.pusu && g.pusu !== "Nötr" && g.pusu !== "-")
-            ? `<div class="alt-bilgi-satir">${g.pusu}</div>`
-            : "";
-
-          const sabitKart = document.createElement("div");
-          sabitKart.className = "kart kart-sabit";
-          sabitKart.innerHTML = `
-            <div class="ust-satir">
-              <div>
-                <span class="sembol-baslik">${ad} ${simge}</span>
-                <span class="yuzde-metin ${yRenk}">${yuzde}</span>
-              </div>
-            </div>
-            <div class="ic-dalga-satir ${icRenk}">${g.icDalga || "-"}</div>
-            ${pusuGoster}
-          `;
-          alan.appendChild(sabitKart);
-        });
-
-        // 2) ALT BÖLÜM: ÖNCE GERÇEK AÇIK POZİSYONLAR, EN ALTTA RE NÖBETLERİ
+        // A) AÇIK POZİSYON VEYA RE NÖBETİ VARSA
         if (veri.pozisyonlar && veri.pozisyonlar.length > 0) {
-          const siraliPozlar = [...veri.pozisyonlar].sort((a, b) => {
-            return (reKaydiMi(a) ? 1 : 0) - (reKaydiMi(b) ? 1 : 0);
-          });
-
-          const ayirici = document.createElement("div");
-          ayirici.className = "bolum-ayirici";
-          ayirici.textContent = "Pozisyon & RE Nöbeti";
-          alan.appendChild(ayirici);
-
-          siraliPozlar.forEach(p => {
+          veri.pozisyonlar.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
             const simge = anaYonSimgesi(p.anaYon);
             const yuzde = sadeceYuzdeAyikla(p.fiyat);
@@ -369,52 +499,221 @@
             const nobetciRenk = p.nobetci.includes("🚨") ? "renk-kirmizi"
                               : p.nobetci.includes("⚠️") ? "renk-sari"
                               : p.nobetci.includes("✅") ? "renk-yesil" : "renk-gri";
-
             const kart = document.createElement("div");
             kart.className = `kart ${cerceve}`;
-
-            if (kzObj.isRe) {
-              const pusuSatir = (p.pusu && p.pusu !== "Nötr" && p.pusu !== "-")
-                ? `<div class="alt-bilgi-satir">${p.pusu}</div>`
-                : "";
-              kart.innerHTML = `
-                ${kzObj.html}
-                <div class="re-sembol-satir">
+            kart.innerHTML = `
+              <div class="ust-satir">
+                <div>
                   <span class="sembol-baslik">${ad} ${simge}</span>
                   <span class="yuzde-metin ${yRenk}">${yuzde}</span>
                 </div>
-                <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
-                ${pusuSatir}
-              `;
-            } else {
-              kart.innerHTML = `
+                ${kzObj.html}
+              </div>
+              <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
+              <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
+            `;
+            alan.appendChild(kart);
+          });
+        }
+        // B) HİÇ POZİSYON YOKSA (SADECE BIST30 & ONS ALTIN)
+        else {
+          let html = `<div class="nakit-etiket">⚪ %100 Nakit — Ana Piyasa İzleme</div>`;
+          (veri.anaGostergeler || []).forEach(g => {
+            const ad = kisaAdTemizle(g.etiket);
+            const simge = anaYonSimgesi(g.anaYon);
+            const yuzde = sadeceYuzdeAyikla(g.fiyat);
+            const yRenk = yuzdeRenkSinifi(yuzde);
+            const icRenk = icDalgaRenkSinifi(g.icDalga);
+            html += `
+              <div class="kart cerceve-notr">
                 <div class="ust-satir">
                   <div>
                     <span class="sembol-baslik">${ad} ${simge}</span>
                     <span class="yuzde-metin ${yRenk}">${yuzde}</span>
                   </div>
-                  ${kzObj.html}
                 </div>
-                <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
-                <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
-              `;
-            }
-
-            alan.appendChild(kart);
+                <div class="ic-dalga-satir ${icRenk}">${g.icDalga || "-"}</div>
+                <div class="alt-bilgi-satir">${g.pusu || "-"}</div>
+              </div>
+            `;
           });
-        } else {
-          const nakitBilgi = document.createElement("div");
-          nakitBilgi.className = "bolum-ayirici";
-          nakitBilgi.textContent = "⚪ %100 Nakit — Açık Pozisyon / RE Yok";
-          alan.appendChild(nakitBilgi);
+          alan.innerHTML = html;
         }
       } catch (err) {
         document.getElementById("saatBilgi").textContent = "⚠️ Bağlantı Bekleniyor...";
       }
     }
 
+    // =========================================================================
+    // HABER ÖZETİ ÇEKMECESİ & DOKUNMATİK YUKARI/AŞAĞI KAYDIRMA YÖNETİCİSİ
+    // =========================================================================
+    function htmlGuvenliYap(metin) {
+      return String(metin || "")
+        .replace(/&/g, "&")
+        .replace(/</g, "<")
+        .replace(/>/g, ">");
+    }
+
+    function ozetMetniniBicimlendir(hamMetin) {
+      if (!hamMetin) return `<div class="ozet-bilgi-mesaj">Özet metni boş.</div>`;
+      const satirlar = String(hamMetin).split("\n");
+      let html = "";
+      for (const hamSatir of satirlar) {
+        const s = hamSatir.trim();
+        if (!s) continue;
+
+        // 1) Ana Bölüm Başlıkları (ÖZET STRATEJİ:, YENİ GELİŞMELER: vb.)
+        const buyukBaslikMi = /^[A-ZÇĞİÖŞÜ0-9\s/()\-]{4,55}:?$/.test(s) && !s.startsWith("-");
+        if (buyukBaslikMi) {
+          html += `<div class="ozet-bolum-baslik">${htmlGuvenliYap(s.replace(/:$/, ""))}</div>`;
+          continue;
+        }
+
+        // 2) Tireli Maddeler (- BİST 30 VE VİOP...: Açıklama)
+        if (/^[\-•*]\s+/.test(s)) {
+          const govde = s.replace(/^[\-•*]\s+/, "");
+          const ikiNoktaIdx = govde.indexOf(":");
+          if (ikiNoktaIdx > 2 && ikiNoktaIdx <= 95) {
+            const basVurgu = htmlGuvenliYap(govde.substring(0, ikiNoktaIdx + 1));
+            const kalanMetin = htmlGuvenliYap(govde.substring(ikiNoktaIdx + 1).trim());
+            html += `<div class="ozet-madde"><span class="ozet-madde-vurgu">${basVurgu}</span> ${kalanMetin}</div>`;
+          } else {
+            html += `<div class="ozet-madde">• ${htmlGuvenliYap(govde)}</div>`;
+          }
+          continue;
+        }
+
+        // 3) Standart Paragraf
+        html += `<div class="ozet-paragraf">${htmlGuvenliYap(s)}</div>`;
+      }
+      return html;
+    }
+
+    async function ozetVerisiniCek(zorlaYenile, ev) {
+      if (ev) ev.stopPropagation();
+      if (ozetYukleniyor) return;
+      const simdi = Date.now();
+      if (!zorlaYenile && sonOzetCekimMs > 0 && (simdi - sonOzetCekimMs) < 120 * 1000) {
+        return;
+      }
+      ozetYukleniyor = true;
+      const govdeEl = document.getElementById("ozetGovde");
+      const zamanEl = document.getElementById("ozetZamanBilgi");
+      const altEtiketEl = document.getElementById("ozetAltEtiket");
+      if (zorlaYenile || sonOzetCekimMs === 0) {
+        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⏳ Haber Özeti Drive'dan okunuyor...</div>`;
+      }
+      try {
+        const res = await fetch(API_URL + "?istek=ozet&t=" + Date.now(), { cache: "no-store" });
+        const veri = await res.json();
+        if (!veri.ok) throw new Error(veri.hata || "Özet okunamadı");
+        sonOzetCekimMs = Date.now();
+        const saatKisa = (veri.zaman || "").split(" ").pop() || veri.zaman || "";
+        zamanEl.textContent = "🕒 Son Güncelleme: " + (veri.zaman || "-");
+        if (saatKisa) {
+          altEtiketEl.textContent = `📄 Haber Özeti (${saatKisa})`;
+        }
+        govdeEl.innerHTML = ozetMetniniBicimlendir(veri.icerik);
+      } catch (err) {
+        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⚠️ Özet alınamadı: ${htmlGuvenliYap(err.message || err)}</div>`;
+      } finally {
+        ozetYukleniyor = false;
+      }
+    }
+
+    function ozetCekmeceAc() {
+      uyanikKilidiAl();
+      const cekmece = document.getElementById("ozetCekmece");
+      const perde = document.getElementById("ozetPerde");
+      cekmece.style.transform = "";
+      perde.classList.add("acik");
+      cekmece.classList.add("acik");
+      ozetVerisiniCek(false);
+    }
+
+    function ozetCekmeceKapat(ev) {
+      if (ev) ev.stopPropagation();
+      const cekmece = document.getElementById("ozetCekmece");
+      const perde = document.getElementById("ozetPerde");
+      cekmece.style.transform = "";
+      cekmece.classList.remove("acik");
+      perde.classList.remove("acik");
+    }
+
+    function altBarTiklandi(ev) {
+      if (ev) ev.stopPropagation();
+      tamEkranVeUyanikTut();
+      ozetCekmeceAc();
+    }
+
+    // Dokunmatik Hareketler: Alt Bardan Yukarı Açma & Üst Başlıktan Aşağı Kapatma
+    (function dokunmatikHareketleriKur() {
+      const altBar = document.getElementById("ozetAltBar");
+      const cekmece = document.getElementById("ozetCekmece");
+      const cekmeceUst = document.getElementById("ozetCekmeceUst");
+      const cekmeceGovde = document.getElementById("ozetGovde");
+
+      let altBasY = null;
+      altBar.addEventListener("touchstart", (e) => {
+        altBasY = e.touches[0].clientY;
+      }, { passive: true });
+
+      altBar.addEventListener("touchend", (e) => {
+        if (altBasY === null) return;
+        const bitisY = e.changedTouches[0].clientY;
+        if (altBasY - bitisY > 22) {
+          tamEkranVeUyanikTut();
+          ozetCekmeceAc();
+        }
+        altBasY = null;
+      }, { passive: true });
+
+      let ustBasY = null;
+      let sonFarkY = 0;
+      cekmeceUst.addEventListener("touchstart", (e) => {
+        ustBasY = e.touches[0].clientY;
+        sonFarkY = 0;
+        cekmece.style.transition = "none";
+      }, { passive: true });
+
+      cekmeceUst.addEventListener("touchmove", (e) => {
+        if (ustBasY === null) return;
+        const fark = e.touches[0].clientY - ustBasY;
+        if (fark > 0) {
+          sonFarkY = fark;
+          cekmece.style.transform = `translateY(${fark}px)`;
+        }
+      }, { passive: true });
+
+      cekmeceUst.addEventListener("touchend", () => {
+        cekmece.style.transition = "";
+        if (sonFarkY > 75) {
+          ozetCekmeceKapat();
+        } else {
+          cekmece.style.transform = "";
+        }
+        ustBasY = null;
+        sonFarkY = 0;
+      }, { passive: true });
+
+      let govdeBasY = null;
+      cekmeceGovde.addEventListener("touchstart", (e) => {
+        govdeBasY = cekmeceGovde.scrollTop <= 0 ? e.touches[0].clientY : null;
+      }, { passive: true });
+
+      cekmeceGovde.addEventListener("touchend", (e) => {
+        if (govdeBasY === null) return;
+        const fark = e.changedTouches[0].clientY - govdeBasY;
+        if (cekmeceGovde.scrollTop <= 0 && fark > 95) {
+          ozetCekmeceKapat();
+        }
+        govdeBasY = null;
+      }, { passive: true });
+    })();
+
     uyanikKilidiAl();
     veriyiCek();
+    setTimeout(() => ozetVerisiniCek(false), 1500);
     setInterval(veriyiCek, YENILEME_SANIYE * 1000);
   </script>
 </body>
