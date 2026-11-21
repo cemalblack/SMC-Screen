@@ -43,7 +43,7 @@
     .kilit-aktif { color: #047857; border: 1px solid #6ee7b7; background: #ecfdf5; }
     .kilit-pasif { color: #b91c1c; border: 1px solid #fca5a5; background: #fef2f2; }
 
-    /* Bölüm Ayırıcı Etiketler (Net Grup Ayrımı) */
+    /* Bölüm Ayırıcı Etiketler */
     .bolum-ayirici {
       display: flex;
       align-items: center;
@@ -73,7 +73,7 @@
       color: #64748b;
     }
 
-    /* Kartlar (Kırık Beyaz Zemin Üzerinde Net Beyaz Banka Kartları) */
+    /* Kartlar */
     .kart {
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
@@ -83,7 +83,6 @@
       margin-bottom: 8px;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     }
-    /* Ana Piyasa (ONS & BİST30 V.) Kartları: Buz Mavisi Sol Şerit ile Ayrışır */
     .kart-sabit {
       background: #f8fafc;
       border-color: #cbd5e1;
@@ -91,7 +90,6 @@
       padding: 8px 12px;
       margin-bottom: 7px;
     }
-    /* RE Nöbet Kartları */
     .kart-re {
       background: #ffffff;
       border-color: #cbd5e1;
@@ -112,7 +110,6 @@
       50% { box-shadow: 0 0 14px rgba(220, 38, 38, 0.45); }
     }
 
-    /* Satır Düzenleri ve Dengeli Puntolar */
     .ust-satir {
       display: flex;
       justify-content: space-between;
@@ -158,14 +155,13 @@
       margin-top: 1px;
     }
 
-    /* Açık Zemin Üzerinde Çatallanma Yapmayan Keskin Renk Sınıfları */
+    /* Keskin Renk Sınıfları */
     .renk-yesil   { color: #15803d; }
     .renk-kirmizi { color: #dc2626; }
     .renk-sari    { color: #b45309; }
     .renk-gri     { color: #475569; }
     .renk-mavi    { color: #0369a1; }
 
-    /* İç Dalga ve Alt Bilgi Satırları */
     .ic-dalga-satir {
       margin-top: 5px;
       font-size: 15px;
@@ -185,7 +181,7 @@
     }
 
     /* ======================================================================
-       ALTTAN YUKARI KAYDIRMALI HABER / PİYASA ÖZETİ ÇEKMECESİ (BANKA MODU)
+       ALTTAN YUKARI KAYDIRMALI ÖZET + BİST 30 + ONS RAPOR ÇEKMECESİ
        ====================================================================== */
     .ozet-alt-bar {
       position: fixed;
@@ -216,7 +212,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 800;
       color: #0f172a;
     }
@@ -226,7 +222,6 @@
       color: #0284c7;
     }
 
-    /* Karartma Perdesi ve Açık Renk Okuma Çekmecesi */
     .ozet-arka-perde {
       position: fixed;
       inset: 0;
@@ -246,8 +241,8 @@
       right: 0;
       bottom: 0;
       z-index: 100;
-      height: 88vh;
-      max-height: 88vh;
+      height: 89vh;
+      max-height: 89vh;
       background: #f1f5f9;
       border-top: 3px solid #0284c7;
       border-radius: 20px 20px 0 0;
@@ -261,7 +256,7 @@
       transform: translateY(0);
     }
     .ozet-cekmece-ust {
-      padding: 9px 12px 11px 12px;
+      padding: 9px 12px 10px 12px;
       border-bottom: 1px solid #cbd5e1;
       background: #ffffff;
       border-radius: 18px 18px 0 0;
@@ -279,7 +274,7 @@
       gap: 6px;
     }
     .ozet-ana-baslik {
-      font-size: 16.5px;
+      font-size: 16px;
       font-weight: 900;
       color: #0f172a;
     }
@@ -322,12 +317,40 @@
       color: #b91c1c;
     }
 
-    /* Haber Özeti Gövdesi ve 3 Kademeli Yazı Boyutu Sınıfları */
+    /* 3'lü Sekme Çubuğu (Haber Özeti | BİST 30 | ONS) */
+    .sekme-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 9px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 11px;
+      border: 1px solid #cbd5e1;
+    }
+    .sekme-btn {
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 4px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .sekme-btn.aktif {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.35);
+    }
+
+    /* Çekmece Gövdesi ve 3 Kademeli Yazı Boyutu Sınıfları */
     .ozet-icerik-alani {
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 14px 14px calc(22px + env(safe-area-inset-bottom, 0px)) 14px;
+      padding: 13px 13px calc(22px + env(safe-area-inset-bottom, 0px)) 13px;
       user-select: text;
       font-weight: 500;
       color: #1e293b;
@@ -345,7 +368,7 @@
       line-height: 1.65;
     }
 
-    /* Deniz Mavisi Bölüm Başlıkları (Seçilen Boyutla Orantılı Büyür) */
+    /* Bölüm Başlıkları ve Madde Kartları */
     .ozet-bolum-baslik {
       font-size: 1.02em;
       font-weight: 900;
@@ -354,13 +377,33 @@
       border-left: 4px solid #0284c7;
       padding: 7px 11px;
       border-radius: 6px;
-      margin: 14px 0 10px 0;
+      margin: 12px 0 10px 0;
       letter-spacing: 0.3px;
     }
     .ozet-bolum-baslik:first-child {
       margin-top: 0;
     }
-    /* Beyaz Zeminli Net Okuma Kartları + Deniz Mavisi Madde Başlıkları */
+    .rapor-ust-afis {
+      font-size: 1.03em;
+      font-weight: 900;
+      color: #0f172a;
+      background: #ffffff;
+      border: 1.5px solid #93c5fd;
+      border-left: 5px solid #0284c7;
+      padding: 9px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .rapor-fiyat-kart {
+      font-size: 1.05em;
+      font-weight: 900;
+      color: #0f172a;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 10px;
+    }
     .ozet-madde {
       background: #ffffff;
       border: 1px solid #cbd5e1;
@@ -399,16 +442,16 @@
 
   <div id="icerikAlani"></div>
 
-  <!-- SABİT ALT TUTAMAÇ BARI (Yukarı Kaydırınca veya Dokununca Açılır) -->
+  <!-- SABİT ALT TUTAMAÇ BARI -->
   <div id="ozetAltBar" class="ozet-alt-bar" onclick="altBarTiklandi(event)">
     <div class="cekmece-tutamac"></div>
     <div class="ozet-alt-satir">
-      <span id="ozetAltEtiket">📄 Haber Özeti</span>
+      <span id="ozetAltEtiket">📄 Özet & Raporlar</span>
       <span class="ozet-alt-ipucu">⌃ Yukarı Kaydır</span>
     </div>
   </div>
 
-  <!-- KARARTMA PERDESİ VE OKUMA ÇEKMECESİ -->
+  <!-- KARARTMA PERDESİ VE SEKMELİ OKUMA ÇEKMECESİ -->
   <div id="ozetPerde" class="ozet-arka-perde" onclick="ozetCekmeceKapat(event)"></div>
   <div id="ozetCekmece" class="ozet-cekmece" onclick="event.stopPropagation()">
     <div id="ozetCekmeceUst" class="ozet-cekmece-ust">
@@ -417,7 +460,7 @@
       </div>
       <div class="ozet-baslik-satir">
         <div>
-          <div class="ozet-ana-baslik">📄 Haber Özeti</div>
+          <div id="cekmeceAnaBaslik" class="ozet-ana-baslik">📰 Haber Özeti</div>
           <div id="ozetZamanBilgi" class="ozet-zaman-etiket">Son Güncelleme: Bekleniyor...</div>
         </div>
         <div class="ozet-buton-grup">
@@ -426,9 +469,14 @@
           <button class="ozet-btn ozet-btn-kapat" onclick="ozetCekmeceKapat(event)">✕ Kapat</button>
         </div>
       </div>
+      <div class="sekme-bar">
+        <button id="sekmeBtn_ozet" class="sekme-btn aktif" onclick="sekmeDegistir('ozet', event)">📰 Haber Özeti</button>
+        <button id="sekmeBtn_bist" class="sekme-btn" onclick="sekmeDegistir('bist', event)">📊 BİST 30</button>
+        <button id="sekmeBtn_ons"  class="sekme-btn" onclick="sekmeDegistir('ons', event)">🪙 ONS</button>
+      </div>
     </div>
     <div id="ozetGovde" class="ozet-icerik-alani boyut-normal">
-      <div class="ozet-bilgi-mesaj">⏳ Haber Özeti yükleniyor...</div>
+      <div class="ozet-bilgi-mesaj">⏳ Veriler yükleniyor...</div>
     </div>
   </div>
 
@@ -446,6 +494,8 @@
     let sonOzetCekimMs = 0;
     let ozetYukleniyor = false;
     let aktifYaziKademe = 0;
+    let aktifSekme = "ozet";
+    let sonCekilenPaket = null;
 
     function yaziBoyutunuUygula(kademe) {
       const gecerli = (kademe >= 0 && kademe < YAZI_KADEMELERI.length) ? kademe : 0;
@@ -507,7 +557,6 @@
       return `(${m[1]})`;
     }
 
-    // ONS Altın için küsuratsız, binlik noktalı dolar fiyatı üretir -> "$3.528"
     function onsDolarFiyatAyikla(fiyatStr) {
       const m = String(fiyatStr || "").match(/^\s*([\d.,]+)/);
       if (!m) return "";
@@ -563,7 +612,6 @@
       const etiket = String(p.etiket || "");
       const isRe = reKaydiMi(p);
 
-      // 1) Gerçek Açık Pozisyon (TL veya % K/Z)
       if (!isRe) {
         const kzM = s.match(/\[K\/Z:([^\]]+)\]/);
         if (kzM) {
@@ -581,7 +629,6 @@
         return { isRe: false, html: "", pozitifMi: false, negatifMi: false };
       }
 
-      // 2) RE Nöbeti: Dünkü kapanışa göre günlük orana çevir
       const isShortRe = /RE-SHORT/i.test(etiket) || /RE-SHORT/i.test(s);
       const fiyatStr = String(p.fiyat || "");
       const fM = fiyatStr.match(/^([\d.,]+)\s*\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
@@ -663,7 +710,7 @@
         const acikPozlar = tumPozlar.filter(p => !reKaydiMi(p));
         const reNobetleri = tumPozlar.filter(p => reKaydiMi(p));
 
-        // 1. BÖLÜM (EN ÜST): GERÇEK AÇIK POZİSYONLAR
+        // 1. BÖLÜM: GERÇEK AÇIK POZİSYONLAR
         bolumBasligiEkle(alan, "💼 Açık Pozisyonlar", true);
         if (acikPozlar.length > 0) {
           acikPozlar.forEach(p => {
@@ -701,7 +748,7 @@
           alan.appendChild(nakit);
         }
 
-        // 2. BÖLÜM (ORTA): ANA PİYASA GÖSTERGELERİ (ÖNCE ONS, SONRA BİST30 V.)
+        // 2. BÖLÜM: ANA PİYASA (ÖNCE ONS, SONRA BİST30 V.)
         const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
           const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
           const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
@@ -739,7 +786,7 @@
           });
         }
 
-        // 3. BÖLÜM (EN ALT): YENİDEN GİRİŞ (RE) NÖBETLERİ (VARSA GÖSTERİR)
+        // 3. BÖLÜM: YENİDEN GİRİŞ (RE) NÖBETLERİ
         if (reNobetleri.length > 0) {
           bolumBasligiEkle(alan, "📌 Yeniden Giriş (RE) Nöbeti", false);
           reNobetleri.forEach(p => {
@@ -774,7 +821,7 @@
     }
 
     // =========================================================================
-    // HABER ÖZETİ ÇEKMECESİ & DOKUNMATİK YUKARI/AŞAĞI KAYDIRMA YÖNETİCİSİ
+    // SEKMELİ HABER ÖZETİ + BİST 30 RAPORU + ONS RAPORU ÇEKMECESİ
     // =========================================================================
     function htmlGuvenliYap(metin) {
       return String(metin || "")
@@ -784,21 +831,19 @@
     }
 
     function ozetMetniniBicimlendir(hamMetin) {
-      if (!hamMetin) return `<div class="ozet-bilgi-mesaj">Özet metni boş.</div>`;
+      if (!hamMetin) return `<div class="ozet-bilgi-mesaj">Özet metni bulunamadı.</div>`;
       const satirlar = String(hamMetin).split("\n");
       let html = "";
       for (const hamSatir of satirlar) {
         const s = hamSatir.trim();
         if (!s) continue;
 
-        // 1) Ana Bölüm Başlıkları (ÖZET STRATEJİ:, YENİ GELİŞMELER: vb.)
         const buyukBaslikMi = /^[A-ZÇĞİÖŞÜ0-9\s/()\-]{4,55}:?$/.test(s) && !s.startsWith("-");
         if (buyukBaslikMi) {
           html += `<div class="ozet-bolum-baslik">${htmlGuvenliYap(s.replace(/:$/, ""))}</div>`;
           continue;
         }
 
-        // 2) Tireli Maddeler (- BİST 30 VE VİOP...: Açıklama)
         if (/^[\-•*]\s+/.test(s)) {
           const govde = s.replace(/^[\-•*]\s+/, "");
           const ikiNoktaIdx = govde.indexOf(":");
@@ -812,39 +857,98 @@
           continue;
         }
 
-        // 3) Standart Paragraf
         html += `<div class="ozet-paragraf">${htmlGuvenliYap(s)}</div>`;
       }
       return html;
+    }
+
+    function sparkRaporunuBicimlendir(raporObj, adEtiket) {
+      if (!raporObj || !raporObj.icerik) {
+        return `<div class="ozet-bilgi-mesaj">📭 Henüz ${htmlGuvenliYap(adEtiket)} için Gmail'de hazır rapor maili bulunamadı.</div>`;
+      }
+      let html = `<div class="rapor-ust-afis">${htmlGuvenliYap(raporObj.konu || adEtiket)}</div>`;
+      const satirlar = String(raporObj.icerik).split("\n");
+      for (const hamSatir of satirlar) {
+        const s = hamSatir.trim();
+        if (!s) continue;
+        const ikiNoktaIdx = s.indexOf(":");
+        if (/^Fiyat\s*:/i.test(s) && ikiNoktaIdx > 0) {
+          const kalan = htmlGuvenliYap(s.substring(ikiNoktaIdx + 1).trim());
+          html += `<div class="rapor-fiyat-kart"><span class="ozet-madde-vurgu">Fiyat:</span> ${kalan}</div>`;
+        } else if (ikiNoktaIdx > 1 && ikiNoktaIdx <= 45) {
+          const etiket = htmlGuvenliYap(s.substring(0, ikiNoktaIdx + 1));
+          const deger = htmlGuvenliYap(s.substring(ikiNoktaIdx + 1).trim());
+          html += `<div class="ozet-madde"><span class="ozet-madde-vurgu">${etiket}</span> ${deger}</div>`;
+        } else {
+          html += `<div class="ozet-paragraf">${htmlGuvenliYap(s)}</div>`;
+        }
+      }
+      return html;
+    }
+
+    function aktifSekmeyiCiz() {
+      const govdeEl = document.getElementById("ozetGovde");
+      const zamanEl = document.getElementById("ozetZamanBilgi");
+      const baslikEl = document.getElementById("cekmeceAnaBaslik");
+
+      ["ozet", "bist", "ons"].forEach(k => {
+        const btn = document.getElementById("sekmeBtn_" + k);
+        if (btn) btn.classList.toggle("aktif", k === aktifSekme);
+      });
+
+      if (!sonCekilenPaket) return;
+
+      if (aktifSekme === "ozet") {
+        baslikEl.textContent = "📰 Haber Özeti";
+        zamanEl.textContent = "🕒 Son Güncelleme: " + (sonCekilenPaket.zaman || "-");
+        govdeEl.innerHTML = ozetMetniniBicimlendir(sonCekilenPaket.icerik);
+      } else if (aktifSekme === "bist") {
+        baslikEl.textContent = "📊 BİST 30 Raporu";
+        const r = sonCekilenPaket.bistRapor;
+        zamanEl.textContent = r && r.zaman ? ("🕒 Rapor Saati: " + r.zaman) : "🕒 Rapor bekleniyor";
+        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "BİST 30");
+      } else if (aktifSekme === "ons") {
+        baslikEl.textContent = "🪙 ONS Altın Raporu";
+        const r = sonCekilenPaket.onsRapor;
+        zamanEl.textContent = r && r.zaman ? ("🕒 Rapor Saati: " + r.zaman) : "🕒 Rapor bekleniyor";
+        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "ONS Altın");
+      }
+      govdeEl.scrollTop = 0;
+    }
+
+    function sekmeDegistir(yeniSekme, ev) {
+      if (ev) ev.stopPropagation();
+      aktifSekme = yeniSekme;
+      aktifSekmeyiCiz();
     }
 
     async function ozetVerisiniCek(zorlaYenile, ev) {
       if (ev) ev.stopPropagation();
       if (ozetYukleniyor) return;
       const simdi = Date.now();
-      if (!zorlaYenile && sonOzetCekimMs > 0 && (simdi - sonOzetCekimMs) < 120 * 1000) {
+      if (!zorlaYenile && sonOzetCekimMs > 0 && (simdi - sonOzetCekimMs) < 120 * 1000 && sonCekilenPaket) {
+        aktifSekmeyiCiz();
         return;
       }
       ozetYukleniyor = true;
       const govdeEl = document.getElementById("ozetGovde");
-      const zamanEl = document.getElementById("ozetZamanBilgi");
       const altEtiketEl = document.getElementById("ozetAltEtiket");
-      if (zorlaYenile || sonOzetCekimMs === 0) {
-        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⏳ Haber Özeti Drive'dan okunuyor...</div>`;
+      if (zorlaYenile || !sonCekilenPaket) {
+        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⏳ Özet ve raporlar okunuyor...</div>`;
       }
       try {
         const res = await fetch(API_URL + "?istek=ozet&t=" + Date.now(), { cache: "no-store" });
         const veri = await res.json();
-        if (!veri.ok) throw new Error(veri.hata || "Özet okunamadı");
+        if (!veri.ok) throw new Error(veri.hata || veri.ozetHata || "Veri okunamadı");
         sonOzetCekimMs = Date.now();
-        const saatKisa = (veri.zaman || "").split(" ").pop() || veri.zaman || "";
-        zamanEl.textContent = "🕒 Son Güncelleme: " + (veri.zaman || "-");
+        sonCekilenPaket = veri;
+        const saatKisa = (veri.zaman || "").split(" ").pop() || "";
         if (saatKisa) {
-          altEtiketEl.textContent = `📄 Haber Özeti (${saatKisa})`;
+          altEtiketEl.textContent = `📄 Özet & Raporlar (${saatKisa})`;
         }
-        govdeEl.innerHTML = ozetMetniniBicimlendir(veri.icerik);
+        aktifSekmeyiCiz();
       } catch (err) {
-        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⚠️ Özet alınamadı: ${htmlGuvenliYap(err.message || err)}</div>`;
+        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⚠️ Okunamadı: ${htmlGuvenliYap(err.message || err)}</div>`;
       } finally {
         ozetYukleniyor = false;
       }
