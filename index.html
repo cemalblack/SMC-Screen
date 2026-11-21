@@ -271,12 +271,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
     .ozet-ana-baslik {
-      font-size: 16px;
+      font-size: 16.5px;
       font-weight: 900;
       color: #0f172a;
+      white-space: nowrap;
     }
     .ozet-zaman-etiket {
       font-size: 12px;
@@ -286,7 +287,7 @@
     }
     .ozet-buton-grup {
       display: flex;
-      gap: 6px;
+      gap: 7px;
       align-items: center;
       flex-shrink: 0;
     }
@@ -295,14 +296,14 @@
       color: #0369a1;
       border: 1px solid #7dd3fc;
       border-radius: 9px;
-      padding: 6px 9px;
+      padding: 6px 10px;
       font-size: 13px;
       font-weight: 800;
       cursor: pointer;
       line-height: 1.1;
     }
     .ozet-btn-boyut {
-      min-width: 42px;
+      min-width: 44px;
       text-align: center;
       letter-spacing: -0.2px;
     }
@@ -383,26 +384,59 @@
     .ozet-bolum-baslik:first-child {
       margin-top: 0;
     }
+
+    /* Rapor Üst Durum Kutusu + Sağ Ucunda Mavi "↻ Yenile" Tuşu */
     .rapor-ust-afis {
-      font-size: 1.03em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.02em;
       font-weight: 900;
       color: #0f172a;
       background: #ffffff;
       border: 1.5px solid #93c5fd;
       border-left: 5px solid #0284c7;
-      padding: 9px 12px;
+      padding: 8px 10px 8px 12px;
       border-radius: 10px;
       margin-bottom: 10px;
     }
+    .rapor-ust-afis-metin {
+      flex: 1;
+      min-width: 0;
+      line-height: 1.25;
+    }
+    .rapor-yenile-btn {
+      flex-shrink: 0;
+      background: #f0f9ff;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      border-radius: 9px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .rapor-yenile-btn:disabled {
+      background: #fffbeb;
+      color: #b45309;
+      border-color: #fcd34d;
+      cursor: default;
+    }
+
+    /* Ayrı Fiyat Kutusu */
     .rapor-fiyat-kart {
-      font-size: 1.05em;
-      font-weight: 900;
+      font-size: 1.03em;
+      font-weight: 800;
       color: #0f172a;
-      background: #f8fafc;
+      background: #ffffff;
       border: 1.5px solid #cbd5e1;
       border-radius: 10px;
-      padding: 9px 12px;
+      padding: 10px 13px;
       margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
     .ozet-madde {
       background: #ffffff;
@@ -465,7 +499,6 @@
         </div>
         <div class="ozet-buton-grup">
           <button id="ozetBoyutBtn" class="ozet-btn ozet-btn-boyut" onclick="ozetYaziBoyutuDegistir(event)">Aa</button>
-          <button class="ozet-btn" onclick="ozetVerisiniCek(true, event)">↻ Yenile</button>
           <button class="ozet-btn ozet-btn-kapat" onclick="ozetCekmeceKapat(event)">✕ Kapat</button>
         </div>
       </div>
@@ -490,12 +523,20 @@
       { sinif: "boyut-cok-buyuk", etiket: "Aa++" }
     ];
 
+    const RAPOR_ANA_BASLIK_REGEX = /^(Fiyat|Fırsat\s*Dedektörü|Pozisyon\s*ve\s*Oyun\s*Planı|Piyasa\s*&\s*Haber\s*Özeti|Seçilen\s*Yön[^:]{0,25}|Kritik\s*Gündem[^:]{0,25})\s*:\s*(.*)$/i;
+
     let wakeLock = null;
     let sonOzetCekimMs = 0;
     let ozetYukleniyor = false;
     let aktifYaziKademe = 0;
     let aktifSekme = "ozet";
     let sonCekilenPaket = null;
+
+    // BİST 30 ve ONS için "Hazırla" komutu bekleme durumu
+    const hazirlaBekleme = {
+      bist: { aktif: false, eskiZaman: "", sayac: null },
+      ons:  { aktif: false, eskiZaman: "", sayac: null }
+    };
 
     function yaziBoyutunuUygula(kademe) {
       const gecerli = (kademe >= 0 && kademe < YAZI_KADEMELERI.length) ? kademe : 0;
@@ -862,28 +903,113 @@
       return html;
     }
 
-    function sparkRaporunuBicimlendir(raporObj, adEtiket) {
-      if (!raporObj || !raporObj.icerik) {
-        return `<div class="ozet-bilgi-mesaj">📭 Henüz ${htmlGuvenliYap(adEtiket)} için Gmail'de hazır rapor maili bulunamadı.</div>`;
-      }
-      let html = `<div class="rapor-ust-afis">${htmlGuvenliYap(raporObj.konu || adEtiket)}</div>`;
-      const satirlar = String(raporObj.icerik).split("\n");
+    // Maildeki kırık satırları birleştirir, tüm * işaretlerini ve Rapor/URL linklerini siler
+    function sparkRaporunuGrupla(hamMetin) {
+      const satirlar = String(hamMetin || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+      const gruplar = [];
+
       for (const hamSatir of satirlar) {
-        const s = hamSatir.trim();
+        let s = hamSatir.replace(/\*/g, "").replace(/\\\$/g, "$").trim();
         if (!s) continue;
-        const ikiNoktaIdx = s.indexOf(":");
-        if (/^Fiyat\s*:/i.test(s) && ikiNoktaIdx > 0) {
-          const kalan = htmlGuvenliYap(s.substring(ikiNoktaIdx + 1).trim());
-          html += `<div class="rapor-fiyat-kart"><span class="ozet-madde-vurgu">Fiyat:</span> ${kalan}</div>`;
-        } else if (ikiNoktaIdx > 1 && ikiNoktaIdx <= 45) {
-          const etiket = htmlGuvenliYap(s.substring(0, ikiNoktaIdx + 1));
-          const deger = htmlGuvenliYap(s.substring(ikiNoktaIdx + 1).trim());
-          html += `<div class="ozet-madde"><span class="ozet-madde-vurgu">${etiket}</span> ${deger}</div>`;
+        if (s.startsWith(">")) continue;
+        if (/^rapor\s*:?$/i.test(s)) continue;
+        if (/^rapor\s*:\s*(https?:|\/\/|www\.)/i.test(s)) continue;
+        if (/(https?:\/\/|\/\/www\.|www\.google\.com|docs\.google\.com)/i.test(s)) continue;
+
+        // "10: 00" gibi saat bölünmelerini "10:00" yap
+        s = s.replace(/\b(\d{1,2}):\s+(\d{2})\b/g, "$1:$2");
+
+        const eslesme = s.match(RAPOR_ANA_BASLIK_REGEX);
+        if (eslesme) {
+          gruplar.push({
+            baslik: eslesme[1].trim(),
+            icerik: eslesme[2].trim()
+          });
+        } else if (gruplar.length > 0) {
+          const son = gruplar[gruplar.length - 1];
+          if (!son.icerik) {
+            son.icerik = s;
+          } else if ((son.icerik.endsWith("-") || son.icerik.endsWith("–")) && !son.icerik.endsWith(" -") && !son.icerik.endsWith(" –")) {
+            son.icerik += s;
+          } else {
+            son.icerik += " " + s;
+          }
         } else {
-          html += `<div class="ozet-paragraf">${htmlGuvenliYap(s)}</div>`;
+          gruplar.push({ baslik: "", icerik: s });
+        }
+      }
+      return gruplar;
+    }
+
+    function sparkRaporunuBicimlendir(raporObj, adEtiket, hedefKod) {
+      const bekliyorMu = hazirlaBekleme[hedefKod] && hazirlaBekleme[hedefKod].aktif;
+      const btnMetin = bekliyorMu ? "⏳ Bekleniyor..." : "↻ Yenile";
+      const btnDisabled = bekliyorMu ? "disabled" : "";
+      const afisBaslik = (raporObj && raporObj.konu)
+        ? raporObj.konu.replace(/\*/g, "").trim()
+        : adEtiket;
+
+      let html = `
+        <div class="rapor-ust-afis">
+          <span class="rapor-ust-afis-metin">${htmlGuvenliYap(afisBaslik)}</span>
+          <button class="rapor-yenile-btn" ${btnDisabled} onclick="raporHazirlaTetikle('${hedefKod}', event)">${btnMetin}</button>
+        </div>
+      `;
+
+      if (!raporObj || !raporObj.icerik) {
+        html += `<div class="ozet-bilgi-mesaj">📭 Henüz ${htmlGuvenliYap(adEtiket)} için hazır rapor bulunamadı. Sağ üstteki ↻ Yenile tuşuyla talep edebilirsiniz.</div>`;
+        return html;
+      }
+
+      const maddeler = sparkRaporunuGrupla(raporObj.icerik);
+      for (const m of maddeler) {
+        if (/^Fiyat$/i.test(m.baslik)) {
+          html += `<div class="rapor-fiyat-kart"><span class="ozet-madde-vurgu">Fiyat:</span> ${htmlGuvenliYap(m.icerik)}</div>`;
+        } else if (m.baslik) {
+          html += `<div class="ozet-madde"><span class="ozet-madde-vurgu">${htmlGuvenliYap(m.baslik)}:</span> ${htmlGuvenliYap(m.icerik)}</div>`;
+        } else {
+          html += `<div class="ozet-paragraf">${htmlGuvenliYap(m.icerik)}</div>`;
         }
       }
       return html;
+    }
+
+    async function raporHazirlaTetikle(hedefKod, ev) {
+      if (ev) ev.stopPropagation();
+      const durum = hazirlaBekleme[hedefKod];
+      if (!durum || durum.aktif) return;
+
+      const ad = hedefKod === "ons" ? "ONS Altın" : "BİST 30";
+      if (!confirm(`${ad} için yeni rapor hazırlansın mı? (~1 dk sürer)`)) return;
+
+      const mevcutRapor = sonCekilenPaket ? (hedefKod === "ons" ? sonCekilenPaket.onsRapor : sonCekilenPaket.bistRapor) : null;
+      durum.aktif = true;
+      durum.eskiZaman = mevcutRapor ? (mevcutRapor.zaman || "") : "";
+      aktifSekmeyiCiz();
+
+      try {
+        const res = await fetch(`${API_URL}?istek=hazirla&hedef=${hedefKod}&t=${Date.now()}`, { cache: "no-store" });
+        const yanit = await res.json();
+        if (!yanit.ok) throw new Error(yanit.hata || "Gönderilemedi");
+
+        let deneme = 0;
+        if (durum.sayac) clearInterval(durum.sayac);
+        durum.sayac = setInterval(async () => {
+          deneme++;
+          await ozetVerisiniCek(true);
+          const yeniRapor = sonCekilenPaket ? (hedefKod === "ons" ? sonCekilenPaket.onsRapor : sonCekilenPaket.bistRapor) : null;
+          if ((yeniRapor && yeniRapor.zaman && yeniRapor.zaman !== durum.eskiZaman) || deneme >= 12) {
+            clearInterval(durum.sayac);
+            durum.sayac = null;
+            durum.aktif = false;
+            aktifSekmeyiCiz();
+          }
+        }, 15000);
+      } catch (err) {
+        durum.aktif = false;
+        aktifSekmeyiCiz();
+        alert("Rapor isteği gönderilemedi (SMC Motoru izin/dağıtım adımını kontrol edin): " + (err.message || err));
+      }
     }
 
     function aktifSekmeyiCiz() {
@@ -906,34 +1032,34 @@
         baslikEl.textContent = "📊 BİST 30 Raporu";
         const r = sonCekilenPaket.bistRapor;
         zamanEl.textContent = r && r.zaman ? ("🕒 Rapor Saati: " + r.zaman) : "🕒 Rapor bekleniyor";
-        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "BİST 30");
+        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "BİST 30", "bist");
       } else if (aktifSekme === "ons") {
         baslikEl.textContent = "🪙 ONS Altın Raporu";
         const r = sonCekilenPaket.onsRapor;
         zamanEl.textContent = r && r.zaman ? ("🕒 Rapor Saati: " + r.zaman) : "🕒 Rapor bekleniyor";
-        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "ONS Altın");
+        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "ONS Altın", "ons");
       }
-      govdeEl.scrollTop = 0;
     }
 
     function sekmeDegistir(yeniSekme, ev) {
       if (ev) ev.stopPropagation();
       aktifSekme = yeniSekme;
       aktifSekmeyiCiz();
+      document.getElementById("ozetGovde").scrollTop = 0;
     }
 
     async function ozetVerisiniCek(zorlaYenile, ev) {
       if (ev) ev.stopPropagation();
       if (ozetYukleniyor) return;
       const simdi = Date.now();
-      if (!zorlaYenile && sonOzetCekimMs > 0 && (simdi - sonOzetCekimMs) < 120 * 1000 && sonCekilenPaket) {
+      if (!zorlaYenile && sonOzetCekimMs > 0 && (simdi - sonOzetCekimMs) < 30 * 1000 && sonCekilenPaket) {
         aktifSekmeyiCiz();
         return;
       }
       ozetYukleniyor = true;
       const govdeEl = document.getElementById("ozetGovde");
       const altEtiketEl = document.getElementById("ozetAltEtiket");
-      if (zorlaYenile || !sonCekilenPaket) {
+      if (!sonCekilenPaket) {
         govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⏳ Özet ve raporlar okunuyor...</div>`;
       }
       try {
@@ -948,7 +1074,9 @@
         }
         aktifSekmeyiCiz();
       } catch (err) {
-        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⚠️ Okunamadı: ${htmlGuvenliYap(err.message || err)}</div>`;
+        if (!sonCekilenPaket) {
+          govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⚠️ Okunamadı: ${htmlGuvenliYap(err.message || err)}</div>`;
+        }
       } finally {
         ozetYukleniyor = false;
       }
