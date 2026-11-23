@@ -80,9 +80,9 @@
       margin-bottom: 7px;
     }
     .kart-re {
-      background: #ffffff;
-      border-color: #cbd5e1;
-      border-left: 5px solid #64748b;
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      border-left: 5px solid #6366f1;
     }
 
     .cerceve-notr    { border-color: #cbd5e1; border-left-color: #64748b; }
@@ -178,11 +178,17 @@
     .gunluk-degisim-satir {
       margin-top: 4px;
       font-size: 14px;
-      font-weight: 800;
       line-height: 1.25;
     }
     .kart-sabit .gunluk-degisim-satir {
       font-size: 13.5px;
+    }
+    .gunluk-degisim-etiket {
+      color: #475569;
+      font-weight: 700;
+    }
+    .gunluk-degisim-oran {
+      font-weight: 800;
     }
 
     .kz-dev {
@@ -672,17 +678,14 @@
       `;
     }
 
-    function gunlukDegisimBilgisi(fiyatStr) {
+    function gunlukDegisimHtmlUret(fiyatStr) {
       const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
       if (!m) {
-        return { metin: "Günlük Değişim: -", renk: "renk-gri" };
+        return `<div class="gunluk-degisim-satir"><span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran renk-gri">-</span></div>`;
       }
       const oran = m[1];
       const renk = oran.includes("+") ? "renk-yesil" : oran.includes("-") ? "renk-kirmizi" : "renk-gri";
-      return {
-        metin: `Günlük Değişim: % ${oran}`,
-        renk: renk
-      };
+      return `<div class="gunluk-degisim-satir"><span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span></div>`;
     }
 
     function onsDolarFiyatAyikla(fiyatStr) {
@@ -856,7 +859,7 @@
           acikPozlar.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
             const rozetHtml = ucluRozetHtmlUret(p);
-            const degisim = gunlukDegisimBilgisi(p.fiyat);
+            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
             const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
@@ -876,7 +879,7 @@
                 </div>
                 ${kzObj.html}
               </div>
-              <div class="gunluk-degisim-satir ${degisim.renk}">${degisim.metin}</div>
+              ${degisimHtml}
               <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(p.icDalga || "-")}</div>
               <div class="alt-bilgi-satir ${nobetciRenk}">${htmlGuvenliYap(temizNobetci || p.pusu || "")}</div>
             `;
@@ -902,7 +905,7 @@
             const ad = kisaAdTemizle(g.etiket);
             const isOns = (ad === "ONS");
             const rozetHtml = ucluRozetHtmlUret(g);
-            const degisim = gunlukDegisimBilgisi(g.fiyat);
+            const degisimHtml = gunlukDegisimHtmlUret(g.fiyat);
             const onsFiyatEk = isOns ? onsDolarFiyatAyikla(g.fiyat) : "";
             const icRenk = icDalgaRenkSinifi(g.icDalga);
             const pusuGoster = (g.pusu && g.pusu !== "Nötr" && g.pusu !== "-")
@@ -926,7 +929,7 @@
                 </div>
                 ${kartZamanHtml}
               </div>
-              <div class="gunluk-degisim-satir ${degisim.renk}">${degisim.metin}</div>
+              ${degisimHtml}
               <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(g.icDalga || "-")}</div>
               ${pusuGoster}
             `;
@@ -943,7 +946,7 @@
           reNobetleri.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
             const rozetHtml = ucluRozetHtmlUret(p);
-            const degisim = gunlukDegisimBilgisi(p.fiyat);
+            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
             const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
@@ -959,7 +962,7 @@
                 <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
                 ${rozetHtml}
               </div>
-              <div class="gunluk-degisim-satir ${degisim.renk}">${degisim.metin}</div>
+              ${degisimHtml}
               <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(p.icDalga || "-")}</div>
               ${pusuSatir}
             `;
