@@ -21,38 +21,16 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Üst Bilgi Çubuğu */
-    .ust-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #475569;
-      border-bottom: 1px solid #cbd5e1;
-      padding-bottom: 7px;
-      margin-bottom: 10px;
-    }
-    .kilit-durum {
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11.5px;
-      background: #ffffff;
-    }
-    .kilit-aktif { color: #047857; border: 1px solid #6ee7b7; background: #ecfdf5; }
-    .kilit-pasif { color: #b91c1c; border: 1px solid #fca5a5; background: #fef2f2; }
-
     /* Bölüm Ayırıcı Etiketler */
     .bolum-ayirici {
       display: flex;
-      align-items: center;
-      gap: 6px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 5px;
       font-size: 11.5px;
       font-weight: 800;
       color: #334155;
       letter-spacing: 0.5px;
-      text-transform: uppercase;
       margin: 12px 2px 6px 2px;
       padding-top: 8px;
       border-top: 1.5px solid #cbd5e1;
@@ -62,6 +40,17 @@
       padding-top: 0;
       border-top: none;
     }
+    .bolum-baslik-metin {
+      text-transform: uppercase;
+    }
+    .bolum-zaman-etiket {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.1px;
+      text-transform: none;
+    }
+
     .nakit-serit {
       background: #ffffff;
       border: 1px dashed #cbd5e1;
@@ -117,6 +106,13 @@
       gap: 8px;
       flex-wrap: wrap;
     }
+    .sembol-grup {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
     .sembol-baslik {
       font-size: 18.5px;
       font-weight: 900;
@@ -127,19 +123,68 @@
       font-size: 17.5px;
       color: #0f172a;
     }
-    .yuzde-metin {
-      font-size: 17.5px;
-      font-weight: 800;
-    }
-    .kart-sabit .yuzde-metin {
-      font-size: 16.5px;
-    }
     .ons-fiyat-metin {
       font-size: 16.5px;
       font-weight: 900;
       color: #0369a1;
-      margin-left: 4px;
     }
+    .kart-zaman-etiket {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    /* 3'lü Kompakt Yön Rozetleri: [K] [15dk] [U] */
+    .yon-rozet-grup {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .yon-rozet {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.1px;
+      white-space: nowrap;
+    }
+    .rozet-yesil {
+      color: #16a34a;
+      background-color: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(22, 163, 74, 0.32);
+    }
+    .rozet-kirmizi {
+      color: #dc2626;
+      background-color: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(220, 38, 38, 0.32);
+    }
+    .rozet-gri {
+      color: #6b7280;
+      background-color: rgba(156, 163, 175, 0.15);
+      border: 1px solid rgba(107, 114, 128, 0.28);
+    }
+    body.koyu-tema .rozet-yesil, [data-theme="dark"] .rozet-yesil { color: #4ade80; }
+    body.koyu-tema .rozet-kirmizi, [data-theme="dark"] .rozet-kirmizi { color: #f87171; }
+    body.koyu-tema .rozet-gri, [data-theme="dark"] .rozet-gri { color: #9ca3af; }
+
+    /* Günlük Değişim Alt Satırı */
+    .gunluk-degisim-satir {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .kart-sabit .gunluk-degisim-satir {
+      font-size: 13.5px;
+    }
+
     .kz-dev {
       font-size: 19px;
       font-weight: 900;
@@ -163,13 +208,13 @@
     .renk-mavi    { color: #0369a1; }
 
     .ic-dalga-satir {
-      margin-top: 5px;
+      margin-top: 4px;
       font-size: 15px;
       font-weight: 800;
       line-height: 1.25;
     }
     .kart-sabit .ic-dalga-satir {
-      margin-top: 4px;
+      margin-top: 3px;
       font-size: 14.5px;
     }
     .alt-bilgi-satir {
@@ -181,7 +226,7 @@
     }
 
     /* ======================================================================
-       ALTTAN YUKARI KAYDIRMALI ÖZET + BİST 30 + ONS RAPOR ÇEKMECESİ
+       ALTTAN YUKARI KAYDIRMALI HABER ÖZETİ ÇEKMECESİ
        ====================================================================== */
     .ozet-alt-bar {
       position: fixed;
@@ -279,12 +324,6 @@
       color: #0f172a;
       white-space: nowrap;
     }
-    .ozet-zaman-etiket {
-      font-size: 12px;
-      font-weight: 700;
-      color: #0369a1;
-      margin-top: 2px;
-    }
     .ozet-buton-grup {
       display: flex;
       gap: 7px;
@@ -316,34 +355,6 @@
       background: #fef2f2;
       border-color: #fca5a5;
       color: #b91c1c;
-    }
-
-    /* 3'lü Sekme Çubuğu (Haber Özeti | BİST 30 | ONS) */
-    .sekme-bar {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-top: 9px;
-      background: #f1f5f9;
-      padding: 4px;
-      border-radius: 11px;
-      border: 1px solid #cbd5e1;
-    }
-    .sekme-btn {
-      background: transparent;
-      border: none;
-      border-radius: 8px;
-      padding: 7px 4px;
-      font-size: 13px;
-      font-weight: 800;
-      color: #475569;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .sekme-btn.aktif {
-      background: #0284c7;
-      color: #ffffff;
-      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.35);
     }
 
     /* Çekmece Gövdesi ve 3 Kademeli Yazı Boyutu Sınıfları */
@@ -384,60 +395,22 @@
     .ozet-bolum-baslik:first-child {
       margin-top: 0;
     }
-
-    /* Rapor Üst Durum Kutusu + Sağ Ucunda Mavi "↻ Yenile" Tuşu */
-    .rapor-ust-afis {
+    .ozet-bolum-baslik-esnek {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      font-size: 1.02em;
-      font-weight: 900;
-      color: #0f172a;
-      background: #ffffff;
-      border: 1.5px solid #93c5fd;
-      border-left: 5px solid #0284c7;
-      padding: 8px 10px 8px 12px;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      padding-right: 1ch;
     }
-    .rapor-ust-afis-metin {
-      flex: 1;
-      min-width: 0;
-      line-height: 1.25;
-    }
-    .rapor-yenile-btn {
-      flex-shrink: 0;
-      background: #f0f9ff;
+    .ozet-strateji-sure {
+      font-size: 0.76em;
+      font-weight: 700;
       color: #0369a1;
-      border: 1px solid #7dd3fc;
-      border-radius: 9px;
-      padding: 6px 10px;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      line-height: 1.1;
       white-space: nowrap;
-    }
-    .rapor-yenile-btn:disabled {
-      background: #fffbeb;
-      color: #b45309;
-      border-color: #fcd34d;
-      cursor: default;
+      letter-spacing: 0;
+      margin-left: auto;
     }
 
-    /* Ayrı Fiyat Kutusu */
-    .rapor-fiyat-kart {
-      font-size: 1.03em;
-      font-weight: 800;
-      color: #0f172a;
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      padding: 10px 13px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-    }
     .ozet-madde {
       background: #ffffff;
       border: 1px solid #cbd5e1;
@@ -468,24 +441,21 @@
     }
   </style>
 </head>
-<body onclick="tamEkranVeUyanikTut()">
-  <div class="ust-bar">
-    <div id="saatBilgi">Bağlanıyor...</div>
-    <div id="wakeDurum" class="kilit-durum kilit-pasif">🔆 Ekrana Dokun</div>
+<body>
+  <div id="icerikAlani">
+    <div class="nakit-serit">⏳ Veriler yükleniyor...</div>
   </div>
-
-  <div id="icerikAlani"></div>
 
   <!-- SABİT ALT TUTAMAÇ BARI -->
   <div id="ozetAltBar" class="ozet-alt-bar" onclick="altBarTiklandi(event)">
     <div class="cekmece-tutamac"></div>
     <div class="ozet-alt-satir">
-      <span id="ozetAltEtiket">📄 Özet & Raporlar</span>
+      <span id="ozetAltEtiket">📄 Haber Özeti</span>
       <span class="ozet-alt-ipucu">⌃ Yukarı Kaydır</span>
     </div>
   </div>
 
-  <!-- KARARTMA PERDESİ VE SEKMELİ OKUMA ÇEKMECESİ -->
+  <!-- KARARTMA PERDESİ VE HABER ÖZETİ OKUMA ÇEKMECESİ -->
   <div id="ozetPerde" class="ozet-arka-perde" onclick="ozetCekmeceKapat(event)"></div>
   <div id="ozetCekmece" class="ozet-cekmece" onclick="event.stopPropagation()">
     <div id="ozetCekmeceUst" class="ozet-cekmece-ust">
@@ -493,19 +463,11 @@
         <div class="cekmece-tutamac"></div>
       </div>
       <div class="ozet-baslik-satir">
-        <div>
-          <div id="cekmeceAnaBaslik" class="ozet-ana-baslik">📰 Haber Özeti</div>
-          <div id="ozetZamanBilgi" class="ozet-zaman-etiket">Son Güncelleme: Bekleniyor...</div>
-        </div>
+        <div id="cekmeceAnaBaslik" class="ozet-ana-baslik">📰 Haber Özeti</div>
         <div class="ozet-buton-grup">
           <button id="ozetBoyutBtn" class="ozet-btn ozet-btn-boyut" onclick="ozetYaziBoyutuDegistir(event)">Aa</button>
           <button class="ozet-btn ozet-btn-kapat" onclick="ozetCekmeceKapat(event)">✕ Kapat</button>
         </div>
-      </div>
-      <div class="sekme-bar">
-        <button id="sekmeBtn_ozet" class="sekme-btn aktif" onclick="sekmeDegistir('ozet', event)">📰 Haber Özeti</button>
-        <button id="sekmeBtn_bist" class="sekme-btn" onclick="sekmeDegistir('bist', event)">📊 BİST 30</button>
-        <button id="sekmeBtn_ons"  class="sekme-btn" onclick="sekmeDegistir('ons', event)">🪙 ONS</button>
       </div>
     </div>
     <div id="ozetGovde" class="ozet-icerik-alani boyut-normal">
@@ -523,20 +485,10 @@
       { sinif: "boyut-cok-buyuk", etiket: "Aa++" }
     ];
 
-    const RAPOR_ANA_BASLIK_REGEX = /^(Fiyat|Fırsat\s*Dedektörü|Pozisyon\s*ve\s*Oyun\s*Planı|Piyasa\s*&\s*Haber\s*Özeti|Seçilen\s*Yön[^:]{0,25}|Kritik\s*Gündem[^:]{0,25})\s*:\s*(.*)$/i;
-
-    let wakeLock = null;
     let sonOzetCekimMs = 0;
     let ozetYukleniyor = false;
     let aktifYaziKademe = 0;
-    let aktifSekme = "ozet";
     let sonCekilenPaket = null;
-
-    // BİST 30 ve ONS için "Hazırla" komutu bekleme durumu
-    const hazirlaBekleme = {
-      bist: { aktif: false, eskiZaman: "", sayac: null },
-      ons:  { aktif: false, eskiZaman: "", sayac: null }
-    };
 
     function yaziBoyutunuUygula(kademe) {
       const gecerli = (kademe >= 0 && kademe < YAZI_KADEMELERI.length) ? kademe : 0;
@@ -566,36 +518,171 @@
       } catch (_) {}
     })();
 
-    async function uyanikKilidiAl() {
-      try {
-        if ("wakeLock" in navigator) {
-          wakeLock = await navigator.wakeLock.request("screen");
-          const el = document.getElementById("wakeDurum");
-          el.textContent = "🔒 Ekran Sabit";
-          el.className = "kilit-durum kilit-aktif";
-          wakeLock.addEventListener("release", () => {
-            el.textContent = "🔆 Ekrana Dokun";
-            el.className = "kilit-durum kilit-pasif";
-          });
+    // =========================================================================
+    // ZAMAN AYRIŞTIRICI VE "50 sn önce / 2 dk önce / 1 saat önce" HESAPLAYICI
+    // =========================================================================
+    function zamanMsCoz(hamZaman) {
+      if (hamZaman === null || hamZaman === undefined || hamZaman === "") return null;
+      if (typeof hamZaman === "number" && !isNaN(hamZaman)) {
+        return hamZaman > 1e11 ? hamZaman : hamZaman * 1000;
+      }
+      const s = String(hamZaman).trim();
+      if (!s || s === "-") return null;
+
+      if (/^\d{9,13}$/.test(s)) {
+        const n = Number(s);
+        return n > 1e11 ? n : n * 1000;
+      }
+
+      // Format 1: "23.11.2026 17:58" veya "23.11.2026 17:58:10"
+      const mTr = s.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+      if (mTr) {
+        const gun = mTr[1].padStart(2, "0");
+        const ay  = mTr[2].padStart(2, "0");
+        const yil = mTr[3];
+        const sa  = mTr[4].padStart(2, "0");
+        const dk  = mTr[5].padStart(2, "0");
+        const sn  = (mTr[6] || "00").padStart(2, "0");
+        const ms = Date.parse(`${yil}-${ay}-${gun}T${sa}:${dk}:${sn}+03:00`);
+        if (!isNaN(ms)) return ms;
+      }
+
+      // Format 2: "2026-11-23 17:58:10"
+      const mIso = s.match(/(\d{4})-(\d{1,2})-(\d{1,2})[T\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+      if (mIso) {
+        const yil = mIso[1];
+        const ay  = mIso[2].padStart(2, "0");
+        const gun = mIso[3].padStart(2, "0");
+        const sa  = mIso[4].padStart(2, "0");
+        const dk  = mIso[5].padStart(2, "0");
+        const sn  = (mIso[6] || "00").padStart(2, "0");
+        const ms = Date.parse(`${yil}-${ay}-${gun}T${sa}:${dk}:${sn}+03:00`);
+        if (!isNaN(ms)) return ms;
+      }
+
+      // Format 3: Sadece "22:20" veya "22:20:15"
+      const mSaat = s.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+      if (mSaat) {
+        const simdi = new Date();
+        const aday = new Date(
+          simdi.getFullYear(),
+          simdi.getMonth(),
+          simdi.getDate(),
+          Number(mSaat[1]),
+          Number(mSaat[2]),
+          Number(mSaat[3] || 0)
+        );
+        if (aday.getTime() - simdi.getTime() > 5 * 60 * 1000) {
+          aday.setDate(aday.getDate() - 1);
         }
-      } catch (_) {}
+        return aday.getTime();
+      }
+
+      const dogrudan = Date.parse(s);
+      return isNaN(dogrudan) ? null : dogrudan;
     }
 
-    function tamEkranVeUyanikTut() {
-      uyanikKilidiAl();
-      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
+    function gecenSureMetni(hamZaman) {
+      const hedefMs = zamanMsCoz(hamZaman);
+      if (!hedefMs) return "";
+      const farkSn = Math.max(0, Math.floor((Date.now() - hedefMs) / 1000));
+      if (farkSn < 5) return "Az önce";
+      if (farkSn < 60) return `${farkSn} sn önce`;
+      const farkDk = Math.floor(farkSn / 60);
+      if (farkDk < 60) return `${farkDk} dk önce`;
+      const farkSaat = Math.floor(farkDk / 60);
+      if (farkSaat < 24) return `${farkSaat} saat önce`;
+      const farkGun = Math.floor(farkSaat / 24);
+      return `${farkGun} gün önce`;
+    }
+
+    function canliSureEtiketleriniGuncelle() {
+      document.querySelectorAll("[data-zaman]").forEach(el => {
+        const ham = el.getAttribute("data-zaman") || "";
+        const onEk = el.getAttribute("data-onek") || "";
+        const metin = gecenSureMetni(ham);
+        el.textContent = metin ? `${onEk}${metin}` : "";
+      });
+      altBarEtiketiniGuncelle();
+    }
+
+    function altBarEtiketiniGuncelle() {
+      const altEtiketEl = document.getElementById("ozetAltEtiket");
+      if (!altEtiketEl) return;
+      if (sonCekilenPaket && sonCekilenPaket.zaman) {
+        const sure = gecenSureMetni(sonCekilenPaket.zaman);
+        altEtiketEl.textContent = sure ? `📄 Haber Özeti (${sure})` : "📄 Haber Özeti";
+      } else {
+        altEtiketEl.textContent = "📄 Haber Özeti";
       }
     }
 
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") uyanikKilidiAl();
-    });
+    // =========================================================================
+    // ROZET ([K] [15dk] [U]) VE KART BİÇİMLENDİRME YARDIMCILARI
+    // =========================================================================
+    function ucluEmojiDizisiniCoz(dizgi) {
+      if (!dizgi) return null;
+      const semboller = Array.from(String(dizgi)).filter(ch =>
+        ch === "🟢" || ch === "🔴" || ch === "🔘" || ch === "⚪"
+      );
+      if (semboller.length < 3) return null;
+      const renkCevir = (s) => s === "🟢" ? "rozet-yesil" : s === "🔴" ? "rozet-kirmizi" : "rozet-gri";
+      return [renkCevir(semboller[0]), renkCevir(semboller[1]), renkCevir(semboller[2])];
+    }
 
-    function sadeceYuzdeAyikla(fiyatStr) {
+    function ucluRozetHtmlUret(kayit) {
+      const ucluYedek = ucluEmojiDizisiniCoz(kayit.ucSimge || kayit.yonSimgeleri || "");
+
+      // 1) [K] - Kısa / İç Dalga (8. sütun)
+      const icMetin = String(kayit.icDalga || "");
+      let renkK = "rozet-gri";
+      if (icMetin) {
+        if (/Long/i.test(icMetin) || icMetin.includes("↗")) renkK = "rozet-yesil";
+        else if (/Short/i.test(icMetin) || icMetin.includes("↘")) renkK = "rozet-kirmizi";
+      } else if (ucluYedek) {
+        renkK = ucluYedek[0];
+      }
+
+      // 2) [15dk] - Orta / 15dk Ana SMC Yönü (5. sütun)
+      const anaMetin = String(kayit.anaYon || "");
+      let renk15 = "rozet-gri";
+      if (anaMetin) {
+        if (anaMetin.includes("🟢") || /LONG/i.test(anaMetin)) renk15 = "rozet-yesil";
+        else if (anaMetin.includes("🔴") || /SHORT/i.test(anaMetin)) renk15 = "rozet-kirmizi";
+      } else if (ucluYedek) {
+        renk15 = ucluYedek[1];
+      }
+
+      // 3) [U] - Uzun / 60dk Üst Yapı (4. sütun)
+      const ustMetin = String(kayit.ustYapi || kayit.tf2Ozet || kayit.ustYon || "");
+      let renkU = "rozet-gri";
+      if (ustMetin) {
+        if (ustMetin.includes("🟢") || /L-BOS|L-CHOCH/i.test(ustMetin)) renkU = "rozet-yesil";
+        else if (ustMetin.includes("🔴") || /S-BOS|S-CHOCH/i.test(ustMetin)) renkU = "rozet-kirmizi";
+      } else if (ucluYedek) {
+        renkU = ucluYedek[2];
+      }
+
+      return `
+        <span class="yon-rozet-grup">
+          <span class="yon-rozet ${renkK}">K</span>
+          <span class="yon-rozet ${renk15}">15dk</span>
+          <span class="yon-rozet ${renkU}">U</span>
+        </span>
+      `;
+    }
+
+    function gunlukDegisimBilgisi(fiyatStr) {
       const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
-      if (!m) return "";
-      return `(${m[1]})`;
+      if (!m) {
+        return { metin: "Günlük Değişim: -", renk: "renk-gri" };
+      }
+      const oran = m[1];
+      const renk = oran.includes("+") ? "renk-yesil" : oran.includes("-") ? "renk-kirmizi" : "renk-gri";
+      return {
+        metin: `Günlük Değişim: % ${oran}`,
+        renk: renk
+      };
     }
 
     function onsDolarFiyatAyikla(fiyatStr) {
@@ -614,13 +701,6 @@
       return `$${binlik}`;
     }
 
-    function anaYonSimgesi(anaYonStr) {
-      const s = String(anaYonStr || "");
-      if (s.includes("🟢")) return "🟢";
-      if (s.includes("🔴")) return "🔴";
-      return "⚪";
-    }
-
     function kisaAdTemizle(etiket) {
       let s = String(etiket || "").split("[")[0].trim();
       if (/BİST30\s*V\.|XU030D1!/i.test(s)) return "BİST30 V.";
@@ -633,12 +713,6 @@
       const s = String(icDalgaStr || "");
       if (s.includes("Long") || s.includes("↗")) return "renk-yesil";
       if (s.includes("Short") || s.includes("↘")) return "renk-kirmizi";
-      return "renk-gri";
-    }
-
-    function yuzdeRenkSinifi(yuzdeStr) {
-      if (yuzdeStr.includes("+")) return "renk-yesil";
-      if (yuzdeStr.includes("-")) return "renk-kirmizi";
       return "renk-gri";
     }
 
@@ -730,10 +804,33 @@
       return t.replace(/NÖBETÇİ\s*\([^)]+\)\s*:\s*/i, "").trim();
     }
 
-    function bolumBasligiEkle(alan, metin, ilkMi) {
+    function htmlGuvenliYap(metin) {
+      return String(metin || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function bolumBasligiEkle(alan, metin, ilkMi, hamZaman) {
       const ayirici = document.createElement("div");
       ayirici.className = ilkMi ? "bolum-ayirici ilk-bolum" : "bolum-ayirici";
-      ayirici.textContent = metin;
+
+      const baslikSpan = document.createElement("span");
+      baslikSpan.className = "bolum-baslik-metin";
+      baslikSpan.textContent = metin;
+      ayirici.appendChild(baslikSpan);
+
+      if (hamZaman !== null && hamZaman !== undefined && hamZaman !== "") {
+        const sure = gecenSureMetni(hamZaman);
+        const zamanSpan = document.createElement("span");
+        zamanSpan.className = "bolum-zaman-etiket";
+        zamanSpan.setAttribute("data-zaman", String(hamZaman));
+        zamanSpan.setAttribute("data-onek", "- ");
+        zamanSpan.textContent = sure ? `- ${sure}` : "";
+        ayirici.appendChild(zamanSpan);
+      }
+
       alan.appendChild(ayirici);
     }
 
@@ -743,7 +840,6 @@
         const veri = await res.json();
         if (!veri.ok) throw new Error(veri.hata || "Veri hatası");
 
-        document.getElementById("saatBilgi").textContent = "🕒 " + (veri.zaman || "-");
         const alan = document.getElementById("icerikAlani");
         alan.innerHTML = "";
 
@@ -751,34 +847,38 @@
         const acikPozlar = tumPozlar.filter(p => !reKaydiMi(p));
         const reNobetleri = tumPozlar.filter(p => reKaydiMi(p));
 
+        const ilkAcikZaman = acikPozlar.find(p => p.zaman || p.sonGuncelleme);
+        const acikGrupZaman = veri.acikPozZaman || veri.hisseZaman || (ilkAcikZaman && (ilkAcikZaman.zaman || ilkAcikZaman.sonGuncelleme)) || veri.zaman || "";
+
         // 1. BÖLÜM: GERÇEK AÇIK POZİSYONLAR
-        bolumBasligiEkle(alan, "💼 Açık Pozisyonlar", true);
+        bolumBasligiEkle(alan, "💼 Açık Pozisyonlar", true, acikGrupZaman);
         if (acikPozlar.length > 0) {
           acikPozlar.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
-            const simge = anaYonSimgesi(p.anaYon);
-            const yuzde = sadeceYuzdeAyikla(p.fiyat);
-            const yRenk = yuzdeRenkSinifi(yuzde);
+            const rozetHtml = ucluRozetHtmlUret(p);
+            const degisim = gunlukDegisimBilgisi(p.fiyat);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
             const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
             const temizNobetci = nobetciMetniSadelestir(p.nobetci);
-            const nobetciRenk = p.nobetci.includes("🚨") ? "renk-kirmizi"
-                              : p.nobetci.includes("⚠️") ? "renk-sari"
-                              : p.nobetci.includes("✅") ? "renk-yesil" : "renk-gri";
+            const nobetciStr = String(p.nobetci || "");
+            const nobetciRenk = nobetciStr.includes("🚨") ? "renk-kirmizi"
+                              : nobetciStr.includes("⚠️") ? "renk-sari"
+                              : nobetciStr.includes("✅") ? "renk-yesil" : "renk-gri";
 
             const kart = document.createElement("div");
             kart.className = `kart ${cerceve}`;
             kart.innerHTML = `
               <div class="ust-satir">
-                <div>
-                  <span class="sembol-baslik">${ad} ${simge}</span>
-                  <span class="yuzde-metin ${yRenk}">${yuzde}</span>
+                <div class="sembol-grup">
+                  <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
+                  ${rozetHtml}
                 </div>
                 ${kzObj.html}
               </div>
-              <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
-              <div class="alt-bilgi-satir ${nobetciRenk}">${temizNobetci || p.pusu || ""}</div>
+              <div class="gunluk-degisim-satir ${degisim.renk}">${degisim.metin}</div>
+              <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(p.icDalga || "-")}</div>
+              <div class="alt-bilgi-satir ${nobetciRenk}">${htmlGuvenliYap(temizNobetci || p.pusu || "")}</div>
             `;
             alan.appendChild(kart);
           });
@@ -789,7 +889,7 @@
           alan.appendChild(nakit);
         }
 
-        // 2. BÖLÜM: ANA PİYASA (ÖNCE ONS, SONRA BİST30 V.)
+        // 2. BÖLÜM: ANA PİYASA (ÖNCE ONS, SONRA BİST30 V. — HER KARTIN KENDİ ZAMANI AYRI)
         const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
           const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
           const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
@@ -797,30 +897,37 @@
         });
 
         if (gostergeler.length > 0) {
-          bolumBasligiEkle(alan, "🌐 Ana Piyasa", false);
+          bolumBasligiEkle(alan, "🌐 Ana Piyasa", false, null);
           gostergeler.forEach(g => {
             const ad = kisaAdTemizle(g.etiket);
             const isOns = (ad === "ONS");
-            const simge = anaYonSimgesi(g.anaYon);
-            const yuzde = sadeceYuzdeAyikla(g.fiyat);
-            const yRenk = yuzdeRenkSinifi(yuzde);
+            const rozetHtml = ucluRozetHtmlUret(g);
+            const degisim = gunlukDegisimBilgisi(g.fiyat);
             const onsFiyatEk = isOns ? onsDolarFiyatAyikla(g.fiyat) : "";
             const icRenk = icDalgaRenkSinifi(g.icDalga);
             const pusuGoster = (g.pusu && g.pusu !== "Nötr" && g.pusu !== "-")
-              ? `<div class="alt-bilgi-satir">${g.pusu}</div>`
+              ? `<div class="alt-bilgi-satir">${htmlGuvenliYap(g.pusu)}</div>`
+              : "";
+
+            const kartHamZaman = g.zaman || g.sonGuncelleme || (isOns ? veri.onsZaman : (veri.viopZaman || veri.bistZaman)) || veri.zaman || "";
+            const kartSureMetin = gecenSureMetni(kartHamZaman);
+            const kartZamanHtml = kartHamZaman
+              ? `<span class="kart-zaman-etiket" data-zaman="${htmlGuvenliYap(kartHamZaman)}" data-onek="">${kartSureMetin}</span>`
               : "";
 
             const sabitKart = document.createElement("div");
             sabitKart.className = "kart kart-sabit";
             sabitKart.innerHTML = `
               <div class="ust-satir">
-                <div>
-                  <span class="sembol-baslik">${ad} ${simge}</span>
-                  <span class="yuzde-metin ${yRenk}">${yuzde}</span>
+                <div class="sembol-grup">
+                  <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
                   ${onsFiyatEk ? `<span class="ons-fiyat-metin">${onsFiyatEk}</span>` : ""}
+                  ${rozetHtml}
                 </div>
+                ${kartZamanHtml}
               </div>
-              <div class="ic-dalga-satir ${icRenk}">${g.icDalga || "-"}</div>
+              <div class="gunluk-degisim-satir ${degisim.renk}">${degisim.metin}</div>
+              <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(g.icDalga || "-")}</div>
               ${pusuGoster}
             `;
             alan.appendChild(sabitKart);
@@ -829,59 +936,102 @@
 
         // 3. BÖLÜM: YENİDEN GİRİŞ (RE) NÖBETLERİ
         if (reNobetleri.length > 0) {
-          bolumBasligiEkle(alan, "📌 Yeniden Giriş (RE) Nöbeti", false);
+          const ilkReZaman = reNobetleri.find(p => p.zaman || p.sonGuncelleme);
+          const reGrupZaman = veri.reZaman || veri.hisseZaman || (ilkReZaman && (ilkReZaman.zaman || ilkReZaman.sonGuncelleme)) || veri.zaman || "";
+          bolumBasligiEkle(alan, "📌 Yeniden Giriş (RE) Nöbeti", false, reGrupZaman);
+
           reNobetleri.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
-            const simge = anaYonSimgesi(p.anaYon);
-            const yuzde = sadeceYuzdeAyikla(p.fiyat);
-            const yRenk = yuzdeRenkSinifi(yuzde);
+            const rozetHtml = ucluRozetHtmlUret(p);
+            const degisim = gunlukDegisimBilgisi(p.fiyat);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
             const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
             const pusuSatir = (p.pusu && p.pusu !== "Nötr" && p.pusu !== "-")
-              ? `<div class="alt-bilgi-satir">${p.pusu}</div>`
+              ? `<div class="alt-bilgi-satir">${htmlGuvenliYap(p.pusu)}</div>`
               : "";
 
             const kart = document.createElement("div");
             kart.className = `kart ${cerceve}`;
             kart.innerHTML = `
               ${kzObj.html}
-              <div class="re-sembol-satir">
-                <span class="sembol-baslik">${ad} ${simge}</span>
-                <span class="yuzde-metin ${yRenk}">${yuzde}</span>
+              <div class="re-sembol-satir sembol-grup">
+                <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
+                ${rozetHtml}
               </div>
-              <div class="ic-dalga-satir ${icRenk}">${p.icDalga || "-"}</div>
+              <div class="gunluk-degisim-satir ${degisim.renk}">${degisim.metin}</div>
+              <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(p.icDalga || "-")}</div>
               ${pusuSatir}
             `;
             alan.appendChild(kart);
           });
         }
       } catch (err) {
-        document.getElementById("saatBilgi").textContent = "⚠️ Bağlantı Bekleniyor...";
+        const alan = document.getElementById("icerikAlani");
+        if (alan && !alan.querySelector(".kart")) {
+          alan.innerHTML = `<div class="nakit-serit">⚠️ Bağlantı bekleniyor...</div>`;
+        }
       }
     }
 
     // =========================================================================
-    // SEKMELİ HABER ÖZETİ + BİST 30 RAPORU + ONS RAPORU ÇEKMECESİ
+    // HABER ÖZETİ / ÖZET STRATEJİ ÇEKMECESİ (BİST 30 & ONS SEKMELERİ KALDIRILDI)
     // =========================================================================
-    function htmlGuvenliYap(metin) {
-      return String(metin || "")
-        .replace(/&/g, "&")
-        .replace(/</g, "<")
-        .replace(/>/g, ">");
-    }
-
-    function ozetMetniniBicimlendir(hamMetin) {
+    function ozetMetniniBicimlendir(hamMetin, ozetHamZaman) {
       if (!hamMetin) return `<div class="ozet-bilgi-mesaj">Özet metni bulunamadı.</div>`;
       const satirlar = String(hamMetin).split("\n");
-      let html = "";
+      const hamBaslikIndeksleri = [];
+      const temizSatirlar = [];
+
       for (const hamSatir of satirlar) {
         const s = hamSatir.trim();
         if (!s) continue;
+        const yildizsiz = s.replace(/\*/g, "").trim();
+        const buyukBaslikMi = (/^[A-ZÇĞİÖŞÜ0-9\s/()\-]{4,55}:?$/.test(yildizsiz) && !yildizsiz.startsWith("-"));
+        const temizMetin = buyukBaslikMi ? yildizsiz : s;
+        if (buyukBaslikMi) hamBaslikIndeksleri.push(temizSatirlar.length);
+        temizSatirlar.push({ metin: temizMetin, baslikMi: buyukBaslikMi });
+      }
 
-        const buyukBaslikMi = /^[A-ZÇĞİÖŞÜ0-9\s/()\-]{4,55}:?$/.test(s) && !s.startsWith("-");
-        if (buyukBaslikMi) {
-          html += `<div class="ozet-bolum-baslik">${htmlGuvenliYap(s.replace(/:$/, ""))}</div>`;
+      // Öncelikle "ÖZET STRATEJİ" satırını, yoksa ilk büyük bölüm başlığını bul
+      let hedefSureSatirIdx = -1;
+      for (const idx of hamBaslikIndeksleri) {
+        if (/ÖZET\s*STRATEJ/i.test(temizSatirlar[idx].metin)) {
+          hedefSureSatirIdx = idx;
+          break;
+        }
+      }
+      if (hedefSureSatirIdx === -1 && hamBaslikIndeksleri.length > 0) {
+        hedefSureSatirIdx = hamBaslikIndeksleri[0];
+      }
+
+      const sureMetin = ozetHamZaman ? gecenSureMetni(ozetHamZaman) : "";
+      let html = "";
+
+      // Eğer metinde hiç büyük başlık yoksa en üste ÖZET STRATEJİ şeridi koy
+      if (hedefSureSatirIdx === -1 && ozetHamZaman) {
+        html += `
+          <div class="ozet-bolum-baslik ozet-bolum-baslik-esnek">
+            <span>ÖZET STRATEJİ</span>
+            <span class="ozet-strateji-sure" data-zaman="${htmlGuvenliYap(ozetHamZaman)}" data-onek="">${sureMetin}</span>
+          </div>
+        `;
+      }
+
+      for (let i = 0; i < temizSatirlar.length; i++) {
+        const s = temizSatirlar[i].metin;
+        if (temizSatirlar[i].baslikMi) {
+          const baslikTemiz = htmlGuvenliYap(s.replace(/:$/, ""));
+          if (i === hedefSureSatirIdx && ozetHamZaman) {
+            html += `
+              <div class="ozet-bolum-baslik ozet-bolum-baslik-esnek">
+                <span>${baslikTemiz}</span>
+                <span class="ozet-strateji-sure" data-zaman="${htmlGuvenliYap(ozetHamZaman)}" data-onek="">${sureMetin}</span>
+              </div>
+            `;
+          } else {
+            html += `<div class="ozet-bolum-baslik">${baslikTemiz}</div>`;
+          }
           continue;
         }
 
@@ -903,149 +1053,11 @@
       return html;
     }
 
-    // Maildeki kırık satırları birleştirir, tüm * işaretlerini ve Rapor/URL linklerini siler
-    function sparkRaporunuGrupla(hamMetin) {
-      const satirlar = String(hamMetin || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
-      const gruplar = [];
-
-      for (const hamSatir of satirlar) {
-        let s = hamSatir.replace(/\*/g, "").replace(/\\\$/g, "$").trim();
-        if (!s) continue;
-        if (s.startsWith(">")) continue;
-        if (/^rapor\s*:?$/i.test(s)) continue;
-        if (/^rapor\s*:\s*(https?:|\/\/|www\.)/i.test(s)) continue;
-        if (/(https?:\/\/|\/\/www\.|www\.google\.com|docs\.google\.com)/i.test(s)) continue;
-
-        // "10: 00" gibi saat bölünmelerini "10:00" yap
-        s = s.replace(/\b(\d{1,2}):\s+(\d{2})\b/g, "$1:$2");
-
-        const eslesme = s.match(RAPOR_ANA_BASLIK_REGEX);
-        if (eslesme) {
-          gruplar.push({
-            baslik: eslesme[1].trim(),
-            icerik: eslesme[2].trim()
-          });
-        } else if (gruplar.length > 0) {
-          const son = gruplar[gruplar.length - 1];
-          if (!son.icerik) {
-            son.icerik = s;
-          } else if ((son.icerik.endsWith("-") || son.icerik.endsWith("–")) && !son.icerik.endsWith(" -") && !son.icerik.endsWith(" –")) {
-            son.icerik += s;
-          } else {
-            son.icerik += " " + s;
-          }
-        } else {
-          gruplar.push({ baslik: "", icerik: s });
-        }
-      }
-      return gruplar;
-    }
-
-    function sparkRaporunuBicimlendir(raporObj, adEtiket, hedefKod) {
-      const bekliyorMu = hazirlaBekleme[hedefKod] && hazirlaBekleme[hedefKod].aktif;
-      const btnMetin = bekliyorMu ? "⏳ Bekleniyor..." : "↻ Yenile";
-      const btnDisabled = bekliyorMu ? "disabled" : "";
-      const afisBaslik = (raporObj && raporObj.konu)
-        ? raporObj.konu.replace(/\*/g, "").trim()
-        : adEtiket;
-
-      let html = `
-        <div class="rapor-ust-afis">
-          <span class="rapor-ust-afis-metin">${htmlGuvenliYap(afisBaslik)}</span>
-          <button class="rapor-yenile-btn" ${btnDisabled} onclick="raporHazirlaTetikle('${hedefKod}', event)">${btnMetin}</button>
-        </div>
-      `;
-
-      if (!raporObj || !raporObj.icerik) {
-        html += `<div class="ozet-bilgi-mesaj">📭 Henüz ${htmlGuvenliYap(adEtiket)} için hazır rapor bulunamadı. Sağ üstteki ↻ Yenile tuşuyla talep edebilirsiniz.</div>`;
-        return html;
-      }
-
-      const maddeler = sparkRaporunuGrupla(raporObj.icerik);
-      for (const m of maddeler) {
-        if (/^Fiyat$/i.test(m.baslik)) {
-          html += `<div class="rapor-fiyat-kart"><span class="ozet-madde-vurgu">Fiyat:</span> ${htmlGuvenliYap(m.icerik)}</div>`;
-        } else if (m.baslik) {
-          html += `<div class="ozet-madde"><span class="ozet-madde-vurgu">${htmlGuvenliYap(m.baslik)}:</span> ${htmlGuvenliYap(m.icerik)}</div>`;
-        } else {
-          html += `<div class="ozet-paragraf">${htmlGuvenliYap(m.icerik)}</div>`;
-        }
-      }
-      return html;
-    }
-
-    async function raporHazirlaTetikle(hedefKod, ev) {
-      if (ev) ev.stopPropagation();
-      const durum = hazirlaBekleme[hedefKod];
-      if (!durum || durum.aktif) return;
-
-      const ad = hedefKod === "ons" ? "ONS Altın" : "BİST 30";
-      if (!confirm(`${ad} için yeni rapor hazırlansın mı? (~1 dk sürer)`)) return;
-
-      const mevcutRapor = sonCekilenPaket ? (hedefKod === "ons" ? sonCekilenPaket.onsRapor : sonCekilenPaket.bistRapor) : null;
-      durum.aktif = true;
-      durum.eskiZaman = mevcutRapor ? (mevcutRapor.zaman || "") : "";
-      aktifSekmeyiCiz();
-
-      try {
-        const res = await fetch(`${API_URL}?istek=hazirla&hedef=${hedefKod}&t=${Date.now()}`, { cache: "no-store" });
-        const yanit = await res.json();
-        if (!yanit.ok) throw new Error(yanit.hata || "Gönderilemedi");
-
-        let deneme = 0;
-        if (durum.sayac) clearInterval(durum.sayac);
-        durum.sayac = setInterval(async () => {
-          deneme++;
-          await ozetVerisiniCek(true);
-          const yeniRapor = sonCekilenPaket ? (hedefKod === "ons" ? sonCekilenPaket.onsRapor : sonCekilenPaket.bistRapor) : null;
-          if ((yeniRapor && yeniRapor.zaman && yeniRapor.zaman !== durum.eskiZaman) || deneme >= 12) {
-            clearInterval(durum.sayac);
-            durum.sayac = null;
-            durum.aktif = false;
-            aktifSekmeyiCiz();
-          }
-        }, 15000);
-      } catch (err) {
-        durum.aktif = false;
-        aktifSekmeyiCiz();
-        alert("Rapor isteği gönderilemedi (SMC Motoru izin/dağıtım adımını kontrol edin): " + (err.message || err));
-      }
-    }
-
-    function aktifSekmeyiCiz() {
+    function ozetIcerigiCiz() {
       const govdeEl = document.getElementById("ozetGovde");
-      const zamanEl = document.getElementById("ozetZamanBilgi");
-      const baslikEl = document.getElementById("cekmeceAnaBaslik");
-
-      ["ozet", "bist", "ons"].forEach(k => {
-        const btn = document.getElementById("sekmeBtn_" + k);
-        if (btn) btn.classList.toggle("aktif", k === aktifSekme);
-      });
-
       if (!sonCekilenPaket) return;
-
-      if (aktifSekme === "ozet") {
-        baslikEl.textContent = "📰 Haber Özeti";
-        zamanEl.textContent = "🕒 Son Güncelleme: " + (sonCekilenPaket.zaman || "-");
-        govdeEl.innerHTML = ozetMetniniBicimlendir(sonCekilenPaket.icerik);
-      } else if (aktifSekme === "bist") {
-        baslikEl.textContent = "📊 BİST 30 Raporu";
-        const r = sonCekilenPaket.bistRapor;
-        zamanEl.textContent = r && r.zaman ? ("🕒 Rapor Saati: " + r.zaman) : "🕒 Rapor bekleniyor";
-        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "BİST 30", "bist");
-      } else if (aktifSekme === "ons") {
-        baslikEl.textContent = "🪙 ONS Altın Raporu";
-        const r = sonCekilenPaket.onsRapor;
-        zamanEl.textContent = r && r.zaman ? ("🕒 Rapor Saati: " + r.zaman) : "🕒 Rapor bekleniyor";
-        govdeEl.innerHTML = sparkRaporunuBicimlendir(r, "ONS Altın", "ons");
-      }
-    }
-
-    function sekmeDegistir(yeniSekme, ev) {
-      if (ev) ev.stopPropagation();
-      aktifSekme = yeniSekme;
-      aktifSekmeyiCiz();
-      document.getElementById("ozetGovde").scrollTop = 0;
+      govdeEl.innerHTML = ozetMetniniBicimlendir(sonCekilenPaket.icerik, sonCekilenPaket.zaman || "");
+      altBarEtiketiniGuncelle();
     }
 
     async function ozetVerisiniCek(zorlaYenile, ev) {
@@ -1053,14 +1065,13 @@
       if (ozetYukleniyor) return;
       const simdi = Date.now();
       if (!zorlaYenile && sonOzetCekimMs > 0 && (simdi - sonOzetCekimMs) < 30 * 1000 && sonCekilenPaket) {
-        aktifSekmeyiCiz();
+        ozetIcerigiCiz();
         return;
       }
       ozetYukleniyor = true;
       const govdeEl = document.getElementById("ozetGovde");
-      const altEtiketEl = document.getElementById("ozetAltEtiket");
       if (!sonCekilenPaket) {
-        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⏳ Özet ve raporlar okunuyor...</div>`;
+        govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⏳ Haber özeti okunuyor...</div>`;
       }
       try {
         const res = await fetch(API_URL + "?istek=ozet&t=" + Date.now(), { cache: "no-store" });
@@ -1068,11 +1079,7 @@
         if (!veri.ok) throw new Error(veri.hata || veri.ozetHata || "Veri okunamadı");
         sonOzetCekimMs = Date.now();
         sonCekilenPaket = veri;
-        const saatKisa = (veri.zaman || "").split(" ").pop() || "";
-        if (saatKisa) {
-          altEtiketEl.textContent = `📄 Özet & Raporlar (${saatKisa})`;
-        }
-        aktifSekmeyiCiz();
+        ozetIcerigiCiz();
       } catch (err) {
         if (!sonCekilenPaket) {
           govdeEl.innerHTML = `<div class="ozet-bilgi-mesaj">⚠️ Okunamadı: ${htmlGuvenliYap(err.message || err)}</div>`;
@@ -1083,7 +1090,6 @@
     }
 
     function ozetCekmeceAc() {
-      uyanikKilidiAl();
       const cekmece = document.getElementById("ozetCekmece");
       const perde = document.getElementById("ozetPerde");
       cekmece.style.transform = "";
@@ -1103,7 +1109,6 @@
 
     function altBarTiklandi(ev) {
       if (ev) ev.stopPropagation();
-      tamEkranVeUyanikTut();
       ozetCekmeceAc();
     }
 
@@ -1122,7 +1127,6 @@
         if (altBasY === null) return;
         const bitisY = e.changedTouches[0].clientY;
         if (altBasY - bitisY > 22) {
-          tamEkranVeUyanikTut();
           ozetCekmeceAc();
         }
         altBasY = null;
@@ -1171,10 +1175,11 @@
       }, { passive: true });
     })();
 
-    uyanikKilidiAl();
     veriyiCek();
     setTimeout(() => ozetVerisiniCek(false), 1500);
     setInterval(veriyiCek, YENILEME_SANIYE * 1000);
+    setInterval(canliSureEtiketleriniGuncelle, 15000);
   </script>
 </body>
 </html>
+
