@@ -174,14 +174,22 @@
     body.koyu-tema .rozet-kirmizi, [data-theme="dark"] .rozet-kirmizi { color: #f87171; }
     body.koyu-tema .rozet-gri, [data-theme="dark"] .rozet-gri { color: #9ca3af; }
 
-    /* Günlük Değişim Alt Satırı */
+    /* Günlük Değişim Alt Satırı + Sağ Zikzak Harita Butonu */
     .gunluk-degisim-satir {
       margin-top: 4px;
       font-size: 14px;
       line-height: 1.25;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-right: 0.6ch;
     }
     .kart-sabit .gunluk-degisim-satir {
       font-size: 13.5px;
+    }
+    .gunluk-degisim-sol {
+      min-width: 0;
     }
     .gunluk-degisim-etiket {
       color: #475569;
@@ -189,6 +197,134 @@
     }
     .gunluk-degisim-oran {
       font-weight: 800;
+    }
+    .zikzak-harita-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #e0f2fe;
+      border: 1.2px solid #7dd3fc;
+      border-radius: 7px;
+      padding: 3px 7px;
+      cursor: pointer;
+      flex-shrink: 0;
+      line-height: 1;
+      transition: background-color 0.14s ease, transform 0.12s ease;
+    }
+    .zikzak-harita-btn:active {
+      background: #bae6fd;
+      transform: scale(0.94);
+    }
+
+    /* ======================================================================
+       AÇILIR POP-UP: BİRLEŞİK YAPI, OB & POZİSYON HARİTASI (15dk + 60dk)
+       ====================================================================== */
+    .harita-arka-perde {
+      position: fixed;
+      inset: 0;
+      z-index: 115;
+      background: rgba(15, 23, 42, 0.52);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    .harita-arka-perde.acik {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .harita-modal {
+      width: 100%;
+      max-width: 450px;
+      max-height: 92vh;
+      background: #ffffff;
+      border: 1.6px solid #94a3b8;
+      border-radius: 18px;
+      padding: 11px 12px 10px 12px;
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.28);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      transform: scale(0.96) translateY(8px);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow-y: auto;
+    }
+    .harita-arka-perde.acik .harita-modal {
+      transform: scale(1) translateY(0);
+    }
+    .harita-modal-ust {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .harita-modal-baslik {
+      font-size: 14.5px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.25;
+      min-width: 0;
+    }
+    .harita-kapat-btn {
+      flex-shrink: 0;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      border-radius: 9px;
+      padding: 5px 11px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      line-height: 1.1;
+    }
+    .harita-lejant {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .harita-lejant-sabit {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+    .harita-lejant-acik {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #475569;
+    }
+    .harita-lejant-re {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      color: #334155;
+    }
+    .harita-svg-kutu {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .harita-svg-kutu svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .harita-alt-not {
+      font-size: 11px;
+      font-style: italic;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.3;
+      padding: 0 4px;
     }
 
     .kz-dev {
@@ -481,9 +617,24 @@
     </div>
   </div>
 
+  <!-- AÇILIR POP-UP: BİRLEŞİK YAPI, OB & POZİSYON HARİTASI -->
+  <div id="haritaPerde" class="harita-arka-perde" onclick="haritaPopKapat(event)">
+    <div class="harita-modal" onclick="event.stopPropagation()">
+      <div class="harita-modal-ust">
+        <div id="haritaBaslik" class="harita-modal-baslik">Yapı &amp; OB Haritası</div>
+        <button type="button" class="harita-kapat-btn" onclick="haritaPopKapat(event)">✕</button>
+      </div>
+      <div id="haritaLejant" class="harita-lejant harita-lejant-sabit"></div>
+      <div id="haritaSvgAlani" class="harita-svg-kutu"></div>
+      <div id="haritaAltNot" class="harita-alt-not"></div>
+    </div>
+  </div>
+
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbyMit9WOCaCUglLFosrQmg2cbo7iQ-lKwqCltJKqaikFvpIVfnXBXXlIGeL7Yrc_GIR/exec";
     const YENILEME_SANIYE = 120;
+    const ZIKZAK_PENCERE_MUM = 90;
+    const ZIKZAK_MAKS_NOKTA = 12;
 
     const YAZI_KADEMELERI = [
       { sinif: "boyut-normal",    etiket: "Aa" },
@@ -495,6 +646,8 @@
     let ozetYukleniyor = false;
     let aktifYaziKademe = 0;
     let sonCekilenPaket = null;
+    let ekranKartlari = [];
+    let aktifHaritaAnahtar = null;
 
     function yaziBoyutunuUygula(kademe) {
       const gecerli = (kademe >= 0 && kademe < YAZI_KADEMELERI.length) ? kademe : 0;
@@ -678,14 +831,23 @@
       `;
     }
 
-    function gunlukDegisimHtmlUret(fiyatStr) {
+    function gunlukDegisimHtmlUret(fiyatStr, kartIdx) {
       const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
-      if (!m) {
-        return `<div class="gunluk-degisim-satir"><span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran renk-gri">-</span></div>`;
+      let solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran renk-gri">-</span>`;
+      if (m) {
+        const oran = m[1];
+        const renk = oran.includes("+") ? "renk-yesil" : oran.includes("-") ? "renk-kirmizi" : "renk-gri";
+        solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span>`;
       }
-      const oran = m[1];
-      const renk = oran.includes("+") ? "renk-yesil" : oran.includes("-") ? "renk-kirmizi" : "renk-gri";
-      return `<div class="gunluk-degisim-satir"><span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span></div>`;
+      const zikzakBtn = `
+        <button type="button" class="zikzak-harita-btn" onclick="haritaPopAc(${kartIdx}, event)" title="Yapı &amp; OB Haritası" aria-label="Yapı ve OB Haritası">
+          <svg viewBox="0 0 28 16" width="24" height="14" fill="none" aria-hidden="true">
+            <polyline points="2,12.5 8.5,5.5 14.5,10.5 23,3.5" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <circle cx="23" cy="3.5" r="2.3" fill="#0284c7"></circle>
+          </svg>
+        </button>
+      `;
+      return `<div class="gunluk-degisim-satir"><div class="gunluk-degisim-sol">${solIcerik}</div>${zikzakBtn}</div>`;
     }
 
     function onsDolarFiyatAyikla(fiyatStr) {
@@ -845,6 +1007,7 @@
 
         const alan = document.getElementById("icerikAlani");
         alan.innerHTML = "";
+        ekranKartlari = [];
 
         const tumPozlar = veri.pozisyonlar || [];
         const acikPozlar = tumPozlar.filter(p => !reKaydiMi(p));
@@ -858,8 +1021,9 @@
         if (acikPozlar.length > 0) {
           acikPozlar.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
+            const kartIdx = ekranKartlari.push({ kategori: "acik", ad: ad, anahtar: "acik_" + ad, veri: p }) - 1;
             const rozetHtml = ucluRozetHtmlUret(p);
-            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat);
+            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat, kartIdx);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
             const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
@@ -904,8 +1068,9 @@
           gostergeler.forEach(g => {
             const ad = kisaAdTemizle(g.etiket);
             const isOns = (ad === "ONS");
+            const kartIdx = ekranKartlari.push({ kategori: "ana", ad: ad, anahtar: "ana_" + ad, veri: g }) - 1;
             const rozetHtml = ucluRozetHtmlUret(g);
-            const degisimHtml = gunlukDegisimHtmlUret(g.fiyat);
+            const degisimHtml = gunlukDegisimHtmlUret(g.fiyat, kartIdx);
             const onsFiyatEk = isOns ? onsDolarFiyatAyikla(g.fiyat) : "";
             const icRenk = icDalgaRenkSinifi(g.icDalga);
             const pusuGoster = (g.pusu && g.pusu !== "Nötr" && g.pusu !== "-")
@@ -945,8 +1110,9 @@
 
           reNobetleri.forEach(p => {
             const ad = kisaAdTemizle(p.etiket);
+            const kartIdx = ekranKartlari.push({ kategori: "re", ad: ad, anahtar: "re_" + ad, veri: p }) - 1;
             const rozetHtml = ucluRozetHtmlUret(p);
-            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat);
+            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat, kartIdx);
             const icRenk = icDalgaRenkSinifi(p.icDalga);
             const kzObj = kzAyikla(p);
             const cerceve = cerceveBelirle(p.nobetci, kzObj);
@@ -969,6 +1135,11 @@
             alan.appendChild(kart);
           });
         }
+
+        if (aktifHaritaAnahtar) {
+          const guncelIdx = ekranKartlari.findIndex(k => k.anahtar === aktifHaritaAnahtar);
+          if (guncelIdx >= 0) haritaIceriginiCiz(ekranKartlari[guncelIdx]);
+        }
       } catch (err) {
         const alan = document.getElementById("icerikAlani");
         if (alan && !alan.querySelector(".kart")) {
@@ -976,6 +1147,679 @@
         }
       }
     }
+
+    // =========================================================================
+    // BİRLEŞİK YAPI, OB & POZİSYON HARİTASI (15dk + 60dk, MAKS 12 ZİKZAK)
+    // =========================================================================
+    function sayiCozHarita(deger) {
+      if (deger === null || deger === undefined || deger === "") return null;
+      if (typeof deger === "number") return (!isNaN(deger) && deger > 0) ? deger : null;
+      let t = String(deger).trim().replace(/[^\d.,\-]/g, "");
+      if (!t) return null;
+      if (t.includes(".") && t.includes(",")) {
+        t = t.replace(/\./g, "").replace(",", ".");
+      } else if (t.includes(",")) {
+        t = t.replace(",", ".");
+      }
+      const n = parseFloat(t);
+      return (!isNaN(n) && n > 0) ? n : null;
+    }
+
+    function haritaFiyatFormatla(n, aralik) {
+      if (n === null || n === undefined || isNaN(n)) return "-";
+      if (n >= 1000) {
+        if (aralik !== undefined && aralik < 15) {
+          return n.toFixed(1);
+        }
+        return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+      if (n >= 100) {
+        return (aralik !== undefined && aralik < 4) ? n.toFixed(2) : n.toFixed(1);
+      }
+      return n.toFixed(2);
+    }
+
+    function ob15SeviyeleriniCoz(metin, onEk, guncelFiyat) {
+      const liste = [];
+      if (!metin) return liste;
+      const re = new RegExp(onEk + "([12])\\s*:\\s*([\\d.,]+)(?:\\s*\\(([^)]*)\\))?", "gi");
+      let m;
+      while ((m = re.exec(String(metin))) !== null) {
+        const kademe = onEk.toUpperCase() + m[1];
+        const fiyat = sayiCozHarita(m[2]);
+        if (!fiyat) continue;
+        const detay = m[3] || "";
+        const mPct = detay.match(/%([+\-]?\d+(?:[.,]\d+)?)/);
+        const mVol = detay.match(/H:\s*%(\d+)/i);
+        let uzaklikPct = mPct ? Math.abs(parseFloat(mPct[1].replace(",", "."))) : null;
+        if ((uzaklikPct === null || isNaN(uzaklikPct)) && guncelFiyat > 0) {
+          uzaklikPct = Math.abs((fiyat - guncelFiyat) / guncelFiyat) * 100;
+        }
+        const hacimPct = mVol ? parseInt(mVol[1], 10) : null;
+        liste.push({
+          kod: kademe,
+          fiyat: fiyat,
+          uzaklikPct: uzaklikPct,
+          hacimPct: (!isNaN(hacimPct) && hacimPct !== null) ? hacimPct : null,
+          anaMi: m[1] === "1"
+        });
+      }
+      return liste;
+    }
+
+    function ob60DuvarlariniCoz(ustMetin, guncelFiyat) {
+      const sonuc = { d60: null, r60: null };
+      if (!ustMetin) return sonuc;
+      const s = String(ustMetin);
+      const mD = s.match(/(?:^|[\s|])D\s*:\s*([\d.,]+)/i);
+      const mR = s.match(/(?:^|[\s|0-9])R\s*:\s*([\d.,]+)/i);
+      if (mD) {
+        const df = sayiCozHarita(mD[1]);
+        if (df) {
+          sonuc.d60 = {
+            fiyat: df,
+            uzaklikPct: guncelFiyat > 0 ? (Math.abs(df - guncelFiyat) / guncelFiyat) * 100 : null
+          };
+        }
+      }
+      if (mR) {
+        const rf = sayiCozHarita(mR[1]);
+        if (rf) {
+          sonuc.r60 = {
+            fiyat: rf,
+            uzaklikPct: guncelFiyat > 0 ? (Math.abs(rf - guncelFiyat) / guncelFiyat) * 100 : null
+          };
+        }
+      }
+      return sonuc;
+    }
+
+    function pozisyonBayraklariniCoz(kayit, kategori, guncelFiyat) {
+      const bayraklar = [];
+      const etiket = String(kayit.etiket || "");
+      const nobetci = String(kayit.nobetci || "");
+      const birlesik = `${etiket} ${nobetci}`;
+
+      // Sadece gerçek açık pozisyonlarda Giriş, SL ve TP gösterilir; RE nöbetlerinde SL/TP gösterilmez
+      if (kategori === "acik") {
+        const mG = etiket.match(/G:([\d.,]+)/i);
+        const mSL = etiket.match(/SL:([\d.,]+)/i);
+        const mTP = etiket.match(/TP:([\d.,]+)/i);
+        const girisVal = mG ? sayiCozHarita(mG[1]) : null;
+        const slVal = mSL ? sayiCozHarita(mSL[1]) : null;
+        const tpVal = mTP ? sayiCozHarita(mTP[1]) : null;
+
+        if (slVal) {
+          bayraklar.push({ tip: "SL", onEk: "SL: ", fiyat: slVal, yaziRenk: "#b91c1c", bgRenk: "#fef2f2", kenarRenk: "#fca5a5", cizgiRenk: "#b91c1c", kesikli: true });
+        }
+        if (girisVal) {
+          bayraklar.push({ tip: "GIRIS", onEk: "Giriş: ", fiyat: girisVal, yaziRenk: "#92400e", bgRenk: "#fffbeb", kenarRenk: "#fcd34d", cizgiRenk: "#d97706", kesikli: true });
+        }
+        if (tpVal) {
+          bayraklar.push({ tip: "TP", onEk: "TP: ", fiyat: tpVal, yaziRenk: "#166534", bgRenk: "#dcfce7", kenarRenk: "#86efac", cizgiRenk: "#15803d", kesikli: true });
+        }
+      } else if (kategori === "re") {
+        const mRE = birlesik.match(/RE:([\d.,]+)/i);
+        const reVal = mRE ? sayiCozHarita(mRE[1]) : null;
+        if (reVal) {
+          bayraklar.push({ tip: "RE", onEk: "RE: ", fiyat: reVal, yaziRenk: "#3730a3", bgRenk: "#eef2ff", kenarRenk: "#a5b4fc", cizgiRenk: "#4f46e5", kesikli: true });
+        }
+      }
+
+      if (guncelFiyat > 0) {
+        bayraklar.push({ tip: "FIYAT", onEk: "", sonEk: " ●", fiyat: guncelFiyat, yaziRenk: "#ffffff", bgRenk: "#0284c7", kenarRenk: "#0284c7", cizgiRenk: "#0284c7", kesikli: false, anaFiyatMi: true });
+      }
+      return bayraklar;
+    }
+
+    // Ham 15dk mum dizisinden son ZIKZAK_PENCERE_MUM (90) barı tarayıp en fazla ZIKZAK_MAKS_NOKTA (12) zikzak çıkarır
+    function mumdanZikzakCikar(bars, pencereMum, maksNokta) {
+      if (!Array.isArray(bars) || bars.length === 0) return null;
+      const altDizi = bars.length > pencereMum ? bars.slice(-pencereMum) : bars.slice();
+      const temiz = altDizi
+        .map(b => Array.isArray(b) ? { t: Number(b[0]) || 0, o: Number(b[1]), h: Number(b[2]), l: Number(b[3]), c: Number(b[4]) } : null)
+        .filter(b => b && !isNaN(b.h) && !isNaN(b.l) && !isNaN(b.c) && b.c > 0);
+      if (temiz.length === 0) return null;
+      if (temiz.length === 1) {
+        return { noktalar: [{ t: temiz[0].t, p: temiz[0].c }], baslangicSn: temiz[0].t, bitisSn: temiz[0].t, gercekMi: true };
+      }
+
+      let tumYuksek = -Infinity, tumDusuk = Infinity;
+      for (const m of temiz) {
+        if (m.h > tumYuksek) tumYuksek = m.h;
+        if (m.l < tumDusuk) tumDusuk = m.l;
+      }
+      const aralikYuzde = tumDusuk > 0 ? ((tumYuksek - tumDusuk) / tumDusuk) * 100 : 1.0;
+      const tabanEsik = Math.max(0.15, aralikYuzde * 0.08);
+
+      let enIyi = null;
+      for (let adim = 0; adim < 26; adim++) {
+        const esik = tabanEsik * Math.pow(1.15, adim);
+        const pivotlar = [];
+        let trend = 0;
+        let sonHI = 0, sonH = temiz[0].h;
+        let sonLI = 0, sonL = temiz[0].l;
+
+        for (let i = 0; i < temiz.length; i++) {
+          const h = temiz[i].h, l = temiz[i].l;
+          if (trend === 0) {
+            if (h > sonH) { sonH = h; sonHI = i; }
+            if (l < sonL) { sonL = l; sonLI = i; }
+            if (sonL > 0 && ((sonH - sonL) / sonL) * 100 >= esik) {
+              if (sonHI > sonLI) {
+                pivotlar.push({ i: sonLI, t: temiz[sonLI].t, p: sonL });
+                trend = 1;
+              } else {
+                pivotlar.push({ i: sonHI, t: temiz[sonHI].t, p: sonH });
+                trend = -1;
+              }
+            }
+          } else if (trend === 1) {
+            if (h >= sonH) {
+              sonH = h; sonHI = i;
+            } else if (sonH > 0 && ((sonH - l) / sonH) * 100 >= esik) {
+              pivotlar.push({ i: sonHI, t: temiz[sonHI].t, p: sonH });
+              sonL = l; sonLI = i;
+              trend = -1;
+            }
+          } else if (trend === -1) {
+            if (l <= sonL) {
+              sonL = l; sonLI = i;
+            } else if (sonL > 0 && ((h - sonL) / sonL) * 100 >= esik) {
+              pivotlar.push({ i: sonLI, t: temiz[sonLI].t, p: sonL });
+              sonH = h; sonHI = i;
+              trend = 1;
+            }
+          }
+        }
+
+        if (trend === 1 && (pivotlar.length === 0 || pivotlar[pivotlar.length - 1].i !== sonHI)) {
+          pivotlar.push({ i: sonHI, t: temiz[sonHI].t, p: sonH });
+        } else if (trend === -1 && (pivotlar.length === 0 || pivotlar[pivotlar.length - 1].i !== sonLI)) {
+          pivotlar.push({ i: sonLI, t: temiz[sonLI].t, p: sonL });
+        }
+
+        const sonIdx = temiz.length - 1;
+        if (pivotlar.length === 0) {
+          pivotlar.push({ i: 0, t: temiz[0].t, p: temiz[0].o || temiz[0].c });
+          pivotlar.push({ i: sonIdx, t: temiz[sonIdx].t, p: temiz[sonIdx].c });
+        } else if (pivotlar[pivotlar.length - 1].i !== sonIdx) {
+          pivotlar.push({ i: sonIdx, t: temiz[sonIdx].t, p: temiz[sonIdx].c });
+        } else {
+          pivotlar[pivotlar.length - 1] = { i: sonIdx, t: temiz[sonIdx].t, p: temiz[sonIdx].c };
+        }
+
+        enIyi = pivotlar;
+        if (pivotlar.length <= maksNokta) break;
+      }
+
+      if (enIyi.length > maksNokta) {
+        enIyi = enIyi.slice(-maksNokta);
+      }
+      return {
+        noktalar: enIyi.map(x => ({ t: x.t, p: x.p })),
+        baslangicSn: enIyi[0].t || 0,
+        bitisSn: enIyi[enIyi.length - 1].t || 0,
+        gercekMi: true
+      };
+    }
+
+    function kayittanZikzakHazirla(kayit, guncelFiyat, gunlukPct) {
+      // 1) Ham 15dk mumları geldiyse (son 90 mum -> maks 12 zikzak)
+      const hamMumlar = kayit.mumlar15 || kayit.bars15;
+      if (Array.isArray(hamMumlar) && hamMumlar.length >= 2) {
+        const cikarilan = mumdanZikzakCikar(hamMumlar, ZIKZAK_PENCERE_MUM, ZIKZAK_MAKS_NOKTA);
+        if (cikarilan && cikarilan.noktalar.length >= 2) return cikarilan;
+      }
+
+      // 2) doGet'ten hazır zikzak dizisi geldiyse (maks 12 nokta sınırını uygula)
+      const hazirDizi = kayit.zikzak15 || kayit.zikzak;
+      if (Array.isArray(hazirDizi) && hazirDizi.length >= 2) {
+        let cozulen = hazirDizi.map(el => {
+          if (typeof el === "number") return { t: 0, p: el };
+          if (Array.isArray(el) && el.length >= 2) return { t: Number(el[0]) || 0, p: Number(el[1]) };
+          if (el && typeof el === "object") return { t: Number(el.t || el.zaman || 0), p: Number(el.p || el.fiyat || el.c) };
+          return null;
+        }).filter(x => x && !isNaN(x.p) && x.p > 0);
+
+        if (cozulen.length >= 2) {
+          if (cozulen.length > ZIKZAK_MAKS_NOKTA) {
+            cozulen = cozulen.slice(-ZIKZAK_MAKS_NOKTA);
+          }
+          if (guncelFiyat > 0) {
+            cozulen[cozulen.length - 1].p = guncelFiyat;
+          }
+          let basSn = cozulen[0].t || 0;
+          if (!basSn && (kayit.zikzakBaslangicSn || kayit.zikzakBaslangic)) {
+            const ms = zamanMsCoz(kayit.zikzakBaslangicSn || kayit.zikzakBaslangic);
+            if (ms) basSn = Math.floor(ms / 1000);
+          }
+          const bitSn = cozulen[cozulen.length - 1].t || Math.floor(Date.now() / 1000);
+          return { noktalar: cozulen, baslangicSn: basSn, bitisSn: bitSn, gercekMi: true };
+        }
+      }
+
+      // 3) doGet henüz güncellenmediyse günlük değişim ve iç dalgadan sembolik gün içi eğri üret
+      if (guncelFiyat > 0) {
+        const pct = (!isNaN(gunlukPct) && gunlukPct !== null) ? gunlukPct : 0;
+        const dunKapanis = Math.abs(1 + pct / 100) > 0.01 ? (guncelFiyat / (1 + pct / 100)) : guncelFiyat;
+        const icStr = String(kayit.icDalga || "");
+        const icLong = /Long/i.test(icStr) || icStr.includes("↗");
+        const icShort = /Short/i.test(icStr) || icStr.includes("↘");
+        const fark = Math.abs(guncelFiyat - dunKapanis) || (guncelFiyat * 0.004);
+        let araNokta = (dunKapanis + guncelFiyat) / 2;
+        if (icLong) araNokta = Math.min(dunKapanis, guncelFiyat) - fark * 0.25;
+        else if (icShort) araNokta = Math.max(dunKapanis, guncelFiyat) + fark * 0.25;
+
+        return {
+          noktalar: [
+            { t: 0, p: dunKapanis },
+            { t: 0, p: araNokta },
+            { t: 0, p: guncelFiyat }
+          ],
+          baslangicSn: 0,
+          bitisSn: Math.floor(Date.now() / 1000),
+          gercekMi: false
+        };
+      }
+      return { noktalar: [], baslangicSn: 0, bitisSn: 0, gercekMi: false };
+    }
+
+    function tsiTakvimGunuAnahtari(sn) {
+      const tsiMs = (sn * 1000) + (3 * 3600 * 1000);
+      const d = new Date(tsiMs);
+      return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    }
+
+    function zikzakBaslangicEtiketiUret(baslangicSn, bitisSn, gercekMi) {
+      if (!gercekMi || !baslangicSn || baslangicSn <= 0) {
+        return "Dün Kapanış";
+      }
+      const basSaniye = baslangicSn > 1e11 ? Math.floor(baslangicSn / 1000) : baslangicSn;
+      const referansSn = Math.max(
+        Math.floor(Date.now() / 1000),
+        bitisSn > 1e11 ? Math.floor(bitisSn / 1000) : (bitisSn || 0)
+      );
+      const farkSn = Math.max(0, referansSn - basSaniye);
+      const farkSaat = farkSn / 3600;
+      const gunFarki = Math.round((tsiTakvimGunuAnahtari(referansSn) - tsiTakvimGunuAnahtari(basSaniye)) / 86400000);
+
+      if (farkSaat < 1) {
+        const dk = Math.max(1, Math.round(farkSn / 60));
+        return `${dk} dk önce`;
+      }
+      if (gunFarki <= 0 || farkSaat < 18) {
+        return `${Math.max(1, Math.round(farkSaat))} saat önce`;
+      }
+      return `${Math.max(1, gunFarki)} gün önce`;
+    }
+
+    function dikeyEtiketCakismaCoz(ogeler, minAralikPx, ustSinirPx, altSinirPx) {
+      if (!ogeler || ogeler.length <= 1) return ogeler;
+      ogeler.sort((a, b) => a.yEtiket - b.yEtiket);
+      for (let tur = 0; tur < 8; tur++) {
+        let degisti = false;
+        for (let i = 1; i < ogeler.length; i++) {
+          const ust = ogeler[i - 1];
+          const alt = ogeler[i];
+          const fark = alt.yEtiket - ust.yEtiket;
+          if (fark < minAralikPx) {
+            const kaydir = (minAralikPx - fark) / 2;
+            ust.yEtiket -= kaydir;
+            alt.yEtiket += kaydir;
+            degisti = true;
+          }
+        }
+        for (let i = 0; i < ogeler.length; i++) {
+          if (ogeler[i].yEtiket < ustSinirPx) ogeler[i].yEtiket = ustSinirPx;
+          if (ogeler[i].yEtiket > altSinirPx) ogeler[i].yEtiket = altSinirPx;
+        }
+        if (!degisti) break;
+      }
+      return ogeler;
+    }
+
+    function birlesikHaritaSvgUret(kartKaydi) {
+      const p = kartKaydi.veri || {};
+      const kategori = kartKaydi.kategori;
+      const fiyatStr = String(p.fiyat || "");
+      const mFiyat = fiyatStr.match(/^\s*([\d.,]+)/);
+      const mPct = fiyatStr.match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
+      const guncelFiyat = mFiyat ? sayiCozHarita(mFiyat[1]) : null;
+      const gunlukPct = mPct ? parseFloat(mPct[1].replace(",", ".")) : 0;
+
+      if (!guncelFiyat) {
+        return {
+          svg: `<div class="ozet-bilgi-mesaj">Bu enstrüman için güncel fiyat verisi henüz bulunmuyor.</div>`,
+          tamVeriVar: false
+        };
+      }
+
+      const d15Liste = ob15SeviyeleriniCoz(p.destek, "D", guncelFiyat);
+      const r15Liste = ob15SeviyeleriniCoz(p.direnc, "R", guncelFiyat);
+      const ustMetin = String(p.ustYapi || p.tf2Ozet || p.ustYon || "");
+      const ob60 = ob60DuvarlariniCoz(ustMetin, guncelFiyat);
+      const bayraklar = pozisyonBayraklariniCoz(p, kategori, guncelFiyat);
+      const zzVeri = kayittanZikzakHazirla(p, guncelFiyat, gunlukPct);
+      const zzNoktalar = zzVeri.noktalar;
+
+      // Çekirdek görünüm aralığını hesapla (aşırı uzaktaki dış duvarların grafiği ezmesini engelle)
+      const cekirdekHavuz = [guncelFiyat, ...zzNoktalar.map(z => z.p)];
+      bayraklar.forEach(b => cekirdekHavuz.push(b.fiyat));
+      d15Liste.filter(d => d.anaMi).forEach(d => cekirdekHavuz.push(d.fiyat));
+      r15Liste.filter(r => r.anaMi).forEach(r => cekirdekHavuz.push(r.fiyat));
+
+      let cekMin = Math.min(...cekirdekHavuz);
+      let cekMax = Math.max(...cekirdekHavuz);
+      if (cekMax - cekMin < guncelFiyat * 0.008) {
+        const esne = guncelFiyat * 0.008;
+        cekMin -= esne;
+        cekMax += esne;
+      }
+      const cekAralik = cekMax - cekMin;
+      const disSinirAlt = cekMin - cekAralik * 1.45;
+      const disSinirUst = cekMax + cekAralik * 1.45;
+
+      const tumGorunurHavuz = [...cekirdekHavuz];
+      const disSeviyeler = [
+        ...d15Liste.filter(d => !d.anaMi).map(d => d.fiyat),
+        ...r15Liste.filter(r => !r.anaMi).map(r => r.fiyat)
+      ];
+      if (ob60.d60) disSeviyeler.push(ob60.d60.fiyat);
+      if (ob60.r60) disSeviyeler.push(ob60.r60.fiyat);
+
+      for (const sv of disSeviyeler) {
+        if (sv >= disSinirAlt && sv <= disSinirUst) {
+          tumGorunurHavuz.push(sv);
+        }
+      }
+
+      let hamMin = Math.min(...tumGorunurHavuz);
+      let hamMax = Math.max(...tumGorunurHavuz);
+      const bazAralik = Math.max(hamMax - hamMin, guncelFiyat * 0.01);
+      const yMin = hamMin - bazAralik * 0.13;
+      const yMax = hamMax + bazAralik * 0.13;
+      const yAralik = yMax - yMin;
+
+      // SVG Koordinat Sistemi
+      const W = 388, H = 338;
+      const solX = 8, sagX = 338;
+      const ustY = 16, altY = 292;
+      const cizimBoy = altY - ustY;
+
+      const yHesapla = (fiyat) => {
+        const oran = (fiyat - yMin) / yAralik;
+        const hamY = altY - oran * cizimBoy;
+        return Math.max(ustY + 4, Math.min(altY - 4, hamY));
+      };
+      const yKistiMi = (fiyat) => (fiyat < yMin ? "alt" : fiyat > yMax ? "ust" : "");
+
+      let parcalar = [];
+
+      // 1) Yatay Izgara & Sağ Y-Ekseni Fiyat Kademeleri (5 kademe)
+      for (let i = 0; i <= 4; i++) {
+        const kOran = i / 4;
+        const kFiyat = yMin + kOran * yAralik;
+        const ky = altY - kOran * cizimBoy;
+        parcalar.push(`<line x1="${solX}" y1="${ky.toFixed(1)}" x2="${sagX}" y2="${ky.toFixed(1)}" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2,3" opacity="0.7" />`);
+        parcalar.push(`<line x1="${sagX}" y1="${ky.toFixed(1)}" x2="${sagX + 3.5}" y2="${ky.toFixed(1)}" stroke="#94a3b8" stroke-width="1" />`);
+        parcalar.push(`<text x="${sagX + 6}" y="${(ky + 3.2).toFixed(1)}" font-size="9.5" font-weight="600" fill="#64748b">${haritaFiyatFormatla(kFiyat, yAralik)}</text>`);
+      }
+
+      // Sağ ve Alt Ana Eksen Çizgileri
+      parcalar.push(`<line x1="${sagX}" y1="${ustY}" x2="${sagX}" y2="${altY}" stroke="#cbd5e1" stroke-width="1.1" />`);
+      parcalar.push(`<line x1="${solX}" y1="${altY}" x2="${sagX}" y2="${altY}" stroke="#94a3b8" stroke-width="1.3" />`);
+
+      // 2) 15dk Destek ve Direnç Order Block Bantları + Sol Etiketler
+      const solEtiketler = [];
+      const bantKalinlik = Math.max(8, Math.round(cizimBoy * 0.033));
+
+      d15Liste.forEach(d => {
+        const y = yHesapla(d.fiyat);
+        const kisti = yKistiMi(d.fiyat);
+        const alpha = d.anaMi
+          ? (d.hacimPct !== null ? (0.11 + (Math.min(100, d.hacimPct) / 100) * 0.17) : 0.17)
+          : 0.10;
+        const yBantUst = y;
+        const yBantAlt = Math.min(altY, y + bantKalinlik);
+        if (!kisti) {
+          parcalar.push(`<rect x="${solX}" y="${yBantUst.toFixed(1)}" width="${sagX - solX}" height="${Math.max(4, yBantAlt - yBantUst).toFixed(1)}" fill="#22c55e" fill-opacity="${alpha.toFixed(2)}" />`);
+        }
+        const dash = d.anaMi ? "" : `stroke-dasharray="2.5,2.5"`;
+        const kalin = d.anaMi ? "1.5" : "1.1";
+        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="#16a34a" stroke-width="${kalin}" ${dash} opacity="0.9" />`);
+
+        const pctKisim = d.uzaklikPct !== null ? `%${d.uzaklikPct.toFixed(1)}` : "";
+        const volKisim = d.hacimPct !== null ? ` | H:%${d.hacimPct}${d.hacimPct >= 50 ? " Güçlü" : ""}` : "";
+        const parantez = (pctKisim || volKisim) ? ` (${pctKisim}${volKisim})` : "";
+        const okOnEk = kisti === "alt" ? "▼ " : "";
+        solEtiketler.push({
+          metin: `${okOnEk}[15dk ${d.kod}] ${haritaFiyatFormatla(d.fiyat, yAralik)}${parantez}`,
+          renk: "#15803d",
+          yEtiket: d.anaMi ? Math.min(altY - 6, yBantAlt + 10) : Math.max(ustY + 10, y - 5)
+        });
+      });
+
+      r15Liste.forEach(r => {
+        const y = yHesapla(r.fiyat);
+        const kisti = yKistiMi(r.fiyat);
+        const alpha = r.anaMi
+          ? (r.hacimPct !== null ? (0.11 + (Math.min(100, r.hacimPct) / 100) * 0.17) : 0.17)
+          : 0.10;
+        const yBantAlt = y;
+        const yBantUst = Math.max(ustY, y - bantKalinlik);
+        if (!kisti) {
+          parcalar.push(`<rect x="${solX}" y="${yBantUst.toFixed(1)}" width="${sagX - solX}" height="${Math.max(4, yBantAlt - yBantUst).toFixed(1)}" fill="#ef4444" fill-opacity="${alpha.toFixed(2)}" />`);
+        }
+        const dash = r.anaMi ? "" : `stroke-dasharray="2.5,2.5"`;
+        const kalin = r.anaMi ? "1.4" : "1.1";
+        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="#dc2626" stroke-width="${kalin}" ${dash} opacity="0.88" />`);
+
+        const pctKisim = r.uzaklikPct !== null ? `%${r.uzaklikPct.toFixed(1)}` : "";
+        const volKisim = r.hacimPct !== null ? ` | H:%${r.hacimPct}${r.hacimPct >= 50 ? " Güçlü" : ""}` : "";
+        const parantez = (pctKisim || volKisim) ? ` (${pctKisim}${volKisim})` : "";
+        const okOnEk = kisti === "ust" ? "▲ " : "";
+        solEtiketler.push({
+          metin: `${okOnEk}[15dk ${r.kod}] ${haritaFiyatFormatla(r.fiyat, yAralik)}${parantez}`,
+          renk: "#dc2626",
+          yEtiket: Math.max(ustY + 10, yBantUst - 4)
+        });
+      });
+
+      // 3) 60dk Ana Duvarlar (Kalın Kesikli Hat + Orta Koyu Kapsül)
+      const ortaDuvarCiz = (duvarObj, etiketOnEk, cizgiRenk, xMerkez) => {
+        if (!duvarObj) return;
+        const y = yHesapla(duvarObj.fiyat);
+        const kisti = yKistiMi(duvarObj.fiyat);
+        const ok = kisti === "ust" ? "▲ " : kisti === "alt" ? "▼ " : "";
+        const pctMetin = duvarObj.uzaklikPct !== null ? ` (%${duvarObj.uzaklikPct.toFixed(1)})` : "";
+        const tamMetin = `${ok}[60dk ${etiketOnEk}] ${haritaFiyatFormatla(duvarObj.fiyat, yAralik)}${pctMetin}`;
+        const kutuGen = Math.max(84, Math.round(tamMetin.length * 5.6 + 12));
+
+        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="${cizgiRenk}" stroke-width="2.1" stroke-dasharray="7,4.5" opacity="0.92" />`);
+        parcalar.push(`<rect x="${(xMerkez - kutuGen / 2).toFixed(1)}" y="${(y - 8).toFixed(1)}" width="${kutuGen}" height="16" rx="4.5" fill="${cizgiRenk}" />`);
+        parcalar.push(`<text x="${xMerkez}" y="${(y + 3.4).toFixed(1)}" text-anchor="middle" font-size="9.2" font-weight="800" fill="#ffffff">${htmlGuvenliYap(tamMetin)}</text>`);
+      };
+
+      ortaDuvarCiz(ob60.r60, "R", "#991b1b", 184);
+      ortaDuvarCiz(ob60.d60, "D", "#065f46", 172);
+
+      // Sol 15dk etiketlerini dikey çakışmasız çiz
+      dikeyEtiketCakismaCoz(solEtiketler, 13.5, ustY + 9, altY - 6);
+      solEtiketler.forEach(et => {
+        const tahminiGen = Math.min(210, Math.round(et.metin.length * 5.2 + 6));
+        parcalar.push(`<rect x="${solX + 2}" y="${(et.yEtiket - 9.5).toFixed(1)}" width="${tahminiGen}" height="12.5" rx="3" fill="#ffffff" fill-opacity="0.82" />`);
+        parcalar.push(`<text x="${solX + 4}" y="${et.yEtiket.toFixed(1)}" font-size="9.4" font-weight="800" fill="${et.renk}">${htmlGuvenliYap(et.metin)}</text>`);
+      });
+
+      // 4) Zikzak Fiyat Yapısı + Dikey Başlangıç İz Düşümü + Alt Eksen Çentiği
+      const zzSolX = 86;
+      const zzSagX = bayraklar.length > 1 ? 236 : 254;
+      const nZz = zzNoktalar.length;
+
+      if (nZz >= 2) {
+        const zzKoord = zzNoktalar.map((pt, idx) => ({
+          x: zzSolX + (idx / (nZz - 1)) * (zzSagX - zzSolX),
+          y: yHesapla(pt.p),
+          p: pt.p
+        }));
+
+        const ilkNokta = zzKoord[0];
+        const sonNokta = zzKoord[zzKoord.length - 1];
+        const sondanOnceki = zzKoord[zzKoord.length - 2];
+
+        // İlk noktadan alt eksene dikey noktalı iz düşümü + çentik + dinamik "X gün önce" rozeti
+        const basEtiket = zikzakBaslangicEtiketiUret(zzVeri.baslangicSn, zzVeri.bitisSn, zzVeri.gercekMi);
+        const basRozetGen = Math.max(54, Math.round(basEtiket.length * 5.6 + 12));
+        parcalar.push(`<line x1="${ilkNokta.x.toFixed(1)}" y1="${ilkNokta.y.toFixed(1)}" x2="${ilkNokta.x.toFixed(1)}" y2="${altY}" stroke="#64748b" stroke-width="1.2" stroke-dasharray="2.5,3.5" opacity="0.8" />`);
+        parcalar.push(`<line x1="${ilkNokta.x.toFixed(1)}" y1="${altY - 4}" x2="${ilkNokta.x.toFixed(1)}" y2="${altY + 5}" stroke="#334155" stroke-width="2" />`);
+        parcalar.push(`<circle cx="${ilkNokta.x.toFixed(1)}" cy="${altY}" r="3.2" fill="#334155" />`);
+        parcalar.push(`<rect x="${(ilkNokta.x - basRozetGen / 2).toFixed(1)}" y="${altY + 8}" width="${basRozetGen}" height="17" rx="4.5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />`);
+        parcalar.push(`<text x="${ilkNokta.x.toFixed(1)}" y="${altY + 19.6}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#334155">${htmlGuvenliYap(basEtiket)}</text>`);
+
+        // Son noktadan ("Şimdi") alt eksene ince mavi iz düşümü
+        parcalar.push(`<line x1="${sonNokta.x.toFixed(1)}" y1="${sonNokta.y.toFixed(1)}" x2="${sonNokta.x.toFixed(1)}" y2="${altY}" stroke="#0284c7" stroke-width="1.1" stroke-dasharray="2.5,3.5" opacity="0.6" />`);
+        parcalar.push(`<circle cx="${sonNokta.x.toFixed(1)}" cy="${altY}" r="2.9" fill="#0284c7" />`);
+        parcalar.push(`<text x="${sonNokta.x.toFixed(1)}" y="${altY + 19.6}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#0369a1">Şimdi</text>`);
+
+        // Ana Zikzak Çizgisi (Son aktif dalga mavi, önceki dalgalar koyu antrasit)
+        if (zzKoord.length > 2) {
+          const gecmisNoktalarStr = zzKoord.slice(0, -1).map(k => `${k.x.toFixed(1)},${k.y.toFixed(1)}`).join(" ");
+          parcalar.push(`<polyline points="${gecmisNoktalarStr}" fill="none" stroke="#334155" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />`);
+        }
+        parcalar.push(`<line x1="${sondanOnceki.x.toFixed(1)}" y1="${sondanOnceki.y.toFixed(1)}" x2="${sonNokta.x.toFixed(1)}" y2="${sonNokta.y.toFixed(1)}" stroke="#0284c7" stroke-width="2.7" stroke-linecap="round" />`);
+
+        // Zikzak Köşe Düğümleri
+        for (let i = 0; i < zzKoord.length - 1; i++) {
+          const k = zzKoord[i];
+          if (i === 0) {
+            parcalar.push(`<circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="3.8" fill="#334155" />`);
+          } else {
+            parcalar.push(`<circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="3.2" fill="#ffffff" stroke="#334155" stroke-width="1.7" />`);
+          }
+        }
+        parcalar.push(`<circle cx="${sonNokta.x.toFixed(1)}" cy="${sonNokta.y.toFixed(1)}" r="4.8" fill="#0284c7" />`);
+
+        // İlk nokta, En Yüksek Tepe ve En Düşük Dip fiyat etiketleri
+        let enYuksekIdx = 0, enDusukIdx = 0;
+        for (let i = 0; i < zzKoord.length - 1; i++) {
+          if (zzKoord[i].p > zzKoord[enYuksekIdx].p) enYuksekIdx = i;
+          if (zzKoord[i].p < zzKoord[enDusukIdx].p) enDusukIdx = i;
+        }
+        const isaretlenecekIndeksler = new Set([0, enYuksekIdx, enDusukIdx]);
+        isaretlenecekIndeksler.forEach(idx => {
+          const k = zzKoord[idx];
+          const komsuY = idx < zzKoord.length - 1 ? zzKoord[idx + 1].y : zzKoord[idx - 1].y;
+          const tepeMi = k.y <= komsuY;
+          const yaziY = tepeMi ? Math.max(ustY + 9, k.y - 6.5) : Math.min(altY - 5, k.y + 12.5);
+          parcalar.push(`<text x="${k.x.toFixed(1)}" y="${yaziY.toFixed(1)}" text-anchor="middle" font-size="9.2" font-weight="800" fill="#0f172a">${haritaFiyatFormatla(k.p, yAralik)}</text>`);
+        });
+
+        // 5) Sağ Kısa Bayraklar (Giriş / SL / TP / RE ve Güncel Fiyat)
+        const sagBayraklar = bayraklar.map(b => {
+          const yGercek = yHesapla(b.fiyat);
+          const metin = `${b.onEk || ""}${haritaFiyatFormatla(b.fiyat, yAralik)}${b.sonEk || ""}`;
+          return {
+            ...b,
+            metin: metin,
+            yGercek: yGercek,
+            yEtiket: yGercek,
+            basX: b.anaFiyatMi ? sonNokta.x : Math.min(sondanOnceki.x + 8, sonNokta.x - 6)
+          };
+        });
+
+        dikeyEtiketCakismaCoz(sagBayraklar, 18.5, ustY + 10, altY - 10);
+
+        const bayrakSolX = 264;
+        sagBayraklar.forEach(b => {
+          const dash = b.kesikli ? `stroke-dasharray="4,2.8"` : "";
+          const kirilmaX = bayrakSolX - 7;
+          if (Math.abs(b.yEtiket - b.yGercek) > 1.5) {
+            parcalar.push(`<polyline points="${b.basX.toFixed(1)},${b.yGercek.toFixed(1)} ${kirilmaX},${b.yGercek.toFixed(1)} ${bayrakSolX},${b.yEtiket.toFixed(1)}" fill="none" stroke="${b.cizgiRenk}" stroke-width="1.5" ${dash} />`);
+          } else {
+            parcalar.push(`<line x1="${b.basX.toFixed(1)}" y1="${b.yGercek.toFixed(1)}" x2="${bayrakSolX}" y2="${b.yEtiket.toFixed(1)}" stroke="${b.cizgiRenk}" stroke-width="1.5" ${dash} />`);
+          }
+          const kutuGen = Math.min(72, Math.max(48, Math.round(b.metin.length * 5.5 + 11)));
+          parcalar.push(`<rect x="${bayrakSolX}" y="${(b.yEtiket - 8.2).toFixed(1)}" width="${kutuGen}" height="16.4" rx="4.5" fill="${b.bgRenk}" stroke="${b.kenarRenk}" stroke-width="1.1" />`);
+          parcalar.push(`<text x="${(bayrakSolX + kutuGen / 2).toFixed(1)}" y="${(b.yEtiket + 3.3).toFixed(1)}" text-anchor="middle" font-size="9.3" font-weight="800" fill="${b.yaziRenk}">${htmlGuvenliYap(b.metin)}</text>`);
+        });
+      }
+
+      const svgTam = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Birleşik Yapı ve OB Haritası">${parcalar.join("")}</svg>`;
+      return {
+        svg: svgTam,
+        gercekZikzakMi: zzVeri.gercekMi,
+        ustDuvarVarMi: Boolean(ob60.d60 || ob60.r60)
+      };
+    }
+
+    function haritaIceriginiCiz(kartKaydi) {
+      if (!kartKaydi) return;
+      const p = kartKaydi.veri || {};
+      const ad = kartKaydi.ad || "";
+      const kategori = kartKaydi.kategori;
+      const etiket = String(p.etiket || "");
+
+      const baslikEl = document.getElementById("haritaBaslik");
+      const lejantEl = document.getElementById("haritaLejant");
+      const svgAlaniEl = document.getElementById("haritaSvgAlani");
+      const altNotEl = document.getElementById("haritaAltNot");
+
+      if (kategori === "acik") {
+        const yon = /SHORT/i.test(etiket) ? "SHORT" : "LONG";
+        baslikEl.textContent = `${ad} (${yon}) — Yapı, OB & Pozisyon Haritası`;
+        lejantEl.className = "harita-lejant harita-lejant-acik";
+        lejantEl.innerHTML = `
+          <span>Sol: 15dk OB Kutusu | Orta: 60dk Ana Duvar</span>
+          <span style="color:#b45309">Sağ Kısa Bayraklar: Giriş / SL / TP</span>
+        `;
+      } else if (kategori === "re") {
+        const reYon = /RE-SHORT/i.test(etiket) ? "RE-SHORT" : "RE-LONG";
+        baslikEl.textContent = `${ad} (${reYon}) — Yapı, OB & RE Haritası`;
+        lejantEl.className = "harita-lejant harita-lejant-re";
+        lejantEl.innerHTML = `
+          <span>Sol: 15dk OB Kutusu | Orta: 60dk Ana Duvar</span>
+          <span style="color:#3730a3">Sağ Bayrak: RE Giriş</span>
+        `;
+      } else {
+        baslikEl.textContent = `${ad} — Birleşik Yapı & OB Haritası (15dk + 60dk)`;
+        lejantEl.className = "harita-lejant harita-lejant-sabit";
+        lejantEl.innerHTML = `
+          <span>■ Renkli Bant: 15dk OB (Hacim %'li)</span>
+          <span style="color:#991b1b">- - Kalın Kesikli Hat: 60dk Ana Duvar</span>
+        `;
+      }
+
+      const sonuc = birlesikHaritaSvgUret(kartKaydi);
+      svgAlaniEl.innerHTML = sonuc.svg;
+
+      if (sonuc.gercekZikzakMi) {
+        altNotEl.textContent = "İlk noktadan inen dikey iz düşümü ve alt eksen çentiği, zikzağın kaç gün/saat önce başladığını dinamik gösterir (maks. 12 nokta).";
+      } else {
+        altNotEl.textContent = "Mevcut 15dk OB ve pozisyon seviyeleri gösteriliyor. Tam 12 noktalı zikzak ve 60dk duvarları Apps Script doGet güncellendiğinde otomatik aktifleşir.";
+      }
+    }
+
+    function haritaPopAc(kartIdx, ev) {
+      if (ev) ev.stopPropagation();
+      const kartKaydi = ekranKartlari[kartIdx];
+      if (!kartKaydi) return;
+      aktifHaritaAnahtar = kartKaydi.anahtar;
+      haritaIceriginiCiz(kartKaydi);
+      document.getElementById("haritaPerde").classList.add("acik");
+    }
+
+    function haritaPopKapat(ev) {
+      if (ev) ev.stopPropagation();
+      aktifHaritaAnahtar = null;
+      document.getElementById("haritaPerde").classList.remove("acik");
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && aktifHaritaAnahtar) {
+        haritaPopKapat();
+      }
+    });
 
     // =========================================================================
     // HABER ÖZETİ / ÖZET STRATEJİ ÇEKMECESİ (BİST 30 & ONS SEKMELERİ KALDIRILDI)
