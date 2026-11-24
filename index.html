@@ -136,7 +136,7 @@
       margin-left: auto;
     }
 
-    /* 3'lü Kompakt Yön Rozetleri: [K] [15dk] [U] */
+    /* 3'lü Kompakt Yön & Güç Rozetleri: [K] [%Güç] [60dk] */
     .yon-rozet-grup {
       display: inline-flex;
       align-items: center;
@@ -802,7 +802,7 @@
         renkK = ucluYedek[0];
       }
 
-      // 2) [15dk] - Orta / 15dk Ana SMC Yönü (5. sütun)
+      // 2) [%Güç] - Orta / 15dk Ana SMC Yönü (5. sütun rengi + 7. sütun Güç Skoru)
       const anaMetin = String(kayit.anaYon || "");
       let renk15 = "rozet-gri";
       if (anaMetin) {
@@ -812,21 +812,33 @@
         renk15 = ucluYedek[1];
       }
 
-      // 3) [U] - Uzun / 60dk Üst Yapı (4. sütun)
+      const gucHam = (kayit.guc !== undefined && kayit.guc !== null) ? kayit.guc : kayit.gucSkoru;
+      let etiket15 = "15dk";
+      if (typeof gucHam === "number" && !isNaN(gucHam)) {
+        const puan = (gucHam > 0 && gucHam < 1) ? Math.round(gucHam * 100) : Math.round(gucHam);
+        etiket15 = `%${puan}`;
+      } else if (gucHam) {
+        const mGuc = String(gucHam).match(/%?\s*(\d{1,3})/);
+        if (mGuc) {
+          etiket15 = `%${mGuc[1]}`;
+        }
+      }
+
+      // 3) [60dk] - Uzun / 60dk Üst Yapı (4. sütun)
       const ustMetin = String(kayit.ustYapi || kayit.tf2Ozet || kayit.ustYon || "");
-      let renkU = "rozet-gri";
+      let renk60 = "rozet-gri";
       if (ustMetin) {
-        if (ustMetin.includes("🟢") || /L-BOS|L-CHOCH/i.test(ustMetin)) renkU = "rozet-yesil";
-        else if (ustMetin.includes("🔴") || /S-BOS|S-CHOCH/i.test(ustMetin)) renkU = "rozet-kirmizi";
+        if (ustMetin.includes("🟢") || /L-BOS|L-CHOCH/i.test(ustMetin)) renk60 = "rozet-yesil";
+        else if (ustMetin.includes("🔴") || /S-BOS|S-CHOCH/i.test(ustMetin)) renk60 = "rozet-kirmizi";
       } else if (ucluYedek) {
-        renkU = ucluYedek[2];
+        renk60 = ucluYedek[2];
       }
 
       return `
         <span class="yon-rozet-grup">
           <span class="yon-rozet ${renkK}">K</span>
-          <span class="yon-rozet ${renk15}">15dk</span>
-          <span class="yon-rozet ${renkU}">U</span>
+          <span class="yon-rozet ${renk15}" title="15dk Ana SMC Yönü &amp; Güç Skoru">${htmlGuvenliYap(etiket15)}</span>
+          <span class="yon-rozet ${renk60}">60dk</span>
         </span>
       `;
     }
@@ -1770,15 +1782,15 @@
         baslikEl.textContent = `${ad} (${yon}) — Yapı, OB & Pozisyon Haritası`;
         lejantEl.className = "harita-lejant harita-lejant-acik";
         lejantEl.innerHTML = `
-          <span>Sol: 15dk OB Kutusu | Orta: 60dk Ana Duvar</span>
-          <span style="color:#b45309">Sağ Kısa Bayraklar: Giriş / SL / TP</span>
+          <span>■ Bant: 15dk OB | - - Kesikli: 60dk OB</span>
+          <span style="color:#b45309">Sağ Bayraklar: Giriş / SL / TP</span>
         `;
       } else if (kategori === "re") {
         const reYon = /RE-SHORT/i.test(etiket) ? "RE-SHORT" : "RE-LONG";
         baslikEl.textContent = `${ad} (${reYon}) — Yapı, OB & RE Haritası`;
         lejantEl.className = "harita-lejant harita-lejant-re";
         lejantEl.innerHTML = `
-          <span>Sol: 15dk OB Kutusu | Orta: 60dk Ana Duvar</span>
+          <span>■ Bant: 15dk OB | - - Kesikli: 60dk OB</span>
           <span style="color:#3730a3">Sağ Bayrak: RE Giriş</span>
         `;
       } else {
