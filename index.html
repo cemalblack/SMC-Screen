@@ -72,12 +72,34 @@
       margin-bottom: 8px;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     }
-    .kart-sabit {
-      background: #f8fafc;
-      border-color: #cbd5e1;
-      border-left: 5px solid #0284c7;
-      padding: 8px 12px;
-      margin-bottom: 7px;
+    /* Birleşik ve Narin Ana Piyasa Çerçevesi (Başlık + ONS + BİST30 V. Tek Blok) */
+    .ana-piyasa-cerceve {
+      background: #f5f9fd;
+      border: 1px solid #bae6fd;
+      border-left: 3px solid #0284c7;
+      border-radius: 12px;
+      margin: 11px 0 9px 0;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(2, 132, 199, 0.04);
+    }
+    .ana-piyasa-baslik {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5.5px 12px 4.5px 12px;
+      font-size: 10.8px;
+      font-weight: 800;
+      color: #475569;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: rgba(224, 242, 254, 0.45);
+      border-bottom: 1px solid #dbeafe;
+    }
+    .ana-piyasa-satir {
+      padding: 7px 12px 7.5px 12px;
+    }
+    .ana-piyasa-satir + .ana-piyasa-satir {
+      border-top: 1px solid #dbeafe;
     }
     .kart-re {
       background: #eef2ff;
@@ -119,9 +141,15 @@
       letter-spacing: 0.2px;
       color: #0f172a;
     }
-    .kart-sabit .sembol-baslik {
-      font-size: 17.5px;
-      color: #0f172a;
+    .ana-piyasa-satir .sembol-baslik {
+      font-size: 16.8px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .ana-piyasa-satir .ons-fiyat-metin {
+      font-size: 15.8px;
+      font-weight: 800;
+      color: #0369a1;
     }
     .ons-fiyat-metin {
       font-size: 16.5px;
@@ -185,8 +213,9 @@
       gap: 8px;
       padding-right: 0.6ch;
     }
-    .kart-sabit .gunluk-degisim-satir {
-      font-size: 13.5px;
+    .ana-piyasa-satir .gunluk-degisim-satir {
+      margin-top: 3px;
+      font-size: 13.3px;
     }
     .gunluk-degisim-sol {
       min-width: 0;
@@ -355,9 +384,13 @@
       font-weight: 800;
       line-height: 1.25;
     }
-    .kart-sabit .ic-dalga-satir {
+    .ana-piyasa-satir .ic-dalga-satir {
+      margin-top: 2.5px;
+      font-size: 14.2px;
+    }
+    .ana-piyasa-satir .alt-bilgi-satir {
       margin-top: 3px;
-      font-size: 14.5px;
+      font-size: 13px;
     }
     .alt-bilgi-satir {
       margin-top: 4px;
@@ -1068,7 +1101,7 @@
           alan.appendChild(nakit);
         }
 
-        // 2. BÖLÜM: ANA PİYASA (ÖNCE ONS, SONRA BİST30 V. — HER KARTIN KENDİ ZAMANI AYRI)
+        // 2. BÖLÜM: ANA PİYASA (BAŞLIK DAHİL TEK NARİN ÇERÇEVE İÇİNDE ONS + BİST30 V.)
         const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
           const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
           const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
@@ -1076,7 +1109,14 @@
         });
 
         if (gostergeler.length > 0) {
-          bolumBasligiEkle(alan, "🌐 Ana Piyasa", false, null);
+          const anaCerceve = document.createElement("div");
+          anaCerceve.className = "ana-piyasa-cerceve";
+
+          const anaBaslik = document.createElement("div");
+          anaBaslik.className = "ana-piyasa-baslik";
+          anaBaslik.textContent = "🌐 Ana Piyasa";
+          anaCerceve.appendChild(anaBaslik);
+
           gostergeler.forEach(g => {
             const ad = kisaAdTemizle(g.etiket);
             const isOns = (ad === "ONS");
@@ -1095,9 +1135,9 @@
               ? `<span class="kart-zaman-etiket" data-zaman="${htmlGuvenliYap(kartHamZaman)}" data-onek="">${kartSureMetin}</span>`
               : "";
 
-            const sabitKart = document.createElement("div");
-            sabitKart.className = "kart kart-sabit";
-            sabitKart.innerHTML = `
+            const satir = document.createElement("div");
+            satir.className = "ana-piyasa-satir";
+            satir.innerHTML = `
               <div class="ust-satir">
                 <div class="sembol-grup">
                   <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
@@ -1110,8 +1150,10 @@
               <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(g.icDalga || "-")}</div>
               ${pusuGoster}
             `;
-            alan.appendChild(sabitKart);
+            anaCerceve.appendChild(satir);
           });
+
+          alan.appendChild(anaCerceve);
         }
 
         // 3. BÖLÜM: YENİDEN GİRİŞ (RE) NÖBETLERİ
@@ -1154,7 +1196,7 @@
         }
       } catch (err) {
         const alan = document.getElementById("icerikAlani");
-        if (alan && !alan.querySelector(".kart")) {
+        if (alan && !alan.querySelector(".kart, .ana-piyasa-cerceve")) {
           alan.innerHTML = `<div class="nakit-serit">⚠️ Bağlantı bekleniyor...</div>`;
         }
       }
