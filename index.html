@@ -1299,18 +1299,28 @@
       return liste;
     }
 
-    function ob60DuvarlariniCoz(ustMetin, guncelFiyat) {
+    function ob60DuvarlariniCoz(ustMetin, guncelFiyat, destekMetin, direncMetin) {
       const sonuc = { d60: null, r60: null };
-      if (!ustMetin) return sonuc;
-      const s = String(ustMetin);
-      const mD = s.match(/(?:^|[\s|])D\s*:\s*([\d.,]+)/i);
-      const mR = s.match(/(?:^|[\s|0-9])R\s*:\s*([\d.,]+)/i);
+      const s = String(ustMetin || "");
+      const mD = s.match(/(?:^|[\s|])D\s*:\s*([\d.,]+)(\s*\[1G\])?/i);
+      const mR = s.match(/(?:^|[\s|0-9\]])R\s*:\s*([\d.,]+)(\s*\[1G\])?/i);
       if (mD) {
         const df = sayiCozHarita(mD[1]);
         if (df) {
           sonuc.d60 = {
             fiyat: df,
-            uzaklikPct: guncelFiyat > 0 ? (Math.abs(df - guncelFiyat) / guncelFiyat) * 100 : null
+            uzaklikPct: guncelFiyat > 0 ? (Math.abs(df - guncelFiyat) / guncelFiyat) * 100 : null,
+            sonKaleMi: Boolean(mD[2])
+          };
+        }
+      } else if (destekMetin) {
+        const mD1g = String(destekMetin).match(/1G\s*:\s*([\d.,]+)/i);
+        const df = mD1g ? sayiCozHarita(mD1g[1]) : null;
+        if (df) {
+          sonuc.d60 = {
+            fiyat: df,
+            uzaklikPct: guncelFiyat > 0 ? (Math.abs(df - guncelFiyat) / guncelFiyat) * 100 : null,
+            sonKaleMi: true
           };
         }
       }
@@ -1319,7 +1329,18 @@
         if (rf) {
           sonuc.r60 = {
             fiyat: rf,
-            uzaklikPct: guncelFiyat > 0 ? (Math.abs(rf - guncelFiyat) / guncelFiyat) * 100 : null
+            uzaklikPct: guncelFiyat > 0 ? (Math.abs(rf - guncelFiyat) / guncelFiyat) * 100 : null,
+            sonKaleMi: Boolean(mR[2])
+          };
+        }
+      } else if (direncMetin) {
+        const mR1g = String(direncMetin).match(/1G\s*:\s*([\d.,]+)/i);
+        const rf = mR1g ? sayiCozHarita(mR1g[1]) : null;
+        if (rf) {
+          sonuc.r60 = {
+            fiyat: rf,
+            uzaklikPct: guncelFiyat > 0 ? (Math.abs(rf - guncelFiyat) / guncelFiyat) * 100 : null,
+            sonKaleMi: true
           };
         }
       }
@@ -1590,7 +1611,7 @@
       const d15Liste = ob15SeviyeleriniCoz(p.destek, "D", guncelFiyat);
       const r15Liste = ob15SeviyeleriniCoz(p.direnc, "R", guncelFiyat);
       const ustMetin = String(p.ustYapi || p.tf2Ozet || p.ustYon || "");
-      const ob60 = ob60DuvarlariniCoz(ustMetin, guncelFiyat);
+      const ob60 = ob60DuvarlariniCoz(ustMetin, guncelFiyat, p.destek, p.direnc);
       const bayraklar = pozisyonBayraklariniCoz(p, kategori, guncelFiyat);
       const zzVeri = kayittanZikzakHazirla(p, guncelFiyat, gunlukPct);
       const zzNoktalar = zzVeri.noktalar;
@@ -1611,18 +1632,22 @@
       const cekAralik = cekMax - cekMin;
       const disSinirAlt = cekMin - cekAralik * 1.45;
       const disSinirUst = cekMax + cekAralik * 1.45;
+      const sonKaleSinirAlt = Math.min(disSinirAlt, guncelFiyat * 0.95);
+      const sonKaleSinirUst = Math.max(disSinirUst, guncelFiyat * 1.05);
 
       const tumGorunurHavuz = [...cekirdekHavuz];
       const disSeviyeler = [
-        ...d15Liste.filter(d => !d.anaMi).map(d => d.fiyat),
-        ...r15Liste.filter(r => !r.anaMi).map(r => r.fiyat)
+        ...d15Liste.filter(d => !d.anaMi).map(d => ({ f: d.fiyat, sk: false })),
+        ...r15Liste.filter(r => !r.anaMi).map(r => ({ f: r.fiyat, sk: false }))
       ];
-      if (ob60.d60) disSeviyeler.push(ob60.d60.fiyat);
-      if (ob60.r60) disSeviyeler.push(ob60.r60.fiyat);
+      if (ob60.d60) disSeviyeler.push({ f: ob60.d60.fiyat, sk: Boolean(ob60.d60.sonKaleMi) });
+      if (ob60.r60) disSeviyeler.push({ f: ob60.r60.fiyat, sk: Boolean(ob60.r60.sonKaleMi) });
 
       for (const sv of disSeviyeler) {
-        if (sv >= disSinirAlt && sv <= disSinirUst) {
-          tumGorunurHavuz.push(sv);
+        const altLim = sv.sk ? sonKaleSinirAlt : disSinirAlt;
+        const ustLim = sv.sk ? sonKaleSinirUst : disSinirUst;
+        if (sv.f >= altLim && sv.f <= ustLim) {
+          tumGorunurHavuz.push(sv.f);
         }
       }
 
@@ -1718,23 +1743,37 @@
         });
       });
 
-      // 3) 60dk Ana Duvarlar (Kalın Kesikli Hat + Orta Koyu Kapsül)
-      const ortaDuvarCiz = (duvarObj, etiketOnEk, cizgiRenk, xMerkez) => {
+      // 3) 60dk Ana Duvarlar ve [1G SON KALE] Duvarları (Kalın Kesikli Hat + Orta Kapsül)
+      const ortaDuvarCiz = (duvarObj, etiketOnEk, varsayilanRenk, xMerkez) => {
         if (!duvarObj) return;
         const y = yHesapla(duvarObj.fiyat);
         const kisti = yKistiMi(duvarObj.fiyat);
         const ok = kisti === "ust" ? "▲ " : kisti === "alt" ? "▼ " : "";
         const pctMetin = duvarObj.uzaklikPct !== null ? ` (%${duvarObj.uzaklikPct.toFixed(1)})` : "";
-        const tamMetin = `${ok}[60dk ${etiketOnEk}] ${haritaFiyatFormatla(duvarObj.fiyat, yAralik)}${pctMetin}`;
-        const kutuGen = Math.max(84, Math.round(tamMetin.length * 5.6 + 12));
+        const sonKaleMi = Boolean(duvarObj.sonKaleMi);
+        const cizgiRenk = sonKaleMi ? (etiketOnEk === "D" ? "#b45309" : "#c2410c") : varsayilanRenk;
+        const baslikKisim = sonKaleMi ? `[1G SON KALE ${etiketOnEk}]` : `[60dk ${etiketOnEk}]`;
+        const tamMetin = `${ok}${baslikKisim} ${haritaFiyatFormatla(duvarObj.fiyat, yAralik)}${pctMetin}`;
+        const kutuGen = Math.max(84, Math.round(tamMetin.length * 5.35 + 12));
+        const kutuSolX = Math.max(solX + 6, Math.min(258 - kutuGen, xMerkez - kutuGen / 2));
+        const yaziMerkezX = kutuSolX + kutuGen / 2;
 
-        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="${cizgiRenk}" stroke-width="2.1" stroke-dasharray="7,4.5" opacity="0.92" />`);
-        parcalar.push(`<rect x="${(xMerkez - kutuGen / 2).toFixed(1)}" y="${(y - 8).toFixed(1)}" width="${kutuGen}" height="16" rx="4.5" fill="${cizgiRenk}" />`);
-        parcalar.push(`<text x="${xMerkez}" y="${(y + 3.4).toFixed(1)}" text-anchor="middle" font-size="9.2" font-weight="800" fill="#ffffff">${htmlGuvenliYap(tamMetin)}</text>`);
+        if (sonKaleMi && !kisti) {
+          const bantY = etiketOnEk === "D" ? y : Math.max(ustY, y - 8);
+          const bantH = etiketOnEk === "D" ? Math.max(3, Math.min(8, altY - y)) : Math.max(3, y - bantY);
+          const bantRenk = etiketOnEk === "D" ? "#f59e0b" : "#ea580c";
+          parcalar.push(`<rect x="${solX}" y="${bantY.toFixed(1)}" width="${sagX - solX}" height="${bantH.toFixed(1)}" fill="${bantRenk}" fill-opacity="0.14" />`);
+        }
+
+        const dashDesen = sonKaleMi ? "8.5,3.5" : "7,4.5";
+        const cizgiKalin = sonKaleMi ? "2.3" : "2.1";
+        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="${cizgiRenk}" stroke-width="${cizgiKalin}" stroke-dasharray="${dashDesen}" opacity="0.94" />`);
+        parcalar.push(`<rect x="${kutuSolX.toFixed(1)}" y="${(y - 8.2).toFixed(1)}" width="${kutuGen}" height="16.4" rx="4.5" fill="${cizgiRenk}" />`);
+        parcalar.push(`<text x="${yaziMerkezX.toFixed(1)}" y="${(y + 3.4).toFixed(1)}" text-anchor="middle" font-size="9.1" font-weight="800" fill="#ffffff">${htmlGuvenliYap(tamMetin)}</text>`);
       };
 
-      ortaDuvarCiz(ob60.r60, "R", "#991b1b", 184);
-      ortaDuvarCiz(ob60.d60, "D", "#065f46", 172);
+      ortaDuvarCiz(ob60.r60, "R", "#991b1b", 180);
+      ortaDuvarCiz(ob60.d60, "D", "#065f46", 168);
 
       // Sol 15dk etiketlerini dikey çakışmasız çiz
       dikeyEtiketCakismaCoz(solEtiketler, 13.5, ustY + 9, altY - 6);
@@ -1838,10 +1877,12 @@
       }
 
       const svgTam = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Birleşik Yapı ve OB Haritası">${parcalar.join("")}</svg>`;
+      const sonKaleVarMi = Boolean((ob60.d60 && ob60.d60.sonKaleMi) || (ob60.r60 && ob60.r60.sonKaleMi));
       return {
         svg: svgTam,
         gercekZikzakMi: zzVeri.gercekMi,
-        ustDuvarVarMi: Boolean(ob60.d60 || ob60.r60)
+        ustDuvarVarMi: Boolean(ob60.d60 || ob60.r60),
+        sonKaleVarMi: sonKaleVarMi
       };
     }
 
@@ -1857,12 +1898,15 @@
       const svgAlaniEl = document.getElementById("haritaSvgAlani");
       const altNotEl = document.getElementById("haritaAltNot");
 
+      const sonuc = birlesikHaritaSvgUret(kartKaydi);
+      const skBilgi = sonuc.sonKaleVarMi ? " / 1G Son Kale" : "";
+
       if (kategori === "acik") {
         const yon = /SHORT/i.test(etiket) ? "SHORT" : "LONG";
         baslikEl.textContent = `${ad} (${yon}) — Yapı, OB & Pozisyon Haritası`;
         lejantEl.className = "harita-lejant harita-lejant-acik";
         lejantEl.innerHTML = `
-          <span>■ Bant: 15dk OB | - - Kesikli: 60dk OB</span>
+          <span>■ Bant: 15dk OB | - - Kesikli: 60dk${skBilgi}</span>
           <span style="color:#b45309">Sağ Bayraklar: Giriş / SL / TP</span>
         `;
       } else if (kategori === "re") {
@@ -1870,19 +1914,19 @@
         baslikEl.textContent = `${ad} (${reYon}) — Yapı, OB & RE Haritası`;
         lejantEl.className = "harita-lejant harita-lejant-re";
         lejantEl.innerHTML = `
-          <span>■ Bant: 15dk OB | - - Kesikli: 60dk OB</span>
+          <span>■ Bant: 15dk OB | - - Kesikli: 60dk${skBilgi}</span>
           <span style="color:#3730a3">Sağ Bayrak: RE Giriş</span>
         `;
       } else {
-        baslikEl.textContent = `${ad} — Birleşik Yapı & OB Haritası (15dk + 60dk)`;
+        baslikEl.textContent = sonuc.sonKaleVarMi
+          ? `${ad} — Birleşik Yapı & OB Haritası (15dk + 60dk + 1G)`
+          : `${ad} — Birleşik Yapı & OB Haritası (15dk + 60dk)`;
         lejantEl.className = "harita-lejant harita-lejant-sabit";
-        lejantEl.innerHTML = `
-          <span>■ Renkli Bant: 15dk OB (Hacim %'li)</span>
-          <span style="color:#991b1b">- - Kalın Kesikli Hat: 60dk Ana Duvar</span>
-        `;
+        lejantEl.innerHTML = sonuc.sonKaleVarMi
+          ? `<span>■ Bant: 15dk OB | - - 60dk Duvar</span><span style="color:#b45309">- - Kehribar: 1G Son Kale</span>`
+          : `<span>■ Renkli Bant: 15dk OB (Hacim %'li)</span><span style="color:#991b1b">- - Kalın Kesikli Hat: 60dk Ana Duvar</span>`;
       }
 
-      const sonuc = birlesikHaritaSvgUret(kartKaydi);
       svgAlaniEl.innerHTML = sonuc.svg;
 
       if (sonuc.gercekZikzakMi) {
