@@ -72,15 +72,19 @@
       margin-bottom: 8px;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     }
-    /* Birleşik ve Narin Ana Piyasa Çerçevesi (Başlık + ONS + BİST30 V. Tek Blok) */
+    /* Birleşik ve Simetrik Mavi Çerçeveli Ana Piyasa Bloğu (Başlık + ONS ─── ◆ ─── BİST 30) */
     .ana-piyasa-cerceve {
       background: #f5f9fd;
-      border: 1px solid #bae6fd;
-      border-left: 3px solid #0284c7;
+      border: 1.5px solid #0284c7;
       border-radius: 12px;
-      margin: 11px 0 9px 0;
+      margin: 2px 0 11px 0;
       overflow: hidden;
-      box-shadow: 0 1px 2px rgba(2, 132, 199, 0.04);
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.08);
+    }
+    .bolum-ayirici.cerceve-sonrasi {
+      margin-top: 10px;
+      padding-top: 0;
+      border-top: none;
     }
     .ana-piyasa-baslik {
       display: flex;
@@ -89,17 +93,40 @@
       padding: 5.5px 12px 4.5px 12px;
       font-size: 10.8px;
       font-weight: 800;
-      color: #475569;
+      color: #0369a1;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      background: rgba(224, 242, 254, 0.45);
-      border-bottom: 1px solid #dbeafe;
+      background: rgba(224, 242, 254, 0.55);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.22);
     }
     .ana-piyasa-satir {
       padding: 7px 12px 7.5px 12px;
     }
-    .ana-piyasa-satir + .ana-piyasa-satir {
-      border-top: 1px solid #dbeafe;
+    .ana-piyasa-ayirici {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      margin: 0;
+      user-select: none;
+    }
+    .ana-piyasa-ayirici::before,
+    .ana-piyasa-ayirici::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+    }
+    .ana-piyasa-ayirici::before {
+      background: linear-gradient(to right, rgba(2, 132, 199, 0.08), rgba(2, 132, 199, 0.48));
+    }
+    .ana-piyasa-ayirici::after {
+      background: linear-gradient(to left, rgba(2, 132, 199, 0.08), rgba(2, 132, 199, 0.48));
+    }
+    .ana-piyasa-elmas {
+      font-size: 9px;
+      line-height: 1;
+      color: #0284c7;
+      opacity: 0.9;
     }
     .kart-re {
       background: #eef2ff;
@@ -913,8 +940,8 @@
 
     function kisaAdTemizle(etiket) {
       let s = String(etiket || "").split("[")[0].trim();
-      if (/BİST30\s*V\.|XU030D1!/i.test(s)) return "BİST30 V.";
-      if (/BIST\s*30/i.test(s)) return "BİST30 V.";
+      if (/BİST30\s*V\.|BIST30\s*V\.|XU030D1!/i.test(s)) return "BİST 30";
+      if (/BIST\s*30|BİST\s*30|XU030/i.test(s)) return "BİST 30";
       if (/Ons\s*Altın|ONS\s*ALTIN|^ONS$/i.test(s)) return "ONS";
       return s;
     }
@@ -1022,9 +1049,13 @@
         .replace(/"/g, "&quot;");
     }
 
-    function bolumBasligiEkle(alan, metin, ilkMi, hamZaman) {
+    function bolumBasligiEkle(alan, metin, mod, hamZaman) {
       const ayirici = document.createElement("div");
-      ayirici.className = ilkMi ? "bolum-ayirici ilk-bolum" : "bolum-ayirici";
+      ayirici.className = mod === "ilk"
+        ? "bolum-ayirici ilk-bolum"
+        : mod === "cerceve-sonrasi"
+          ? "bolum-ayirici cerceve-sonrasi"
+          : "bolum-ayirici";
 
       const baslikSpan = document.createElement("span");
       baslikSpan.className = "bolum-baslik-metin";
@@ -1061,47 +1092,7 @@
         const ilkAcikZaman = acikPozlar.find(p => p.zaman || p.sonGuncelleme);
         const acikGrupZaman = veri.acikPozZaman || veri.hisseZaman || (ilkAcikZaman && (ilkAcikZaman.zaman || ilkAcikZaman.sonGuncelleme)) || veri.zaman || "";
 
-        // 1. BÖLÜM: GERÇEK AÇIK POZİSYONLAR
-        bolumBasligiEkle(alan, "💼 Açık Pozisyonlar", true, acikGrupZaman);
-        if (acikPozlar.length > 0) {
-          acikPozlar.forEach(p => {
-            const ad = kisaAdTemizle(p.etiket);
-            const kartIdx = ekranKartlari.push({ kategori: "acik", ad: ad, anahtar: "acik_" + ad, veri: p }) - 1;
-            const rozetHtml = ucluRozetHtmlUret(p);
-            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat, kartIdx);
-            const icRenk = icDalgaRenkSinifi(p.icDalga);
-            const kzObj = kzAyikla(p);
-            const cerceve = cerceveBelirle(p.nobetci, kzObj);
-            const temizNobetci = nobetciMetniSadelestir(p.nobetci);
-            const nobetciStr = String(p.nobetci || "");
-            const nobetciRenk = nobetciStr.includes("🚨") ? "renk-kirmizi"
-                              : nobetciStr.includes("⚠️") ? "renk-sari"
-                              : nobetciStr.includes("✅") ? "renk-yesil" : "renk-gri";
-
-            const kart = document.createElement("div");
-            kart.className = `kart ${cerceve}`;
-            kart.innerHTML = `
-              <div class="ust-satir">
-                <div class="sembol-grup">
-                  <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
-                  ${rozetHtml}
-                </div>
-                ${kzObj.html}
-              </div>
-              ${degisimHtml}
-              <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(p.icDalga || "-")}</div>
-              <div class="alt-bilgi-satir ${nobetciRenk}">${htmlGuvenliYap(temizNobetci || p.pusu || "")}</div>
-            `;
-            alan.appendChild(kart);
-          });
-        } else {
-          const nakit = document.createElement("div");
-          nakit.className = "nakit-serit";
-          nakit.textContent = "⚪ Açık pozisyon bulunmuyor (%100 Nakit)";
-          alan.appendChild(nakit);
-        }
-
-        // 2. BÖLÜM: ANA PİYASA (BAŞLIK DAHİL TEK NARİN ÇERÇEVE İÇİNDE ONS + BİST30 V.)
+        // 1. BÖLÜM (EN ÜST): ANA PİYASA (SİMETRİK MAVİ ÇERÇEVE + ELMAS AYIRICILI ONS & BİST 30)
         const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
           const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
           const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
@@ -1117,7 +1108,14 @@
           anaBaslik.textContent = "🌐 Ana Piyasa";
           anaCerceve.appendChild(anaBaslik);
 
-          gostergeler.forEach(g => {
+          gostergeler.forEach((g, idx) => {
+            if (idx > 0) {
+              const ayirici = document.createElement("div");
+              ayirici.className = "ana-piyasa-ayirici";
+              ayirici.setAttribute("aria-hidden", "true");
+              ayirici.innerHTML = `<span class="ana-piyasa-elmas">◆</span>`;
+              anaCerceve.appendChild(ayirici);
+            }
             const ad = kisaAdTemizle(g.etiket);
             const isOns = (ad === "ONS");
             const kartIdx = ekranKartlari.push({ kategori: "ana", ad: ad, anahtar: "ana_" + ad, veri: g }) - 1;
@@ -1154,6 +1152,46 @@
           });
 
           alan.appendChild(anaCerceve);
+        }
+
+        // 2. BÖLÜM: GERÇEK AÇIK POZİSYONLAR
+        bolumBasligiEkle(alan, "💼 Açık Pozisyonlar", gostergeler.length > 0 ? "cerceve-sonrasi" : "ilk", acikGrupZaman);
+        if (acikPozlar.length > 0) {
+          acikPozlar.forEach(p => {
+            const ad = kisaAdTemizle(p.etiket);
+            const kartIdx = ekranKartlari.push({ kategori: "acik", ad: ad, anahtar: "acik_" + ad, veri: p }) - 1;
+            const rozetHtml = ucluRozetHtmlUret(p);
+            const degisimHtml = gunlukDegisimHtmlUret(p.fiyat, kartIdx);
+            const icRenk = icDalgaRenkSinifi(p.icDalga);
+            const kzObj = kzAyikla(p);
+            const cerceve = cerceveBelirle(p.nobetci, kzObj);
+            const temizNobetci = nobetciMetniSadelestir(p.nobetci);
+            const nobetciStr = String(p.nobetci || "");
+            const nobetciRenk = nobetciStr.includes("🚨") ? "renk-kirmizi"
+                              : nobetciStr.includes("⚠️") ? "renk-sari"
+                              : nobetciStr.includes("✅") ? "renk-yesil" : "renk-gri";
+
+            const kart = document.createElement("div");
+            kart.className = `kart ${cerceve}`;
+            kart.innerHTML = `
+              <div class="ust-satir">
+                <div class="sembol-grup">
+                  <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
+                  ${rozetHtml}
+                </div>
+                ${kzObj.html}
+              </div>
+              ${degisimHtml}
+              <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(p.icDalga || "-")}</div>
+              <div class="alt-bilgi-satir ${nobetciRenk}">${htmlGuvenliYap(temizNobetci || p.pusu || "")}</div>
+            `;
+            alan.appendChild(kart);
+          });
+        } else {
+          const nakit = document.createElement("div");
+          nakit.className = "nakit-serit";
+          nakit.textContent = "⚪ Açık pozisyon bulunmuyor (%100 Nakit)";
+          alan.appendChild(nakit);
         }
 
         // 3. BÖLÜM: YENİDEN GİRİŞ (RE) NÖBETLERİ
