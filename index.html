@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
   <meta name="theme-color" content="#f1f5f9" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -90,31 +90,56 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      padding: 5px 10px 4.5px 12px;
-      font-size: 10.8px;
-      font-weight: 800;
-      color: #0369a1;
-      letter-spacing: 0.5px;
+      gap: 10px;
+      padding: 9px 11px 8.5px 13px;
+      font-size: 13.2px;
+      font-weight: 900;
+      color: #075985;
+      letter-spacing: 0.45px;
       text-transform: uppercase;
-      background: rgba(224, 242, 254, 0.55);
-      border-bottom: 1px solid rgba(2, 132, 199, 0.22);
+      background: rgba(224, 242, 254, 0.78);
+      border-bottom: 1.3px solid rgba(2, 132, 199, 0.28);
+    }
+    .ana-piyasa-baslik-metin {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      line-height: 1.2;
+    }
+    .ana-piyasa-aksiyon-grup {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      flex-shrink: 0;
+      text-transform: none;
+    }
+    .ana-piyasa-aksiyon-grup .kart-boyut-btn {
+      padding: 5px 9.5px;
+      font-size: 12.5px;
+      min-width: 42px;
+      border-radius: 9px;
+      background: #ffffff;
+    }
+    .ana-piyasa-aksiyon-grup .kart-boyut-btn.buyutuldu {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #075985;
     }
     .tumu-ac-btn {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
       background: #ffffff;
       color: #0369a1;
-      border: 1.2px solid #38bdf8;
-      border-radius: 999px;
-      padding: 2.5px 9px;
-      font-size: 11px;
+      border: 1.3px solid #38bdf8;
+      border-radius: 9px;
+      padding: 5px 13px;
+      font-size: 12.8px;
       font-weight: 800;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.15px;
       text-transform: none;
       cursor: pointer;
-      line-height: 1.2;
+      line-height: 1.15;
       box-shadow: 0 1px 2px rgba(2, 132, 199, 0.10);
       transition: background-color 0.14s ease, transform 0.12s ease;
     }
@@ -761,6 +786,106 @@
       font-weight: 700;
       color: #475569;
     }
+
+    /* Harita Alt Kontrol Barı (Aa Büyütme Tuşu — ✕ Kapat'tan Tamamen Uzak) */
+    .harita-alt-cubuk {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 3px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .harita-alt-cubuk .harita-alt-not {
+      text-align: left;
+      flex: 1;
+      padding: 0;
+    }
+    .harita-boyut-btn {
+      flex-shrink: 0;
+      min-width: 48px;
+      padding: 6px 11px;
+      font-size: 13px;
+    }
+    .harita-modal.harita-kademe-1 {
+      max-width: 500px;
+    }
+    .harita-modal.harita-kademe-1 .harita-modal-baslik {
+      font-size: 16.2px;
+    }
+    .harita-modal.harita-kademe-1 .harita-lejant {
+      font-size: 12.3px;
+    }
+    .harita-modal.harita-kademe-1 .harita-alt-not {
+      font-size: 12px;
+    }
+    .harita-modal.harita-kademe-2 {
+      max-width: 548px;
+    }
+    .harita-modal.harita-kademe-2 .harita-modal-baslik {
+      font-size: 17.8px;
+    }
+    .harita-modal.harita-kademe-2 .harita-lejant {
+      font-size: 13.5px;
+    }
+    .harita-modal.harita-kademe-2 .harita-alt-not {
+      font-size: 13px;
+    }
+
+    /* ======================================================================
+       KARTLAR İÇİN 2 TIK BÜYÜTME MODLARI (Aa+ ve Aa++ — Dağılmayan Esnek Yapı)
+       ====================================================================== */
+    body.kart-kademe-1 .bolum-ayirici,
+    body.kart-kademe-1 .bolum-zaman-etiket,
+    body.kart-kademe-1 .kart-zaman-etiket { font-size: 13px; }
+    body.kart-kademe-1 .ana-piyasa-baslik { font-size: 14.5px; padding: 10px 11px 9.5px 13px; }
+    body.kart-kademe-1 .sembol-baslik { font-size: 21px; }
+    body.kart-kademe-1 .ana-piyasa-satir .sembol-baslik { font-size: 19.2px; }
+    body.kart-kademe-1 .ons-fiyat-metin,
+    body.kart-kademe-1 .ana-piyasa-satir .ons-fiyat-metin,
+    body.kart-kademe-1 .hisse-fiyat-metin { font-size: 18px; }
+    body.kart-kademe-1 .yon-rozet { font-size: 13.2px; padding: 2.5px 8px; }
+    body.kart-kademe-1 .gunluk-degisim-satir { font-size: 16px; margin-top: 5px; }
+    body.kart-kademe-1 .ana-piyasa-satir .gunluk-degisim-satir { font-size: 15.2px; margin-top: 4px; }
+    body.kart-kademe-1 .rs-ek-metin { font-size: 14px; }
+    body.kart-kademe-1 .zikzak-harita-btn { padding: 4px 8.5px; }
+    body.kart-kademe-1 .zikzak-harita-btn svg { width: 27px; height: 16px; }
+    body.kart-kademe-1 .ic-dalga-satir { font-size: 17.2px; margin-top: 5px; }
+    body.kart-kademe-1 .ana-piyasa-satir .ic-dalga-satir { font-size: 16.3px; margin-top: 4px; }
+    body.kart-kademe-1 .alt-bilgi-satir { font-size: 15.4px; margin-top: 5px; }
+    body.kart-kademe-1 .ana-piyasa-satir .alt-bilgi-satir { font-size: 14.8px; }
+    body.kart-kademe-1 .kz-dev { font-size: 21.5px; }
+    body.kart-kademe-1 .re-ust-satir { font-size: 19.8px; }
+    body.kart-kademe-1 .hisse-durum-etiket { font-size: 12.2px; padding: 2.5px 7.5px; }
+    body.kart-kademe-1 .nakit-serit { font-size: 14.2px; }
+    body.kart-kademe-1 .viop-makas-satir { font-size: 13.6px; }
+
+    body.kart-kademe-2 .kart { padding: 11px 13px; }
+    body.kart-kademe-2 .ana-piyasa-satir { padding: 9px 13px 9.5px 13px; }
+    body.kart-kademe-2 .bolum-ayirici,
+    body.kart-kademe-2 .bolum-zaman-etiket,
+    body.kart-kademe-2 .kart-zaman-etiket { font-size: 14.2px; }
+    body.kart-kademe-2 .ana-piyasa-baslik { font-size: 15.6px; padding: 10.5px 11px 10px 13px; }
+    body.kart-kademe-2 .sembol-baslik { font-size: 23.5px; }
+    body.kart-kademe-2 .ana-piyasa-satir .sembol-baslik { font-size: 21.5px; }
+    body.kart-kademe-2 .ons-fiyat-metin,
+    body.kart-kademe-2 .ana-piyasa-satir .ons-fiyat-metin,
+    body.kart-kademe-2 .hisse-fiyat-metin { font-size: 20.2px; }
+    body.kart-kademe-2 .yon-rozet { font-size: 14.6px; padding: 3px 9px; }
+    body.kart-kademe-2 .gunluk-degisim-satir { font-size: 17.8px; margin-top: 6px; }
+    body.kart-kademe-2 .ana-piyasa-satir .gunluk-degisim-satir { font-size: 17px; margin-top: 5px; }
+    body.kart-kademe-2 .rs-ek-metin { font-size: 15.5px; }
+    body.kart-kademe-2 .zikzak-harita-btn { padding: 5px 10px; }
+    body.kart-kademe-2 .zikzak-harita-btn svg { width: 30px; height: 18px; }
+    body.kart-kademe-2 .ic-dalga-satir { font-size: 19.2px; margin-top: 6px; }
+    body.kart-kademe-2 .ana-piyasa-satir .ic-dalga-satir { font-size: 18.2px; margin-top: 5px; }
+    body.kart-kademe-2 .alt-bilgi-satir { font-size: 17.2px; margin-top: 6px; }
+    body.kart-kademe-2 .ana-piyasa-satir .alt-bilgi-satir { font-size: 16.5px; }
+    body.kart-kademe-2 .kz-dev { font-size: 24px; }
+    body.kart-kademe-2 .re-ust-satir { font-size: 22px; }
+    body.kart-kademe-2 .hisse-durum-etiket { font-size: 13.4px; padding: 3px 8px; }
+    body.kart-kademe-2 .nakit-serit { font-size: 15.8px; }
+    body.kart-kademe-2 .viop-makas-satir { font-size: 15px; }
   </style>
 </head>
 <body>
@@ -808,7 +933,8 @@
           <div id="tumuAnaBaslik" class="tumu-ana-baslik">📊 BIST 30 Tümü</div>
           <div id="tumuAltBilgi" class="tumu-alt-bilgi">Alarm / Pusu üstte • Diğerleri A–Z</div>
         </div>
-        <div class="ozet-buton-grup">
+        <div class="ozet-buton-grup" style="gap: 9px;">
+          <button type="button" class="ozet-btn ozet-btn-boyut kart-boyut-btn" onclick="kartYaziBoyutuDegistir(event)">Aa</button>
           <button type="button" class="ozet-btn ozet-btn-kapat" onclick="tumuCekmeceKapat(event)">✕ Kapat</button>
         </div>
       </div>
@@ -820,14 +946,17 @@
 
   <!-- AÇILIR POP-UP: BİRLEŞİK YAPI, OB & POZİSYON HARİTASI -->
   <div id="haritaPerde" class="harita-arka-perde" onclick="haritaPopKapat(event)">
-    <div class="harita-modal" onclick="event.stopPropagation()">
+    <div id="haritaModal" class="harita-modal" onclick="event.stopPropagation()">
       <div class="harita-modal-ust">
         <div id="haritaBaslik" class="harita-modal-baslik">Yapı &amp; OB Haritası</div>
         <button type="button" class="harita-kapat-btn" onclick="haritaPopKapat(event)">✕</button>
       </div>
       <div id="haritaLejant" class="harita-lejant harita-lejant-sabit"></div>
       <div id="haritaSvgAlani" class="harita-svg-kutu"></div>
-      <div id="haritaAltNot" class="harita-alt-not"></div>
+      <div class="harita-alt-cubuk">
+        <div id="haritaAltNot" class="harita-alt-not"></div>
+        <button id="haritaBoyutBtn" type="button" class="ozet-btn ozet-btn-boyut harita-boyut-btn" onclick="haritaYaziBoyutuDegistir(event)">Aa</button>
+      </div>
     </div>
   </div>
 
@@ -843,9 +972,23 @@
       { sinif: "boyut-cok-buyuk", etiket: "Aa++" }
     ];
 
+    const KART_KADEMELERI = [
+      { sinif: "",              etiket: "Aa" },
+      { sinif: "kart-kademe-1", etiket: "Aa+" },
+      { sinif: "kart-kademe-2", etiket: "Aa++" }
+    ];
+
+    const HARITA_KADEMELERI = [
+      { sinif: "",                etiket: "Aa" },
+      { sinif: "harita-kademe-1", etiket: "Aa+" },
+      { sinif: "harita-kademe-2", etiket: "Aa++" }
+    ];
+
     let sonOzetCekimMs = 0;
     let ozetYukleniyor = false;
     let aktifYaziKademe = 0;
+    let aktifKartKademe = 0;
+    let aktifHaritaKademe = 0;
     let sonCekilenPaket = null;
     let sonAnaVeriPaketi = null;
     let ekranKartlari = [];
@@ -874,10 +1017,81 @@
       } catch (_) {}
     }
 
-    (function kayitliYaziBoyutunuYukle() {
+    function kartBoyutButonlariniSenkronla() {
+      const etiket = KART_KADEMELERI[aktifKartKademe].etiket;
+      document.querySelectorAll(".kart-boyut-btn").forEach(btn => {
+        btn.textContent = etiket;
+        if (aktifKartKademe > 0) btn.classList.add("buyutuldu");
+        else btn.classList.remove("buyutuldu");
+      });
+    }
+
+    function kartBoyutunuUygula(kademe) {
+      const gecerli = (kademe >= 0 && kademe < KART_KADEMELERI.length) ? kademe : 0;
+      aktifKartKademe = gecerli;
+      KART_KADEMELERI.forEach(k => {
+        if (k.sinif) document.body.classList.remove(k.sinif);
+      });
+      if (KART_KADEMELERI[gecerli].sinif) {
+        document.body.classList.add(KART_KADEMELERI[gecerli].sinif);
+      }
+      kartBoyutButonlariniSenkronla();
+    }
+
+    function kartYaziBoyutuDegistir(ev) {
+      if (ev) ev.stopPropagation();
+      const yeniKademe = (aktifKartKademe + 1) % KART_KADEMELERI.length;
+      kartBoyutunuUygula(yeniKademe);
       try {
-        const kayitli = parseInt(localStorage.getItem("OZET_YAZI_KADEME") || "0", 10);
-        if (!isNaN(kayitli)) yaziBoyutunuUygula(kayitli);
+        localStorage.setItem("KART_YAZI_KADEME", String(yeniKademe));
+      } catch (_) {}
+    }
+
+    function haritaBoyutunuUygula(kademe) {
+      const gecerli = (kademe >= 0 && kademe < HARITA_KADEMELERI.length) ? kademe : 0;
+      aktifHaritaKademe = gecerli;
+      const modalEl = document.getElementById("haritaModal");
+      const btnEl = document.getElementById("haritaBoyutBtn");
+      if (modalEl) {
+        HARITA_KADEMELERI.forEach(k => {
+          if (k.sinif) modalEl.classList.remove(k.sinif);
+        });
+        if (HARITA_KADEMELERI[gecerli].sinif) {
+          modalEl.classList.add(HARITA_KADEMELERI[gecerli].sinif);
+        }
+      }
+      if (btnEl) {
+        btnEl.textContent = HARITA_KADEMELERI[gecerli].etiket;
+        if (gecerli > 0) btnEl.classList.add("buyutuldu");
+        else btnEl.classList.remove("buyutuldu");
+      }
+    }
+
+    function haritaYaziBoyutuDegistir(ev) {
+      if (ev) ev.stopPropagation();
+      const yeniKademe = (aktifHaritaKademe + 1) % HARITA_KADEMELERI.length;
+      haritaBoyutunuUygula(yeniKademe);
+      try {
+        localStorage.setItem("HARITA_YAZI_KADEME", String(yeniKademe));
+      } catch (_) {}
+      if (aktifHaritaAnahtar) {
+        const guncelIdx = ekranKartlari.findIndex(k => k.anahtar === aktifHaritaAnahtar);
+        if (guncelIdx >= 0) haritaIceriginiCiz(ekranKartlari[guncelIdx]);
+      }
+    }
+
+    (function kayitliBoyutlariYukle() {
+      try {
+        const kOzet = parseInt(localStorage.getItem("OZET_YAZI_KADEME") || "0", 10);
+        if (!isNaN(kOzet)) yaziBoyutunuUygula(kOzet);
+      } catch (_) {}
+      try {
+        const kKart = parseInt(localStorage.getItem("KART_YAZI_KADEME") || "0", 10);
+        if (!isNaN(kKart)) kartBoyutunuUygula(kKart);
+      } catch (_) {}
+      try {
+        const kHarita = parseInt(localStorage.getItem("HARITA_YAZI_KADEME") || "0", 10);
+        if (!isNaN(kHarita)) haritaBoyutunuUygula(kHarita);
       } catch (_) {}
     })();
 
@@ -1049,11 +1263,11 @@
 
     function gunlukDegisimHtmlUret(fiyatStr, kartIdx, ekSolHtml) {
       const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
-      let solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran renk-gri">-</span>`;
+      let solIcerik = `<span class="gunluk-degisim-etiket">Günlük:</span> <span class="gunluk-degisim-oran renk-gri">-</span>`;
       if (m) {
         const oran = m[1];
         const renk = oran.includes("+") ? "renk-yesil" : oran.includes("-") ? "renk-kirmizi" : "renk-gri";
-        solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span>${ekSolHtml || ""}`;
+        solIcerik = `<span class="gunluk-degisim-etiket">Günlük:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span>${ekSolHtml || ""}`;
       }
       const zikzakBtn = `
         <button type="button" class="zikzak-harita-btn" onclick="haritaPopAc(${kartIdx}, event)" title="Yapı &amp; OB Haritası" aria-label="Yapı ve OB Haritası">
@@ -1391,14 +1605,15 @@
           const anaBaslik = document.createElement("div");
           anaBaslik.className = "ana-piyasa-baslik";
           const aktifSayi = tumuOzet.alarmPusuGrubu.length;
-          const topSayiMetin = tumuOzet.toplam > 0 ? ` (${tumuOzet.toplam})` : "";
-          const sinyalOnEk = aktifSayi > 0 ? `🎯 ${aktifSayi} · ` : "";
           const btnEkSinif = aktifSayi > 0 ? " aktif-sinyal-var" : "";
+          const kartBtnEtiket = KART_KADEMELERI[aktifKartKademe].etiket;
+          const kartBtnSinif = aktifKartKademe > 0 ? " buyutuldu" : "";
           anaBaslik.innerHTML = `
-            <span>🌐 Ana Piyasa</span>
-            <button type="button" class="tumu-ac-btn${btnEkSinif}" onclick="tumuCekmeceAc(event)" aria-label="Tüm BIST 30 Hisselerini Aç">
-              <span>${sinyalOnEk}Tümü${topSayiMetin} ▸</span>
-            </button>
+            <span class="ana-piyasa-baslik-metin">🌐 Ana Piyasa</span>
+            <div class="ana-piyasa-aksiyon-grup">
+              <button type="button" class="ozet-btn ozet-btn-boyut kart-boyut-btn${kartBtnSinif}" onclick="kartYaziBoyutuDegistir(event)" aria-label="Kart Yazı Boyutu">${kartBtnEtiket}</button>
+              <button type="button" class="tumu-ac-btn${btnEkSinif}" onclick="tumuCekmeceAc(event)" aria-label="Tüm BIST 30 Hisselerini Aç">Tümü</button>
+            </div>
           `;
           anaCerceve.appendChild(anaBaslik);
 
@@ -1955,10 +2170,14 @@
       const yMax = hamMax + bazAralik * 0.13;
       const yAralik = yMax - yMin;
 
-      // SVG Koordinat Sistemi
-      const W = 388, H = 338;
-      const solX = 8, sagX = 338;
-      const ustY = 16, altY = 292;
+      // SVG Koordinat Sistemi ve 2 Kademeli Büyütme Çarpanı (Aa / Aa+ / Aa++)
+      const yaziKat = aktifHaritaKademe === 2 ? 1.28 : (aktifHaritaKademe === 1 ? 1.14 : 1.0);
+      const W = 396;
+      const H = Math.round(338 + aktifHaritaKademe * 26);
+      const solX = 8;
+      const sagX = aktifHaritaKademe === 2 ? 325 : (aktifHaritaKademe === 1 ? 332 : 338);
+      const ustY = Math.round(16 * yaziKat);
+      const altY = H - Math.round(46 * (1 + aktifHaritaKademe * 0.08));
       const cizimBoy = altY - ustY;
 
       const yHesapla = (fiyat) => {
@@ -1971,13 +2190,14 @@
       let parcalar = [];
 
       // 1) Yatay Izgara & Sağ Y-Ekseni Fiyat Kademeleri (5 kademe)
+      const eksenFont = (9.5 * yaziKat).toFixed(1);
       for (let i = 0; i <= 4; i++) {
         const kOran = i / 4;
         const kFiyat = yMin + kOran * yAralik;
         const ky = altY - kOran * cizimBoy;
         parcalar.push(`<line x1="${solX}" y1="${ky.toFixed(1)}" x2="${sagX}" y2="${ky.toFixed(1)}" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2,3" opacity="0.7" />`);
         parcalar.push(`<line x1="${sagX}" y1="${ky.toFixed(1)}" x2="${sagX + 3.5}" y2="${ky.toFixed(1)}" stroke="#94a3b8" stroke-width="1" />`);
-        parcalar.push(`<text x="${sagX + 6}" y="${(ky + 3.2).toFixed(1)}" font-size="9.5" font-weight="600" fill="#64748b">${haritaFiyatFormatla(kFiyat, yAralik)}</text>`);
+        parcalar.push(`<text x="${sagX + 5.5}" y="${(ky + 3.2 * yaziKat).toFixed(1)}" font-size="${eksenFont}" font-weight="700" fill="#64748b">${haritaFiyatFormatla(kFiyat, yAralik)}</text>`);
       }
 
       // Sağ ve Alt Ana Eksen Çizgileri
@@ -1987,6 +2207,7 @@
       // 2) 15dk Destek ve Direnç Order Block Bantları + Sol Etiketler
       const solEtiketler = [];
       const bantKalinlik = Math.max(8, Math.round(cizimBoy * 0.033));
+      const solFont = (9.4 * yaziKat).toFixed(1);
 
       d15Liste.forEach(d => {
         const y = yHesapla(d.fiyat);
@@ -2010,7 +2231,7 @@
         solEtiketler.push({
           metin: `${okOnEk}[15dk ${d.kod}] ${haritaFiyatFormatla(d.fiyat, yAralik)}${parantez}`,
           renk: "#15803d",
-          yEtiket: d.anaMi ? Math.min(altY - 6, yBantAlt + 10) : Math.max(ustY + 10, y - 5)
+          yEtiket: d.anaMi ? Math.min(altY - 6, yBantAlt + 10 * yaziKat) : Math.max(ustY + 10 * yaziKat, y - 5)
         });
       });
 
@@ -2036,11 +2257,16 @@
         solEtiketler.push({
           metin: `${okOnEk}[15dk ${r.kod}] ${haritaFiyatFormatla(r.fiyat, yAralik)}${parantez}`,
           renk: "#dc2626",
-          yEtiket: Math.max(ustY + 10, yBantUst - 4)
+          yEtiket: Math.max(ustY + 10 * yaziKat, yBantUst - 4)
         });
       });
 
       // 3) 60dk Ana Duvarlar ve [1G SON KALE] Duvarları (Kalın Kesikli Hat + Orta Kapsül)
+      const maksSagBayrakGen = Math.round(72 * yaziKat);
+      const bayrakSolX = sagX - maksSagBayrakGen - 3;
+      const ortaFont = (9.1 * yaziKat).toFixed(1);
+      const ortaKutuBoy = 16.4 * yaziKat;
+
       const ortaDuvarCiz = (duvarObj, etiketOnEk, varsayilanRenk, xMerkez) => {
         if (!duvarObj) return;
         const y = yHesapla(duvarObj.fiyat);
@@ -2051,8 +2277,8 @@
         const cizgiRenk = sonKaleMi ? (etiketOnEk === "D" ? "#b45309" : "#c2410c") : varsayilanRenk;
         const baslikKisim = sonKaleMi ? `[1G SON KALE ${etiketOnEk}]` : `[60dk ${etiketOnEk}]`;
         const tamMetin = `${ok}${baslikKisim} ${haritaFiyatFormatla(duvarObj.fiyat, yAralik)}${pctMetin}`;
-        const kutuGen = Math.max(84, Math.round(tamMetin.length * 5.35 + 12));
-        const kutuSolX = Math.max(solX + 6, Math.min(258 - kutuGen, xMerkez - kutuGen / 2));
+        const kutuGen = Math.max(Math.round(84 * yaziKat), Math.round(tamMetin.length * 5.35 * yaziKat + 12));
+        const kutuSolX = Math.max(solX + 6, Math.min((bayrakSolX - 4) - kutuGen, xMerkez - kutuGen / 2));
         const yaziMerkezX = kutuSolX + kutuGen / 2;
 
         if (sonKaleMi && !kisti) {
@@ -2065,24 +2291,25 @@
         const dashDesen = sonKaleMi ? "8.5,3.5" : "7,4.5";
         const cizgiKalin = sonKaleMi ? "2.3" : "2.1";
         parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="${cizgiRenk}" stroke-width="${cizgiKalin}" stroke-dasharray="${dashDesen}" opacity="0.94" />`);
-        parcalar.push(`<rect x="${kutuSolX.toFixed(1)}" y="${(y - 8.2).toFixed(1)}" width="${kutuGen}" height="16.4" rx="4.5" fill="${cizgiRenk}" />`);
-        parcalar.push(`<text x="${yaziMerkezX.toFixed(1)}" y="${(y + 3.4).toFixed(1)}" text-anchor="middle" font-size="9.1" font-weight="800" fill="#ffffff">${htmlGuvenliYap(tamMetin)}</text>`);
+        parcalar.push(`<rect x="${kutuSolX.toFixed(1)}" y="${(y - ortaKutuBoy / 2).toFixed(1)}" width="${kutuGen}" height="${ortaKutuBoy.toFixed(1)}" rx="4.5" fill="${cizgiRenk}" />`);
+        parcalar.push(`<text x="${yaziMerkezX.toFixed(1)}" y="${(y + 3.4 * yaziKat).toFixed(1)}" text-anchor="middle" font-size="${ortaFont}" font-weight="800" fill="#ffffff">${htmlGuvenliYap(tamMetin)}</text>`);
       };
 
-      ortaDuvarCiz(ob60.r60, "R", "#991b1b", 180);
-      ortaDuvarCiz(ob60.d60, "D", "#065f46", 168);
+      ortaDuvarCiz(ob60.r60, "R", "#991b1b", 174);
+      ortaDuvarCiz(ob60.d60, "D", "#065f46", 164);
 
       // Sol 15dk etiketlerini dikey çakışmasız çiz
-      dikeyEtiketCakismaCoz(solEtiketler, 13.5, ustY + 9, altY - 6);
+      dikeyEtiketCakismaCoz(solEtiketler, 13.8 * yaziKat, ustY + 10 * yaziKat, altY - 6);
+      const solKutuBoy = 12.6 * yaziKat;
       solEtiketler.forEach(et => {
-        const tahminiGen = Math.min(210, Math.round(et.metin.length * 5.2 + 6));
-        parcalar.push(`<rect x="${solX + 2}" y="${(et.yEtiket - 9.5).toFixed(1)}" width="${tahminiGen}" height="12.5" rx="3" fill="#ffffff" fill-opacity="0.82" />`);
-        parcalar.push(`<text x="${solX + 4}" y="${et.yEtiket.toFixed(1)}" font-size="9.4" font-weight="800" fill="${et.renk}">${htmlGuvenliYap(et.metin)}</text>`);
+        const tahminiGen = Math.min(sagX - 24, Math.round(et.metin.length * 5.25 * yaziKat + 7));
+        parcalar.push(`<rect x="${solX + 2}" y="${(et.yEtiket - 9.6 * yaziKat).toFixed(1)}" width="${tahminiGen}" height="${solKutuBoy.toFixed(1)}" rx="3" fill="#ffffff" fill-opacity="0.84" />`);
+        parcalar.push(`<text x="${solX + 4}" y="${et.yEtiket.toFixed(1)}" font-size="${solFont}" font-weight="800" fill="${et.renk}">${htmlGuvenliYap(et.metin)}</text>`);
       });
 
       // 4) Zikzak Fiyat Yapısı + Dikey Başlangıç İz Düşümü + Alt Eksen Çentiği
       const zzSolX = 86;
-      const zzSagX = bayraklar.length > 1 ? 236 : 254;
+      const zzSagX = bayraklar.length > 1 ? (bayrakSolX - 22) : (bayrakSolX - 10);
       const nZz = zzNoktalar.length;
 
       if (nZz >= 2) {
@@ -2097,18 +2324,20 @@
         const sondanOnceki = zzKoord[zzKoord.length - 2];
 
         // İlk noktadan alt eksene dikey noktalı iz düşümü + çentik + dinamik "X gün önce" rozeti
+        const altRozetFont = (9.5 * yaziKat).toFixed(1);
+        const altRozetBoy = Math.round(17 * yaziKat);
         const basEtiket = zikzakBaslangicEtiketiUret(zzVeri.baslangicSn, zzVeri.bitisSn, zzVeri.gercekMi);
-        const basRozetGen = Math.max(54, Math.round(basEtiket.length * 5.6 + 12));
+        const basRozetGen = Math.max(Math.round(54 * yaziKat), Math.round(basEtiket.length * 5.6 * yaziKat + 12));
         parcalar.push(`<line x1="${ilkNokta.x.toFixed(1)}" y1="${ilkNokta.y.toFixed(1)}" x2="${ilkNokta.x.toFixed(1)}" y2="${altY}" stroke="#64748b" stroke-width="1.2" stroke-dasharray="2.5,3.5" opacity="0.8" />`);
         parcalar.push(`<line x1="${ilkNokta.x.toFixed(1)}" y1="${altY - 4}" x2="${ilkNokta.x.toFixed(1)}" y2="${altY + 5}" stroke="#334155" stroke-width="2" />`);
         parcalar.push(`<circle cx="${ilkNokta.x.toFixed(1)}" cy="${altY}" r="3.2" fill="#334155" />`);
-        parcalar.push(`<rect x="${(ilkNokta.x - basRozetGen / 2).toFixed(1)}" y="${altY + 8}" width="${basRozetGen}" height="17" rx="4.5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />`);
-        parcalar.push(`<text x="${ilkNokta.x.toFixed(1)}" y="${altY + 19.6}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#334155">${htmlGuvenliYap(basEtiket)}</text>`);
+        parcalar.push(`<rect x="${(ilkNokta.x - basRozetGen / 2).toFixed(1)}" y="${altY + 8}" width="${basRozetGen}" height="${altRozetBoy}" rx="4.5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />`);
+        parcalar.push(`<text x="${ilkNokta.x.toFixed(1)}" y="${(altY + 8 + altRozetBoy * 0.69).toFixed(1)}" text-anchor="middle" font-size="${altRozetFont}" font-weight="800" fill="#334155">${htmlGuvenliYap(basEtiket)}</text>`);
 
         // Son noktadan ("Şimdi") alt eksene ince mavi iz düşümü
         parcalar.push(`<line x1="${sonNokta.x.toFixed(1)}" y1="${sonNokta.y.toFixed(1)}" x2="${sonNokta.x.toFixed(1)}" y2="${altY}" stroke="#0284c7" stroke-width="1.1" stroke-dasharray="2.5,3.5" opacity="0.6" />`);
         parcalar.push(`<circle cx="${sonNokta.x.toFixed(1)}" cy="${altY}" r="2.9" fill="#0284c7" />`);
-        parcalar.push(`<text x="${sonNokta.x.toFixed(1)}" y="${altY + 19.6}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#0369a1">Şimdi</text>`);
+        parcalar.push(`<text x="${sonNokta.x.toFixed(1)}" y="${(altY + 8 + altRozetBoy * 0.69).toFixed(1)}" text-anchor="middle" font-size="${altRozetFont}" font-weight="800" fill="#0369a1">Şimdi</text>`);
 
         // Ana Zikzak Çizgisi (Son aktif dalga mavi, önceki dalgalar koyu antrasit)
         if (zzKoord.length > 2) {
@@ -2129,6 +2358,7 @@
         parcalar.push(`<circle cx="${sonNokta.x.toFixed(1)}" cy="${sonNokta.y.toFixed(1)}" r="4.8" fill="#0284c7" />`);
 
         // İlk nokta, En Yüksek Tepe ve En Düşük Dip fiyat etiketleri
+        const pivFont = (9.2 * yaziKat).toFixed(1);
         let enYuksekIdx = 0, enDusukIdx = 0;
         for (let i = 0; i < zzKoord.length - 1; i++) {
           if (zzKoord[i].p > zzKoord[enYuksekIdx].p) enYuksekIdx = i;
@@ -2139,8 +2369,8 @@
           const k = zzKoord[idx];
           const komsuY = idx < zzKoord.length - 1 ? zzKoord[idx + 1].y : zzKoord[idx - 1].y;
           const tepeMi = k.y <= komsuY;
-          const yaziY = tepeMi ? Math.max(ustY + 9, k.y - 6.5) : Math.min(altY - 5, k.y + 12.5);
-          parcalar.push(`<text x="${k.x.toFixed(1)}" y="${yaziY.toFixed(1)}" text-anchor="middle" font-size="9.2" font-weight="800" fill="#0f172a">${haritaFiyatFormatla(k.p, yAralik)}</text>`);
+          const yaziY = tepeMi ? Math.max(ustY + 10 * yaziKat, k.y - 6.5) : Math.min(altY - 5, k.y + 12.5 * yaziKat);
+          parcalar.push(`<text x="${k.x.toFixed(1)}" y="${yaziY.toFixed(1)}" text-anchor="middle" font-size="${pivFont}" font-weight="800" fill="#0f172a">${haritaFiyatFormatla(k.p, yAralik)}</text>`);
         });
 
         // 5) Sağ Kısa Bayraklar (Giriş / SL / TP / RE ve Güncel Fiyat)
@@ -2156,9 +2386,10 @@
           };
         });
 
-        dikeyEtiketCakismaCoz(sagBayraklar, 18.5, ustY + 10, altY - 10);
+        const bayrakKutuBoy = 16.4 * yaziKat;
+        const bayrakFont = (9.3 * yaziKat).toFixed(1);
+        dikeyEtiketCakismaCoz(sagBayraklar, 18.6 * yaziKat, ustY + 10 * yaziKat, altY - 10 * yaziKat);
 
-        const bayrakSolX = 264;
         sagBayraklar.forEach(b => {
           const dash = b.kesikli ? `stroke-dasharray="4,2.8"` : "";
           const kirilmaX = bayrakSolX - 7;
@@ -2167,9 +2398,9 @@
           } else {
             parcalar.push(`<line x1="${b.basX.toFixed(1)}" y1="${b.yGercek.toFixed(1)}" x2="${bayrakSolX}" y2="${b.yEtiket.toFixed(1)}" stroke="${b.cizgiRenk}" stroke-width="1.5" ${dash} />`);
           }
-          const kutuGen = Math.min(72, Math.max(48, Math.round(b.metin.length * 5.5 + 11)));
-          parcalar.push(`<rect x="${bayrakSolX}" y="${(b.yEtiket - 8.2).toFixed(1)}" width="${kutuGen}" height="16.4" rx="4.5" fill="${b.bgRenk}" stroke="${b.kenarRenk}" stroke-width="1.1" />`);
-          parcalar.push(`<text x="${(bayrakSolX + kutuGen / 2).toFixed(1)}" y="${(b.yEtiket + 3.3).toFixed(1)}" text-anchor="middle" font-size="9.3" font-weight="800" fill="${b.yaziRenk}">${htmlGuvenliYap(b.metin)}</text>`);
+          const kutuGen = Math.min(maksSagBayrakGen, Math.max(Math.round(48 * yaziKat), Math.round(b.metin.length * 5.5 * yaziKat + 11)));
+          parcalar.push(`<rect x="${bayrakSolX}" y="${(b.yEtiket - bayrakKutuBoy / 2).toFixed(1)}" width="${kutuGen}" height="${bayrakKutuBoy.toFixed(1)}" rx="4.5" fill="${b.bgRenk}" stroke="${b.kenarRenk}" stroke-width="1.1" />`);
+          parcalar.push(`<text x="${(bayrakSolX + kutuGen / 2).toFixed(1)}" y="${(b.yEtiket + 3.3 * yaziKat).toFixed(1)}" text-anchor="middle" font-size="${bayrakFont}" font-weight="800" fill="${b.yaziRenk}">${htmlGuvenliYap(b.metin)}</text>`);
         });
       }
 
@@ -2576,11 +2807,11 @@
 
       let altBasY = null;
       altBar.addEventListener("touchstart", (e) => {
-        altBasY = e.touches[0].clientY;
+        altBasY = e.touches.length === 1 ? e.touches[0].clientY : null;
       }, { passive: true });
 
       altBar.addEventListener("touchend", (e) => {
-        if (altBasY === null) return;
+        if (altBasY === null || e.touches.length > 0) { altBasY = null; return; }
         const bitisY = e.changedTouches[0].clientY;
         if (altBasY - bitisY > 22) {
           ozetCekmeceAc();
@@ -2591,13 +2822,16 @@
       let ustBasY = null;
       let sonFarkY = 0;
       cekmeceUst.addEventListener("touchstart", (e) => {
+        if (e.touches.length !== 1) { ustBasY = null; return; }
         ustBasY = e.touches[0].clientY;
         sonFarkY = 0;
         cekmece.style.transition = "none";
       }, { passive: true });
 
       cekmeceUst.addEventListener("touchmove", (e) => {
-        if (ustBasY === null) return;
+        if (ustBasY === null || e.touches.length !== 1) {
+          ustBasY = null; sonFarkY = 0; cekmece.style.transform = ""; return;
+        }
         const fark = e.touches[0].clientY - ustBasY;
         if (fark > 0) {
           sonFarkY = fark;
@@ -2618,7 +2852,11 @@
 
       let govdeBasY = null;
       cekmeceGovde.addEventListener("touchstart", (e) => {
-        govdeBasY = cekmeceGovde.scrollTop <= 0 ? e.touches[0].clientY : null;
+        govdeBasY = (e.touches.length === 1 && cekmeceGovde.scrollTop <= 0) ? e.touches[0].clientY : null;
+      }, { passive: true });
+
+      cekmeceGovde.addEventListener("touchmove", (e) => {
+        if (e.touches.length > 1) govdeBasY = null;
       }, { passive: true });
 
       cekmeceGovde.addEventListener("touchend", (e) => {
@@ -2636,13 +2874,16 @@
       let tumuFarkY = 0;
       if (tumuKatman && tumuUst) {
         tumuUst.addEventListener("touchstart", (e) => {
+          if (e.touches.length !== 1) { tumuBasY = null; return; }
           tumuBasY = e.touches[0].clientY;
           tumuFarkY = 0;
           tumuKatman.style.transition = "none";
         }, { passive: true });
 
         tumuUst.addEventListener("touchmove", (e) => {
-          if (tumuBasY === null) return;
+          if (tumuBasY === null || e.touches.length !== 1) {
+            tumuBasY = null; tumuFarkY = 0; tumuKatman.style.transform = ""; return;
+          }
           const fark = e.touches[0].clientY - tumuBasY;
           if (fark > 0) {
             tumuFarkY = fark;
