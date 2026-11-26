@@ -88,9 +88,10 @@
     }
     .ana-piyasa-baslik {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 5px;
-      padding: 5.5px 12px 4.5px 12px;
+      gap: 8px;
+      padding: 5px 10px 4.5px 12px;
       font-size: 10.8px;
       font-weight: 800;
       color: #0369a1;
@@ -98,6 +99,33 @@
       text-transform: uppercase;
       background: rgba(224, 242, 254, 0.55);
       border-bottom: 1px solid rgba(2, 132, 199, 0.22);
+    }
+    .tumu-ac-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ffffff;
+      color: #0369a1;
+      border: 1.2px solid #38bdf8;
+      border-radius: 999px;
+      padding: 2.5px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-transform: none;
+      cursor: pointer;
+      line-height: 1.2;
+      box-shadow: 0 1px 2px rgba(2, 132, 199, 0.10);
+      transition: background-color 0.14s ease, transform 0.12s ease;
+    }
+    .tumu-ac-btn:active {
+      background: #e0f2fe;
+      transform: scale(0.95);
+    }
+    .tumu-ac-btn.aktif-sinyal-var {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0369a1;
     }
     .ana-piyasa-satir {
       padding: 7px 12px 7.5px 12px;
@@ -134,9 +162,10 @@
       border-left: 5px solid #6366f1;
     }
 
-    .cerceve-notr    { border-color: #cbd5e1; border-left-color: #64748b; }
-    .cerceve-pozitif { border-color: #86efac; border-left-color: #16a34a; background: #f0fdf4; }
-    .cerceve-uyari   { border-color: #fcd34d; border-left-color: #d97706; background: #fffbeb; }
+    .cerceve-notr         { border-color: #cbd5e1; border-left-color: #64748b; }
+    .cerceve-pozitif      { border-color: #86efac; border-left-color: #16a34a; background: #f0fdf4; }
+    .cerceve-short-sinyal { border-color: #fca5a5; border-left-color: #dc2626; background: #fef2f2; }
+    .cerceve-uyari        { border-color: #fcd34d; border-left-color: #d97706; background: #fffbeb; }
     .cerceve-kritik  {
       border-color: #fca5a5;
       border-left-color: #dc2626;
@@ -641,6 +670,97 @@
       font-weight: 700;
       color: #475569;
     }
+
+    /* ======================================================================
+       TAM EKRAN TÜM BIST 30 RADAR ÇEKMECESİ / POP-UP KATMANI
+       ====================================================================== */
+    .tumu-cekmece {
+      position: fixed;
+      inset: 0;
+      z-index: 105;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(104%);
+      pointer-events: none;
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .tumu-cekmece.acik {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .tumu-cekmece-ust {
+      padding: calc(8px + env(safe-area-inset-top, 0px)) 12px 9px 12px;
+      background: #ffffff;
+      border-bottom: 1.5px solid #cbd5e1;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      touch-action: none;
+      flex-shrink: 0;
+    }
+    .tumu-baslik-grup {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+    .tumu-ana-baslik {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+    .tumu-alt-bilgi {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .tumu-icerik-alani {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px 10px calc(26px + env(safe-area-inset-bottom, 0px)) 10px;
+    }
+    .hisse-fiyat-metin {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #0369a1;
+    }
+    .hisse-etiket-sag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .hisse-durum-etiket {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6.5px;
+      border-radius: 6px;
+      font-size: 10.8px;
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .durum-aplus  { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .durum-asat   { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .durum-pusu   { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .durum-acik   { background: #fef08a; color: #713f12; border: 1px solid #facc15; }
+    .durum-re     { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
+    .rs-ek-metin {
+      font-size: 12.2px;
+      font-weight: 800;
+      margin-left: 5px;
+    }
+    .viop-makas-satir {
+      margin-top: 2px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+    }
   </style>
 </head>
 <body>
@@ -677,6 +797,27 @@
     </div>
   </div>
 
+  <!-- TAM EKRAN ÇEKMECE / POP-UP: TÜM BIST 30 HİSSELERİ (ALARM/PUSU ÜSTTE + A-Z) -->
+  <div id="tumuCekmece" class="tumu-cekmece" aria-hidden="true">
+    <div id="tumuCekmeceUst" class="tumu-cekmece-ust">
+      <div class="ozet-cekmece-ust-cubuk">
+        <div class="cekmece-tutamac"></div>
+      </div>
+      <div class="ozet-baslik-satir">
+        <div class="tumu-baslik-grup">
+          <div id="tumuAnaBaslik" class="tumu-ana-baslik">📊 BIST 30 Tümü</div>
+          <div id="tumuAltBilgi" class="tumu-alt-bilgi">Alarm / Pusu üstte • Diğerleri A–Z</div>
+        </div>
+        <div class="ozet-buton-grup">
+          <button type="button" class="ozet-btn ozet-btn-kapat" onclick="tumuCekmeceKapat(event)">✕ Kapat</button>
+        </div>
+      </div>
+    </div>
+    <div id="tumuGovde" class="tumu-icerik-alani">
+      <div class="ozet-bilgi-mesaj">⏳ BIST 30 hisseleri yükleniyor...</div>
+    </div>
+  </div>
+
   <!-- AÇILIR POP-UP: BİRLEŞİK YAPI, OB & POZİSYON HARİTASI -->
   <div id="haritaPerde" class="harita-arka-perde" onclick="haritaPopKapat(event)">
     <div class="harita-modal" onclick="event.stopPropagation()">
@@ -706,8 +847,11 @@
     let ozetYukleniyor = false;
     let aktifYaziKademe = 0;
     let sonCekilenPaket = null;
+    let sonAnaVeriPaketi = null;
     let ekranKartlari = [];
     let aktifHaritaAnahtar = null;
+    let tumuAcikMi = false;
+    let tumuHistoryItildiMi = false;
 
     function yaziBoyutunuUygula(kademe) {
       const gecerli = (kademe >= 0 && kademe < YAZI_KADEMELERI.length) ? kademe : 0;
@@ -903,13 +1047,13 @@
       `;
     }
 
-    function gunlukDegisimHtmlUret(fiyatStr, kartIdx) {
+    function gunlukDegisimHtmlUret(fiyatStr, kartIdx, ekSolHtml) {
       const m = String(fiyatStr || "").match(/\(%?([+\-]?\d+(?:[.,]\d+)?)\)/);
       let solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran renk-gri">-</span>`;
       if (m) {
         const oran = m[1];
         const renk = oran.includes("+") ? "renk-yesil" : oran.includes("-") ? "renk-kirmizi" : "renk-gri";
-        solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span>`;
+        solIcerik = `<span class="gunluk-degisim-etiket">Günlük Değişim:</span> <span class="gunluk-degisim-oran ${renk}">% ${htmlGuvenliYap(oran)}</span>${ekSolHtml || ""}`;
       }
       const zikzakBtn = `
         <button type="button" class="zikzak-harita-btn" onclick="haritaPopAc(${kartIdx}, event)" title="Yapı &amp; OB Haritası" aria-label="Yapı ve OB Haritası">
@@ -920,6 +1064,145 @@
         </button>
       `;
       return `<div class="gunluk-degisim-satir"><div class="gunluk-degisim-sol">${solIcerik}</div>${zikzakBtn}</div>`;
+    }
+
+    function hisseTlFiyatAyikla(fiyatStr) {
+      const m = String(fiyatStr || "").match(/^\s*([\d.,]+)/);
+      if (!m) return "";
+      let ham = m[1];
+      if (ham.includes(".") && ham.includes(",")) {
+        ham = ham.replace(/\./g, "").replace(",", ".");
+      } else if (ham.includes(",")) {
+        ham = ham.replace(",", ".");
+      }
+      const sayi = parseFloat(ham);
+      if (isNaN(sayi) || sayi <= 0) return "";
+      return sayi >= 100 ? sayi.toFixed(1).replace(".", ",") : sayi.toFixed(2).replace(".", ",");
+    }
+
+    function rsEkHtmlUret(vwapAlfaStr) {
+      if (!vwapAlfaStr) return "";
+      const m = String(vwapAlfaStr).match(/RS:\s*%?([+\-]?\d+(?:[.,]\d+)?)/i);
+      if (!m) return "";
+      const val = parseFloat(m[1].replace(",", "."));
+      if (isNaN(val)) return "";
+      const renk = val >= 0.35 ? "renk-yesil" : val <= -0.35 ? "renk-kirmizi" : "renk-gri";
+      return `<span class="rs-ek-metin ${renk}">· RS:%${htmlGuvenliYap(m[1])}</span>`;
+    }
+
+    // Faz 2 & Faz 3 Altyapı Yuvası: İleride VİOP fiyatı ve zımni faiz/makas verisi geldiğinde otomatik görünür
+    function viopMakasBilgiHtmlUret(kayit) {
+      if (!kayit || !kayit.viopAktif || !kayit.makasOzet) return "";
+      return `<div class="viop-makas-satir">${htmlGuvenliYap(kayit.makasOzet)}</div>`;
+    }
+
+    // Hisseyi Alarm / Pusu önceliğine göre sınıflandırır:
+    // seviye 1: Onaylı Giriş / Kopuş (🔥 A+ BOS, 🎯 ONAYLI PUSU, 🎯 AL-/SAT- formasyon)
+    // seviye 2: Diğer Çekirdek Alarmlar (⚡ Hacimli BOS, Pusu Adayı, 🛡️/💎 ALARM-3)
+    // seviye 3: Pusu Bölgesinde Bekleyenler (⏳ Pusu(L/S) veya 🛡️[Emilim])
+    // seviye 9: Diğer Hisseler (Alfabetik A-Z grubu)
+    function hisseAlarmPusuSiniflandir(h) {
+      const pusuStr = String(h.pusu || "").trim();
+      const alarmStr = String(h.alarmMetin || "").trim();
+      const anaYonStr = String(h.anaYon || "").trim();
+      const aPlusMu = /A\+\s*KURUMSAL\s*BOS|🔥/i.test(alarmStr) || anaYonStr.includes("🔥");
+      const onayliFormasyonMu = pusuStr.startsWith("🎯") || /ALARM-1\s*\[ONAYLI\s*PUSU\]/i.test(alarmStr);
+      const digerAlarmMi = Boolean(h.alarmVarMi) || /ALARM-[123]/i.test(alarmStr) || anaYonStr.includes("⚡");
+      const pusuBekleyenMi = pusuStr.startsWith("⏳") || pusuStr.includes("[Emilim]");
+
+      const shortYonMu = /SHORT|SAT-|Pusu\(S\)|↘/i.test(`${alarmStr} ${pusuStr} ${anaYonStr}`);
+      const longYonMu  = /LONG|AL-|Pusu\(L\)|↗/i.test(`${alarmStr} ${pusuStr} ${anaYonStr}`);
+
+      if (aPlusMu || onayliFormasyonMu) {
+        const kisaRozet = aPlusMu ? "🔥 A+ BOS" : "🎯 PUSU";
+        return {
+          ustGrupMu: true,
+          seviye: 1,
+          rozetMetin: kisaRozet,
+          rozetSinif: shortYonMu && !longYonMu ? "durum-asat" : "durum-aplus",
+          cerceve: shortYonMu && !longYonMu ? "cerceve-short-sinyal" : "cerceve-pozitif"
+        };
+      }
+      if (digerAlarmMi) {
+        const kisaRozet = /EMİLİM/i.test(alarmStr) ? "🛡️ EMİLİM" : (/ALARM-2/i.test(alarmStr) || anaYonStr.includes("⚡") ? "⚡ BOS" : "🚨 ALARM");
+        return {
+          ustGrupMu: true,
+          seviye: 2,
+          rozetMetin: kisaRozet,
+          rozetSinif: "durum-pusu",
+          cerceve: "cerceve-uyari"
+        };
+      }
+      if (pusuBekleyenMi) {
+        return {
+          ustGrupMu: true,
+          seviye: 3,
+          rozetMetin: pusuStr.includes("[Emilim]") ? "🛡️ EMİLİM" : "⏳ PUSU",
+          rozetSinif: "durum-pusu",
+          cerceve: "cerceve-uyari"
+        };
+      }
+      return {
+        ustGrupMu: false,
+        seviye: 9,
+        rozetMetin: "",
+        rozetSinif: "",
+        cerceve: "cerceve-notr"
+      };
+    }
+
+    function tumHisseleriHazirla(veri) {
+      let hamListe = Array.isArray(veri && veri.tumHisseler) ? veri.tumHisseler.slice() : [];
+      const doGetGuncelMi = Array.isArray(veri && veri.tumHisseler);
+      if (!doGetGuncelMi && Array.isArray(veri && veri.pozisyonlar)) {
+        // doGet henüz v9'a güncellenmediyse eldeki pozisyon/RE hisselerini yedek olarak göster
+        const gorulen = new Set();
+        veri.pozisyonlar.forEach(p => {
+          const ad = kisaAdTemizle(p.etiket);
+          if (ad && ad !== "ONS" && ad !== "BİST 30" && !gorulen.has(ad)) {
+            gorulen.add(ad);
+            hamListe.push({
+              kod: ad,
+              etiket: p.etiket,
+              fiyat: p.fiyat,
+              vwapAlfa: p.vwapAlfa || "",
+              ustYapi: p.ustYapi,
+              anaYon: p.anaYon,
+              guc: p.guc,
+              icDalga: p.icDalga,
+              pusu: p.pusu,
+              destek: p.destek,
+              direnc: p.direnc,
+              nobetci: p.nobetci,
+              zikzak15: p.zikzak15,
+              zikzakBaslangicSn: p.zikzakBaslangicSn,
+              zaman: p.zaman,
+              pozDurum: reKaydiMi(p) ? "re" : "acik"
+            });
+          }
+        });
+      }
+
+      const islenmis = hamListe.map(h => {
+        const kod = kisaAdTemizle(h.kod || h.etiket || "");
+        const sinifBilgi = hisseAlarmPusuSiniflandir(h);
+        return { kod: kod, veri: h, sinifBilgi: sinifBilgi };
+      }).filter(x => x.kod && x.kod !== "ONS" && x.kod !== "BİST 30");
+
+      const alarmPusuGrubu = islenmis
+        .filter(x => x.sinifBilgi.ustGrupMu)
+        .sort((a, b) => (a.sinifBilgi.seviye - b.sinifBilgi.seviye) || a.kod.localeCompare(b.kod, "tr"));
+
+      const alfabetikGrup = islenmis
+        .filter(x => !x.sinifBilgi.ustGrupMu)
+        .sort((a, b) => a.kod.localeCompare(b.kod, "tr"));
+
+      return {
+        toplam: islenmis.length,
+        alarmPusuGrubu: alarmPusuGrubu,
+        alfabetikGrup: alfabetikGrup,
+        doGetGuncelMi: doGetGuncelMi
+      };
     }
 
     function onsDolarFiyatAyikla(fiyatStr) {
@@ -1081,6 +1364,7 @@
         const veri = await res.json();
         if (!veri.ok) throw new Error(veri.hata || "Veri hatası");
 
+        sonAnaVeriPaketi = veri;
         const alan = document.getElementById("icerikAlani");
         alan.innerHTML = "";
         ekranKartlari = [];
@@ -1088,11 +1372,12 @@
         const tumPozlar = veri.pozisyonlar || [];
         const acikPozlar = tumPozlar.filter(p => !reKaydiMi(p));
         const reNobetleri = tumPozlar.filter(p => reKaydiMi(p));
+        const tumuOzet = tumHisseleriHazirla(veri);
 
         const ilkAcikZaman = acikPozlar.find(p => p.zaman || p.sonGuncelleme);
         const acikGrupZaman = veri.acikPozZaman || veri.hisseZaman || (ilkAcikZaman && (ilkAcikZaman.zaman || ilkAcikZaman.sonGuncelleme)) || veri.zaman || "";
 
-        // 1. BÖLÜM (EN ÜST): ANA PİYASA (SİMETRİK MAVİ ÇERÇEVE + ELMAS AYIRICILI ONS & BİST 30)
+        // 1. BÖLÜM (EN ÜST): ANA PİYASA (SİMETRİK MAVİ ÇERÇEVE + SAĞ ÜST "TÜMÜ" BUTONU + ONS & BİST 30)
         const gostergeler = [...(veri.anaGostergeler || [])].sort((a, b) => {
           const aOns = /ONS/i.test(a.etiket) ? 0 : 1;
           const bOns = /ONS/i.test(b.etiket) ? 0 : 1;
@@ -1105,7 +1390,16 @@
 
           const anaBaslik = document.createElement("div");
           anaBaslik.className = "ana-piyasa-baslik";
-          anaBaslik.textContent = "🌐 Ana Piyasa";
+          const aktifSayi = tumuOzet.alarmPusuGrubu.length;
+          const topSayiMetin = tumuOzet.toplam > 0 ? ` (${tumuOzet.toplam})` : "";
+          const sinyalOnEk = aktifSayi > 0 ? `🎯 ${aktifSayi} · ` : "";
+          const btnEkSinif = aktifSayi > 0 ? " aktif-sinyal-var" : "";
+          anaBaslik.innerHTML = `
+            <span>🌐 Ana Piyasa</span>
+            <button type="button" class="tumu-ac-btn${btnEkSinif}" onclick="tumuCekmeceAc(event)" aria-label="Tüm BIST 30 Hisselerini Aç">
+              <span>${sinyalOnEk}Tümü${topSayiMetin} ▸</span>
+            </button>
+          `;
           anaCerceve.appendChild(anaBaslik);
 
           gostergeler.forEach((g, idx) => {
@@ -1227,6 +1521,9 @@
             alan.appendChild(kart);
           });
         }
+
+        // 4. KATMAN (ARKA PLAN HAZIR): TAM EKRAN TÜM BIST 30 ÇEKMECESİ KARTLARINI GÜNCELLE
+        tumuListesiniCiz(veri, tumuOzet);
 
         if (aktifHaritaAnahtar) {
           const guncelIdx = ekranKartlari.findIndex(k => k.anahtar === aktifHaritaAnahtar);
@@ -1951,9 +2248,185 @@
       document.getElementById("haritaPerde").classList.remove("acik");
     }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && aktifHaritaAnahtar) {
+    function hisseKartiOlustur(kayitPaketi) {
+      const h = kayitPaketi.veri;
+      const ad = kayitPaketi.kod;
+      const sb = kayitPaketi.sinifBilgi;
+      const haritaKategori = h.pozDurum === "acik" ? "acik" : (h.pozDurum === "re" ? "re" : "ana");
+      const kartIdx = ekranKartlari.push({
+        kategori: haritaKategori,
+        ad: ad,
+        anahtar: "tumu_" + ad,
+        veri: h
+      }) - 1;
+
+      const tlFiyat = hisseTlFiyatAyikla(h.fiyat);
+      const rozetHtml = ucluRozetHtmlUret(h);
+      const rsHtml = rsEkHtmlUret(h.vwapAlfa);
+      const degisimHtml = gunlukDegisimHtmlUret(h.fiyat, kartIdx, rsHtml);
+      const viopMakasHtml = viopMakasBilgiHtmlUret(h);
+      const icRenk = icDalgaRenkSinifi(h.icDalga);
+
+      const sagRozetler = [];
+      if (h.pozDurum === "acik") {
+        sagRozetler.push(`<span class="hisse-durum-etiket durum-acik">💼 AÇIK</span>`);
+      } else if (h.pozDurum === "re") {
+        sagRozetler.push(`<span class="hisse-durum-etiket durum-re">📌 RE</span>`);
+      }
+      if (sb.rozetMetin) {
+        sagRozetler.push(`<span class="hisse-durum-etiket ${sb.rozetSinif}">${htmlGuvenliYap(sb.rozetMetin)}</span>`);
+      }
+
+      let altSatirMetin = "";
+      let altSatirRenk = "";
+      if (h.alarmMetin) {
+        altSatirMetin = h.alarmMetin;
+        altSatirRenk = /SHORT|SAT-/i.test(h.alarmMetin) ? "renk-kirmizi" : (/LONG|AL-/i.test(h.alarmMetin) ? "renk-yesil" : "renk-sari");
+      } else if (h.pusu && h.pusu !== "Nötr" && h.pusu !== "-") {
+        altSatirMetin = h.pusu;
+        if (h.pusu.startsWith("🎯")) {
+          altSatirRenk = /SAT-/i.test(h.pusu) ? "renk-kirmizi" : "renk-yesil";
+        } else if (h.pusu.startsWith("⏳") || h.pusu.includes("[Emilim]")) {
+          altSatirRenk = "renk-sari";
+        }
+      }
+
+      const kart = document.createElement("div");
+      kart.className = `kart ${sb.cerceve}`;
+      kart.innerHTML = `
+        <div class="ust-satir">
+          <div class="sembol-grup">
+            <span class="sembol-baslik">${htmlGuvenliYap(ad)}</span>
+            ${tlFiyat ? `<span class="hisse-fiyat-metin">${htmlGuvenliYap(tlFiyat)}</span>` : ""}
+            ${rozetHtml}
+          </div>
+          ${sagRozetler.length > 0 ? `<div class="hisse-etiket-sag">${sagRozetler.join("")}</div>` : ""}
+        </div>
+        ${degisimHtml}
+        ${viopMakasHtml}
+        <div class="ic-dalga-satir ${icRenk}">${htmlGuvenliYap(h.icDalga || "-")}</div>
+        ${altSatirMetin ? `<div class="alt-bilgi-satir ${altSatirRenk}">${htmlGuvenliYap(altSatirMetin)}</div>` : ""}
+      `;
+      return kart;
+    }
+
+    function tumuListesiniCiz(veri, hazirOzet) {
+      const govdeEl = document.getElementById("tumuGovde");
+      const baslikEl = document.getElementById("tumuAnaBaslik");
+      const altBilgiEl = document.getElementById("tumuAltBilgi");
+      if (!govdeEl) return;
+
+      const oncekiScroll = govdeEl.scrollTop;
+      const ozet = hazirOzet || tumHisseleriHazirla(veri || sonAnaVeriPaketi || {});
+      const hisseHamZaman = (veri && (veri.hisseZaman || veri.zaman)) || "";
+      const sureMetin = hisseHamZaman ? gecenSureMetni(hisseHamZaman) : "";
+
+      if (baslikEl) {
+        baslikEl.textContent = ozet.toplam > 0 ? `📊 BIST 30 Tümü (${ozet.toplam})` : "📊 BIST 30 Tümü";
+      }
+      if (altBilgiEl) {
+        if (hisseHamZaman) {
+          altBilgiEl.setAttribute("data-zaman", String(hisseHamZaman));
+          altBilgiEl.setAttribute("data-onek", "Alarm / Pusu üstte • A–Z · ");
+          altBilgiEl.textContent = sureMetin ? `Alarm / Pusu üstte • A–Z · ${sureMetin}` : "Alarm / Pusu üstte • A–Z";
+        } else {
+          altBilgiEl.textContent = "Alarm / Pusu üstte • Diğerleri A–Z";
+        }
+      }
+
+      govdeEl.innerHTML = "";
+
+      if (!ozet.doGetGuncelMi) {
+        const bilgi = document.createElement("div");
+        bilgi.className = "nakit-serit";
+        bilgi.textContent = "ℹ️ Tüm hesaplanan BIST 30 hisselerinin listelenmesi için Apps Script'te SMC Motor v3.4 kodunu 'Yeni sürüm' olarak dağıtın.";
+        govdeEl.appendChild(bilgi);
+      }
+
+      if (ozet.toplam === 0) {
+        const bos = document.createElement("div");
+        bos.className = "ozet-bilgi-mesaj";
+        bos.textContent = "Henüz hesaplanmış BIST 30 hisse verisi bulunmuyor.";
+        govdeEl.appendChild(bos);
+        return;
+      }
+
+      if (ozet.alarmPusuGrubu.length > 0) {
+        bolumBasligiEkle(govdeEl, `🎯 Alarm & Pusu Hattındakiler (${ozet.alarmPusuGrubu.length})`, "ilk", "");
+        ozet.alarmPusuGrubu.forEach(item => {
+          govdeEl.appendChild(hisseKartiOlustur(item));
+        });
+      }
+
+      if (ozet.alfabetikGrup.length > 0) {
+        const baslikMetni = ozet.alarmPusuGrubu.length > 0
+          ? `📋 Diğer Hisseler — A–Z (${ozet.alfabetikGrup.length})`
+          : `📋 Tüm Hisseler — A–Z (${ozet.alfabetikGrup.length})`;
+        bolumBasligiEkle(govdeEl, baslikMetni, ozet.alarmPusuGrubu.length > 0 ? "" : "ilk", "");
+        ozet.alfabetikGrup.forEach(item => {
+          govdeEl.appendChild(hisseKartiOlustur(item));
+        });
+      }
+
+      if (tumuAcikMi && oncekiScroll > 0) {
+        govdeEl.scrollTop = oncekiScroll;
+      }
+    }
+
+    function tumuCekmeceAc(ev) {
+      if (ev) ev.stopPropagation();
+      const katman = document.getElementById("tumuCekmece");
+      if (!katman) return;
+      katman.style.transform = "";
+      katman.classList.add("acik");
+      katman.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      if (!tumuAcikMi && window.history && window.history.pushState) {
+        try {
+          window.history.pushState({ katman: "tumu" }, "");
+          tumuHistoryItildiMi = true;
+        } catch (_) {}
+      }
+      tumuAcikMi = true;
+    }
+
+    function tumuCekmeceKapatDahili() {
+      const katman = document.getElementById("tumuCekmece");
+      if (!katman) return;
+      katman.style.transform = "";
+      katman.classList.remove("acik");
+      katman.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      tumuAcikMi = false;
+    }
+
+    function tumuCekmeceKapat(ev) {
+      if (ev) ev.stopPropagation();
+      tumuCekmeceKapatDahili();
+      if (tumuHistoryItildiMi && window.history && window.history.back) {
+        tumuHistoryItildiMi = false;
+        try { window.history.back(); } catch (_) {}
+      }
+    }
+
+    window.addEventListener("popstate", () => {
+      if (aktifHaritaAnahtar) {
         haritaPopKapat();
+        return;
+      }
+      if (tumuAcikMi) {
+        tumuHistoryItildiMi = false;
+        tumuCekmeceKapatDahili();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (aktifHaritaAnahtar) {
+          haritaPopKapat();
+        } else if (tumuAcikMi) {
+          tumuCekmeceKapat();
+        }
       }
     });
 
@@ -2156,6 +2629,38 @@
         }
         govdeBasY = null;
       }, { passive: true });
+
+      const tumuKatman = document.getElementById("tumuCekmece");
+      const tumuUst = document.getElementById("tumuCekmeceUst");
+      let tumuBasY = null;
+      let tumuFarkY = 0;
+      if (tumuKatman && tumuUst) {
+        tumuUst.addEventListener("touchstart", (e) => {
+          tumuBasY = e.touches[0].clientY;
+          tumuFarkY = 0;
+          tumuKatman.style.transition = "none";
+        }, { passive: true });
+
+        tumuUst.addEventListener("touchmove", (e) => {
+          if (tumuBasY === null) return;
+          const fark = e.touches[0].clientY - tumuBasY;
+          if (fark > 0) {
+            tumuFarkY = fark;
+            tumuKatman.style.transform = `translateY(${fark}px)`;
+          }
+        }, { passive: true });
+
+        tumuUst.addEventListener("touchend", () => {
+          tumuKatman.style.transition = "";
+          if (tumuFarkY > 75) {
+            tumuCekmeceKapat();
+          } else {
+            tumuKatman.style.transform = "";
+          }
+          tumuBasY = null;
+          tumuFarkY = 0;
+        }, { passive: true });
+      }
     })();
 
     veriyiCek();
@@ -2165,4 +2670,5 @@
   </script>
 </body>
 </html>
+
 
