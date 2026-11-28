@@ -2674,7 +2674,7 @@
         const s = hamSatir.trim();
         if (!s) continue;
         const yildizsiz = s.replace(/\*/g, "").trim();
-        const buyukBaslikMi = (/^[A-ZÇĞİÖŞÜ0-9\s/()\-]{4,55}:?$/.test(yildizsiz) && !yildizsiz.startsWith("-"));
+        const buyukBaslikMi = (/^[A-ZÇĞİÖŞÜ0-9\s/(),.&\-]{4,70}:?$/.test(yildizsiz) && !yildizsiz.startsWith("-"));
         const temizMetin = buyukBaslikMi ? yildizsiz : s;
         if (buyukBaslikMi) hamBaslikIndeksleri.push(temizSatirlar.length);
         temizSatirlar.push({ metin: temizMetin, baslikMi: buyukBaslikMi });
