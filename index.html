@@ -1421,6 +1421,7 @@
               zikzak3Ay: p.zikzak3Ay,
               ucAyZirve: p.ucAyZirve,
               ucAyDip: p.ucAyDip,
+              obDogum: p.obDogum,
               zaman: p.zaman,
               pozDurum: reKaydiMi(p) ? "re" : "acik"
             });
@@ -2180,7 +2181,7 @@
           hazirMi: false,
           konumMetin: "",
           baslikMetin: "3 Aylık Konum",
-          html: `<div class="harita-mini-bilgi">3 aylık panoramik konum için Apps Script'te SMC Motor v3.6 kodunu 'Yeni sürüm' olarak dağıtın.</div>`
+          html: `<div class="harita-mini-bilgi">3 aylık panoramik konum için Apps Script'te SMC Motor v3.7 kodunu 'Yeni sürüm' olarak dağıtın.</div>`
         };
       }
 
@@ -2210,7 +2211,7 @@
       const konumYuzde = Math.max(0, Math.min(100, Math.round(((guncelFiyat - mutlakDip) / bantAralik) * 100)));
       const bolgeAd = konumYuzde <= 20 ? "Dip Bölgesi" : (konumYuzde >= 80 ? "Zirve Bölgesi" : "Orta Bant");
 
-      // Aktif OB duvarlarından 3 aylık dalgaya makul mesafede olanları Y ölçeğine dahil et (dalgayı ezmeden)
+      // Aktif OB duvarlarından 3 aylık dalgaya makul mesafede olanları Y ölçeğine dahil et
       const gorunurHavuz = [mutlakDip, mutlakZirve, guncelFiyat];
       const tumObFiyatlar = [
         ...d15Liste.map(d => d.fiyat),
@@ -2242,44 +2243,7 @@
         return Math.max(ustY + 2, Math.min(altY - 2, altY - oran * cizimBoy));
       };
 
-      const parcalar = [];
-
-      // Sağ ve Alt Eksen İnce Çerçeve Çizgisi (Yazısız, tertemiz)
-      parcalar.push(`<line x1="${sagX}" y1="${ustY}" x2="${sagX}" y2="${altY}" stroke="#cbd5e1" stroke-width="1" />`);
-      parcalar.push(`<line x1="${solX}" y1="${altY}" x2="${sagX}" y2="${altY}" stroke="#94a3b8" stroke-width="1.15" />`);
-
-      // 1) YAZISIZ AKTİF ORDER BLOCK BANTLARI VE DUVARLARI (Sadece Renkli Çizgiler/Hafif Bantlar)
-      const miniBantBoy = Math.max(3.5, Math.round(cizimBoy * 0.045));
-      d15Liste.forEach(d => {
-        if (d.fiyat < yMin || d.fiyat > yMax) return;
-        const y = yHesapla(d.fiyat);
-        const yAlt = Math.min(altY, y + miniBantBoy);
-        parcalar.push(`<rect x="${solX}" y="${y.toFixed(1)}" width="${sagX - solX}" height="${Math.max(2.5, yAlt - y).toFixed(1)}" fill="#22c55e" fill-opacity="${d.anaMi ? "0.15" : "0.09"}" />`);
-        const dash = d.anaMi ? "" : `stroke-dasharray="2.5,2.5"`;
-        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="#16a34a" stroke-width="${d.anaMi ? "1.3" : "1.0"}" ${dash} opacity="0.88" />`);
-      });
-
-      r15Liste.forEach(r => {
-        if (r.fiyat < yMin || r.fiyat > yMax) return;
-        const y = yHesapla(r.fiyat);
-        const yUst = Math.max(ustY, y - miniBantBoy);
-        parcalar.push(`<rect x="${solX}" y="${yUst.toFixed(1)}" width="${sagX - solX}" height="${Math.max(2.5, y - yUst).toFixed(1)}" fill="#ef4444" fill-opacity="${r.anaMi ? "0.15" : "0.09"}" />`);
-        const dash = r.anaMi ? "" : `stroke-dasharray="2.5,2.5"`;
-        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="#dc2626" stroke-width="${r.anaMi ? "1.3" : "1.0"}" ${dash} opacity="0.88" />`);
-      });
-
-      const miniUstDuvarCiz = (duvarObj, tip) => {
-        if (!duvarObj || duvarObj.fiyat < yMin || duvarObj.fiyat > yMax) return;
-        const y = yHesapla(duvarObj.fiyat);
-        const sk = Boolean(duvarObj.sonKaleMi);
-        const renk = sk ? (tip === "D" ? "#b45309" : "#c2410c") : (tip === "D" ? "#065f46" : "#991b1b");
-        const dash = sk ? "7.5,3" : "6,4";
-        parcalar.push(`<line x1="${solX}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="${renk}" stroke-width="1.65" stroke-dasharray="${dash}" opacity="0.9" />`);
-      };
-      miniUstDuvarCiz(ob60.r60, "R");
-      miniUstDuvarCiz(ob60.d60, "D");
-
-      // 2) 3 AYLIK ZİKZAK EĞRİSİ (Zaman Orantılı X Dağılımı)
+      // Önce 3 aylık zikzak koordinatlarını ve zaman->X haritasını kur (OB doğum yerlerini tam hizalamak için)
       const zzSolX = solX + 12;
       const zzSagX = bayrakSolX - 10;
       const n = noktalar.length;
@@ -2292,7 +2256,7 @@
         const zamanOran = (topSureSn > 3600 && pt.t >= basSn)
           ? Math.max(0, Math.min(1, (pt.t - basSn) / topSureSn))
           : idxOran;
-        const karmaOran = (0.72 * zamanOran) + (0.28 * idxOran);
+        const karmaOran = (0.85 * zamanOran) + (0.15 * idxOran);
         return {
           x: zzSolX + karmaOran * (zzSagX - zzSolX),
           y: yHesapla(pt.p),
@@ -2305,21 +2269,106 @@
       const sonK = koord[n - 1];
       const sondanOncekiK = koord[n - 2];
 
-      // Hafif mavi alan dolgusu (panoramik derinlik hissi için)
-      const alanNoktalari = [
-        `${ilkK.x.toFixed(1)},${altY.toFixed(1)}`,
-        ...koord.map(k => `${k.x.toFixed(1)},${k.y.toFixed(1)}`),
-        `${sonK.x.toFixed(1)},${altY.toFixed(1)}`
-      ].join(" ");
-      parcalar.push(`<polygon points="${alanNoktalari}" fill="#0284c7" fill-opacity="0.065" />`);
+      // Doğum zamanını (Unix sn) zikzak eğrisi üzerindeki tam X koordinatına çevirir;
+      // 3 ay başlangıcından daha eski duvarları en sol çerçeveden (solX) başlatır.
+      const zamanSnDenXBul = (dogumSn) => {
+        if (!dogumSn || dogumSn <= 0 || topSureSn <= 3600 || basSn <= 0) return null;
+        const sn = dogumSn > 1e11 ? Math.floor(dogumSn / 1000) : dogumSn;
+        if (sn < basSn - 3600) return solX;
+        if (sn <= basSn) return ilkK.x;
+        if (sn >= bitSn) return sonK.x;
+        for (let i = 0; i < n - 1; i++) {
+          const tA = koord[i].t, tB = koord[i + 1].t;
+          if (sn >= tA && sn <= tB) {
+            if (tB <= tA) return koord[i].x;
+            const oran = (sn - tA) / (tB - tA);
+            return koord[i].x + oran * (koord[i + 1].x - koord[i].x);
+          }
+        }
+        const genelOran = Math.max(0, Math.min(1, (sn - basSn) / topSureSn));
+        return ilkK.x + genelOran * (sonK.x - ilkK.x);
+      };
 
-      // Başlangıç ve Şimdi dikey ince iz düşümü + Zaman Ekseni (Sol Tarih, Orta Tarih, Şimdi)
+      const xDenZamanSnBul = (hedefX) => {
+        if (topSureSn <= 3600 || basSn <= 0) return 0;
+        for (let i = 0; i < n - 1; i++) {
+          const xA = koord[i].x, xB = koord[i + 1].x;
+          if (hedefX >= xA && hedefX <= xB) {
+            if (xB <= xA) return koord[i].t;
+            const oran = (hedefX - xA) / (xB - xA);
+            return Math.round(koord[i].t + oran * (koord[i + 1].t - koord[i].t));
+          }
+        }
+        return Math.round((basSn + bitSn) / 2);
+      };
+
+      const obDogum = (p && p.obDogum && typeof p.obDogum === "object") ? p.obDogum : null;
+      // Taze 15dk OB'ler nokta kadar kalmasın diye en az %17 soldan başlar; daha eskiyse gerçek doğum yerinden başlar
+      const minRaf15SolX = Math.max(solX + 8, sonK.x - 0.17 * (sonK.x - solX));
+      const min60SolX    = Math.max(solX + 4, sonK.x - 0.06 * (sonK.x - solX));
+
+      const parcalar = [];
+
+      // Sağ ve Alt Eksen İnce Çerçeve Çizgisi (Açık mavi alan dolgusu kaldırıldı, temiz zemin)
+      parcalar.push(`<line x1="${sagX}" y1="${ustY}" x2="${sagX}" y2="${altY}" stroke="#cbd5e1" stroke-width="1" />`);
+      parcalar.push(`<line x1="${solX}" y1="${altY}" x2="${sagX}" y2="${altY}" stroke="#94a3b8" stroke-width="1.15" />`);
+
+      // 1) GERÇEK DOĞUM NOKTALI YAZISIZ ORDER BLOCK BANTLARI VE DUVARLARI (Sağ uca kadar uzanır)
+      const miniBantBoy = Math.max(3.5, Math.round(cizimBoy * 0.045));
+      d15Liste.forEach(d => {
+        if (d.fiyat < yMin || d.fiyat > yMax) return;
+        const y = yHesapla(d.fiyat);
+        const yAlt = Math.min(altY, y + miniBantBoy);
+        const anahtar = String(d.kod || "").toLowerCase();
+        const dogumSn = obDogum ? Number(obDogum[anahtar] || 0) : 0;
+        const gercekX = dogumSn > 0 ? zamanSnDenXBul(dogumSn) : null;
+        const xBas = gercekX !== null ? Math.min(gercekX, minRaf15SolX) : minRaf15SolX;
+
+        parcalar.push(`<rect x="${xBas.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(4, sagX - xBas).toFixed(1)}" height="${Math.max(2.5, yAlt - y).toFixed(1)}" fill="#22c55e" fill-opacity="${d.anaMi ? "0.17" : "0.10"}" />`);
+        const dash = d.anaMi ? "" : `stroke-dasharray="2.5,2.5"`;
+        parcalar.push(`<line x1="${xBas.toFixed(1)}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="#16a34a" stroke-width="${d.anaMi ? "1.35" : "1.05"}" ${dash} opacity="0.92" />`);
+      });
+
+      r15Liste.forEach(r => {
+        if (r.fiyat < yMin || r.fiyat > yMax) return;
+        const y = yHesapla(r.fiyat);
+        const yUst = Math.max(ustY, y - miniBantBoy);
+        const anahtar = String(r.kod || "").toLowerCase();
+        const dogumSn = obDogum ? Number(obDogum[anahtar] || 0) : 0;
+        const gercekX = dogumSn > 0 ? zamanSnDenXBul(dogumSn) : null;
+        const xBas = gercekX !== null ? Math.min(gercekX, minRaf15SolX) : minRaf15SolX;
+
+        parcalar.push(`<rect x="${xBas.toFixed(1)}" y="${yUst.toFixed(1)}" width="${Math.max(4, sagX - xBas).toFixed(1)}" height="${Math.max(2.5, y - yUst).toFixed(1)}" fill="#ef4444" fill-opacity="${r.anaMi ? "0.17" : "0.10"}" />`);
+        const dash = r.anaMi ? "" : `stroke-dasharray="2.5,2.5"`;
+        parcalar.push(`<line x1="${xBas.toFixed(1)}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="#dc2626" stroke-width="${r.anaMi ? "1.35" : "1.05"}" ${dash} opacity="0.92" />`);
+      });
+
+      const miniUstDuvarCiz = (duvarObj, tip) => {
+        if (!duvarObj || duvarObj.fiyat < yMin || duvarObj.fiyat > yMax) return;
+        const y = yHesapla(duvarObj.fiyat);
+        const sk = Boolean(duvarObj.sonKaleMi);
+        const renk = sk ? (tip === "D" ? "#b45309" : "#c2410c") : (tip === "D" ? "#065f46" : "#991b1b");
+        const dash = sk ? "7.5,3" : "6,4";
+        const anahtar = sk ? (tip === "D" ? "d1g" : "r1g") : (tip === "D" ? "d60" : "r60");
+        const dogumSn = obDogum ? Number(obDogum[anahtar] || 0) : 0;
+        const gercekX = dogumSn > 0 ? zamanSnDenXBul(dogumSn) : null;
+        const xBas = gercekX !== null ? Math.min(gercekX, min60SolX) : solX;
+
+        parcalar.push(`<line x1="${xBas.toFixed(1)}" y1="${y.toFixed(1)}" x2="${sagX}" y2="${y.toFixed(1)}" stroke="${renk}" stroke-width="1.75" stroke-dasharray="${dash}" opacity="0.92" />`);
+        if (xBas > solX + 3) {
+          parcalar.push(`<circle cx="${xBas.toFixed(1)}" cy="${y.toFixed(1)}" r="2.0" fill="${renk}" />`);
+        }
+      };
+      miniUstDuvarCiz(ob60.r60, "R");
+      miniUstDuvarCiz(ob60.d60, "D");
+
+      // 2) ZAMAN EKSENİ VE 3 AYLIK ZİKZAK EĞRİSİ
       const tarihFont = (8.9 * yaziKat).toFixed(1);
       const yaziAltY = (altY + 14 * yaziKat).toFixed(1);
       const solTarihMetin = panoramikBaslangicEtiketiUret(basSn, bitSn);
-      const ortaSn = (basSn > 0 && bitSn > basSn) ? Math.round((basSn + bitSn) / 2) : 0;
-      const ortaTarihMetin = ortaSn > 0 ? tsiKisaTarihFormatla(ortaSn) : "";
       const ortaX = (ilkK.x + sonK.x) / 2;
+      const ortaSn = xDenZamanSnBul(ortaX);
+      const ortaTarihMetin = ortaSn > 0 ? tsiKisaTarihFormatla(ortaSn) : "";
 
       parcalar.push(`<line x1="${ilkK.x.toFixed(1)}" y1="${ilkK.y.toFixed(1)}" x2="${ilkK.x.toFixed(1)}" y2="${altY}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,3" opacity="0.65" />`);
       parcalar.push(`<circle cx="${ilkK.x.toFixed(1)}" cy="${altY}" r="2.5" fill="#475569" />`);
@@ -2795,7 +2844,7 @@
       }
 
       if (altNotEl) {
-        altNotEl.textContent = "Üst: Yakın Plan (15dk+60dk OB) · Alt: 3 Aylık Genel Konum (Yazısız OB Çizgili)";
+        altNotEl.textContent = "Üst: Yakın Plan (15dk+60dk OB) · Alt: 3 Aylık Konum (OB Doğum Noktalı)";
       }
     }
 
@@ -2905,7 +2954,7 @@
       if (!ozet.doGetGuncelMi) {
         const bilgi = document.createElement("div");
         bilgi.className = "nakit-serit";
-        bilgi.textContent = "ℹ️ Tüm hesaplanan BIST 30 hisselerinin listelenmesi için Apps Script'te SMC Motor v3.6 kodunu 'Yeni sürüm' olarak dağıtın.";
+        bilgi.textContent = "ℹ️ Tüm hesaplanan BIST 30 hisselerinin listelenmesi için Apps Script'te SMC Motor v3.7 kodunu 'Yeni sürüm' olarak dağıtın.";
         govdeEl.appendChild(bilgi);
       }
 
